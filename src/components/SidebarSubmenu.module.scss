@@ -1,0 +1,26 @@
+@use '@/styles/placeholders';
+
+.container {
+  margin-block: 1rem;
+}
+
+.headingWrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heading {
+  text-transform: capitalize;
+  padding-block: 0.25rem;
+  font-weight: 500;
+}
+
+.listItem {
+  @extend %nav__list-item;
+
+  &Active {
+    @extend %nav__list-item--active;
+  }
+}
