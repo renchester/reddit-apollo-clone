@@ -57,13 +57,21 @@ table {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-size: var(--text-sm);
+  // font-size: var(--text-sm);
   font-family: var(--font-roboto);
 }
 
 button {
-  cursor: pointer;
   background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+a,
+a:link,
+a:visited {
+  text-decoration: none;
+  color: inherit;
 }
 
 .material-symbols-outlined {

@@ -1,3 +1,5 @@
+@use './variables/color-variables' as cv;
+
 %parent-with-centered-children {
   display: flex;
   justify-content: center;
@@ -14,4 +16,17 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+%nav__list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.625rem;
+}
+
+%nav__list-item--active {
+  background-color: cv.$primary-color;
+  color: white;
 }
