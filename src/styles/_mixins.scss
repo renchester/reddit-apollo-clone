@@ -1,0 +1,49 @@
+$breakpoints: (
+  sm: 30em,
+  md: 50em,
+  lg: 75em,
+);
+
+@mixin breakpoint($key, $minmax: min) {
+  $size: map-get($breakpoints, $key);
+
+  @if ($size) {
+    @media only screen and (#{$minmax}-width: $size) {
+      @content;
+    }
+  } @else {
+    @error '`#{$key}` does not exist in the $breakpoints';
+  }
+}
+
+@mixin breakpoint-exact($size, $minmax: min) {
+  @if ($size) {
+    @media only screen and (#{$minmax}-width: $size) {
+      @content;
+    }
+  } @else {
+    @error '`#{$key}` does not exist in the $breakpoints';
+  }
+}
+
+@mixin center-self($position, $relOrAbs: relative) {
+  position: $relOrAbs;
+
+  @if $position == 'vertical' {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  } @else if $position == 'horizontal' {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translate(-50%);
+  } @else if $position == 'both' {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+}

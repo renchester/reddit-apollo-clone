@@ -1,0 +1,30 @@
+@use 'variables' as v;
+@use 'dark-theme' as dark;
+@use 'light-theme' as light;
+
+@mixin theme($theme) {
+  @if $theme == 'dark-mode' {
+    @include dark.color-mixin();
+  } @else {
+    @include light.color-mixin();
+  }
+}
+
+.dark-mode {
+  @include dark.color-mixin();
+  transition: all 500ms ease;
+}
+
+.light-mode {
+  @include light.color-mixin();
+  transition: all 500ms ease;
+}
+
+:root {
+  .dark-mode {
+    --main-theme-variable: #{dark.$main-theme-variable};
+  }
+  .light-mode {
+    --main-theme-variable: #{light.$main-theme-variable};
+  }
+}

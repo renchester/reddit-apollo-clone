@@ -1,0 +1,17 @@
+%parent-with-centered-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+%text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+%cover-background {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
