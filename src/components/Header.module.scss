@@ -1,0 +1,77 @@
+@use '@/styles/placeholders';
+@use '@/styles/mixins' as mixins;
+@use '@/styles/variables/color-variables' as cv;
+
+%label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: cv.$primary-color;
+}
+
+.header {
+  background: #f0f0f0;
+}
+
+.header__wrapper {
+  @extend %parent-with-centered-children;
+  margin-inline: auto;
+  max-width: var(--max-page-width);
+  position: relative;
+  justify-content: space-between;
+  padding-block: 1.25rem;
+  padding-inline: 0.5rem;
+}
+
+.nav {
+  &__container {
+    @extend %parent-with-centered-children;
+  }
+
+  &__btnToggleIcon {
+    font-size: var(--text-lg);
+    color: cv.$primary-color;
+  }
+
+  &__label {
+    @extend %label;
+  }
+}
+
+.feed {
+  &__labelWrapper {
+    @include mixins.center-self(horizontal, absolute);
+
+    @extend %parent-with-centered-children;
+    position: absolute;
+    gap: 0.125rem;
+  }
+
+  &__labelBtnIcon {
+    display: block;
+  }
+
+  &__label {
+    @extend %label;
+  }
+}
+
+.btn {
+  &__container {
+    @extend %parent-with-centered-children;
+    gap: 0.375rem;
+  }
+
+  &__icon {
+    display: block;
+    background: rgb(255, 255, 255);
+    padding: 0.25rem;
+    border-radius: 100%;
+
+    color: #8f04cf;
+    font-size: var(--text-lg);
+  }
+
+  &__accountIcon {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+}
