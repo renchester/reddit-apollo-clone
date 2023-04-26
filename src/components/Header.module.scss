@@ -5,11 +5,11 @@
 %label {
   font-size: var(--text-sm);
   font-weight: 500;
-  color: cv.$primary-color;
 }
 
 .header {
   background: #f0f0f0;
+  color: cv.$primary-color;
 }
 
 .header__wrapper {
@@ -23,17 +23,25 @@
 }
 
 .nav {
-  &__container {
+  &__btnToggle {
     @extend %parent-with-centered-children;
+    color: inherit;
   }
 
   &__btnToggleIcon {
     font-size: var(--text-lg);
-    color: cv.$primary-color;
   }
 
   &__label {
     @extend %label;
+  }
+
+  &__labelWithSidebar {
+    display: none;
+
+    @include mixins.breakpoint(md) {
+      display: block;
+    }
   }
 }
 

@@ -1,20 +1,30 @@
 import { useState } from 'react';
 import styles from './Header.module.scss';
+import { AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire } from '@fortawesome/free-solid-svg-icons';
+import { useSwipeable } from 'react-swipeable';
+import { useNavbar } from '@/hooks/useNavbar';
 
 function Header() {
-  const [isNavBarShown, setNavBarVisibility] = useState(false);
+  const { showNavbar, toggleNavbar, isNavbarShown } = useNavbar();
+
+  const swipeHandlers = useSwipeable({
+    preventScrollOnSwipe: true,
+    onSwipedRight: showNavbar,
+  });
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} {...swipeHandlers}>
       <div className={styles.header__wrapper}>
         <div className={styles.nav__container}>
           <button
             type="button"
             className={styles.nav__btnToggle}
             aria-label="Show navigation sidebar"
-            aria-expanded="false"
+            aria-expanded={isNavbarShown}
+            aria-controls="nav__container"
+            onClick={toggleNavbar}
           >
             <span
               className={`${styles.nav__btnToggleIcon} material-symbols-outlined`}
@@ -22,8 +32,14 @@ function Header() {
             >
               arrow_back_ios
             </span>
+            <h2
+              className={`${styles.nav__label} ${
+                isNavbarShown && styles.nav__labelWithSidebar
+              }`}
+            >
+              Subreddits
+            </h2>
           </button>
-          <h2 className={styles.nav__label}>Subreddits</h2>
         </div>
         <div className={styles.feed__labelWrapper}>
           <h2 className={styles.feed__label} aria-label="Name of current feed">
@@ -88,6 +104,14 @@ function Header() {
           </button>
         </div>
       </div>
+      {/* 
+      <AnimatePresence>
+        {isNavBarShown && (
+          <Overlay hideChildren={hideNavBar}>
+            <SidebarNav hideNavbar={hideNavBar} />
+          </Overlay>
+        )}
+      </AnimatePresence> */}
     </header>
   );
 }
