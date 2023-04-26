@@ -7,6 +7,7 @@ import { roboto, inter } from '@/utils/fonts';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import { NavbarProvider } from '@/hooks/useNavbar';
 
 fontAwesomeConfig.autoAddCss = false;
 
@@ -23,8 +24,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <div className={`${roboto.variable} ${inter.variable}`}>
-      {getLayout(<Component {...pageProps} />)}
-    </div>
+    <NavbarProvider>
+      <div className={`${roboto.variable} ${inter.variable}`}>
+        {getLayout(<Component {...pageProps} />)}
+      </div>
+    </NavbarProvider>
   );
 }
