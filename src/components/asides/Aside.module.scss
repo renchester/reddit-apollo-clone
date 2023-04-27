@@ -1,0 +1,90 @@
+@use '@/styles/mixins' as mixins;
+
+%aside-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  border: 1px solid gray;
+  border-radius: var(--main-border-radius);
+  padding-inline: 1rem;
+  padding-block: 1.375rem;
+}
+
+.aside {
+  &__container {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    height: fit-content;
+    max-width: 300px;
+
+    @include mixins.breakpoint(xl) {
+      display: flex;
+    }
+  }
+
+  &__adWrapper {
+    height: 8rem;
+    width: 100%;
+    border-radius: var(--main-border-radius);
+    overflow: hidden;
+  }
+
+  &__ad {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__main {
+    @extend %aside-main;
+  }
+
+  &__heading {
+    font-size: var(--text-md);
+    font-weight: 500;
+  }
+
+  &__btnCreate {
+    border: 1px solid;
+    border-radius: 10rem;
+    padding-block: 0.5rem;
+  }
+}
+
+.policy {
+  &__main {
+    --gap-between: 1rem;
+
+    @extend %aside-main;
+    gap: 0rem;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 0.375rem;
+    border-bottom: 1px solid gray;
+    padding-bottom: var(--gap-between);
+
+    &:not(:first-child) {
+      padding-top: var(--gap-between);
+    }
+  }
+
+  &__link {
+    font-size: var(--text-xs);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+      text-underline-offset: 0.125rem;
+    }
+  }
+
+  &__copy {
+    padding-top: var(--gap-between);
+    font-size: var(--text-xs);
+  }
+}
