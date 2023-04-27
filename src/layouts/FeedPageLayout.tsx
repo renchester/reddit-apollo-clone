@@ -1,6 +1,7 @@
 import styles from './FeedPageLayout.module.scss';
 import type { ReactNode } from 'react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 type FeedPageLayoutProps = {
   children: ReactNode;
@@ -13,6 +14,7 @@ function FeedPageLayout(props: FeedPageLayoutProps) {
     <div className={styles.layout__feed}>
       <Header />
       {children}
+      <Footer />
     </div>
   );
 }
