@@ -1,8 +1,11 @@
 $body-color: #f0f0f0;
 
 :root {
-  --max-page-width: 1600px;
   --body-color: #{$body-color};
+
+  --max-page-width: 1200px;
+  --main-border-radius: 0.375rem;
+  --distance-from-header: 1.5rem;
 
   //====== FONT SIZE VARIABLES ======//
 
