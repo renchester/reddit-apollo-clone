@@ -1,0 +1,43 @@
+@use '@/styles/placeholders';
+
+.container {
+  border-top: 1px solid rgb(172, 172, 172);
+  border-bottom: 1px solid rgb(172, 172, 172);
+  padding-block: 0.625rem;
+  padding-inline: 0.5rem;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.titleWrapper {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.title {
+  font-size: var(--text-md);
+  font-weight: 500;
+}
+
+.description {
+  font-size: var(--text-sm);
+}
+
+.meta {
+  font-size: var(--text-xs);
+  color: rgb(85, 85, 85);
+}
+
+.btnReport {
+  width: fit-content;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.125rem 0.625rem;
+  font-size: var(--text-xxs);
+  color: rgb(85, 85, 85);
+}
