@@ -1,0 +1,14 @@
+.pageContainer {
+  display: flex;
+  gap: 1.625rem;
+  width: min(95%, var(--max-page-width));
+  margin-inline: auto;
+  margin-top: var(--distance-from-header);
+}
+
+.feed {
+  flex-grow: 1;
+}
+
+.side__content {
+}

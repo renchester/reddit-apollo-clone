@@ -1,7 +1,7 @@
 import styles from './MasterLayout.module.scss';
 import { type ReactNode } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import SidebarNav from '@/components/SidebarNav';
+import SidebarNav from '@/components/sidebar/SidebarNav';
 import { useNavbar } from '@/hooks/useNavbar';
 
 type MasterLayoutProps = {
