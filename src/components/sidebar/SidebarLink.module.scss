@@ -1,0 +1,53 @@
+@use '@/styles/variables/color-variables' as cv;
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgb(167, 167, 167);
+  }
+
+  &Active {
+    background-color: cv.$primary-color;
+    color: white;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.625rem;
+}
+
+.icon {
+  font-size: var(--text-lg);
+  padding: 0.25rem;
+  border: 0.25px solid currentColor;
+  border-radius: 100%;
+  background: cv.$primary-color;
+  color: white;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  font-size: var(--text-xs);
+  color: rgb(82, 82, 82);
+}
+
+.btnFav {
+  display: flex;
+  align-items: center;
+  color: cv.$primary-color;
+}
+
+.favIcon__filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}

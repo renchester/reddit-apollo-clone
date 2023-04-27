@@ -38,15 +38,6 @@
   flex-direction: column;
   gap: 0.25rem;
   margin-bottom: 1rem;
-  color: cv.$primary-color;
-}
-
-.listItem {
-  @extend %nav__list-item;
-
-  &Active {
-    @extend %nav__list-item--active;
-  }
 }
 
 .heading {

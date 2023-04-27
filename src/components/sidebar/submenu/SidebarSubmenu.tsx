@@ -1,16 +1,14 @@
-import { useState } from 'react';
-import styles from './SidebarSubmenu.module.scss';
+import styles from './Submenu.module.scss';
+import { type ReactNode, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse } from '@fortawesome/free-solid-svg-icons';
 
 type SidebarSubmenuProps = {
   headingTitle: string;
+  children: ReactNode;
 };
 
 function SidebarSubmenu(props: SidebarSubmenuProps) {
-  const { headingTitle } = props;
+  const { headingTitle, children } = props;
   const [isMenuExpanded, setMenuExpansion] = useState(true);
 
   const toggleMenuExpansion = () => setMenuExpansion((prev) => !prev);
@@ -37,7 +35,7 @@ function SidebarSubmenu(props: SidebarSubmenuProps) {
       </button>
       <AnimatePresence>
         {isMenuExpanded && (
-          <motion.ul
+          <motion.ol
             className={styles.list}
             id={`submenu__${headingTitle}-list`}
             aria-expanded={isMenuExpanded}
@@ -46,40 +44,12 @@ function SidebarSubmenu(props: SidebarSubmenuProps) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
           >
-            <li className={styles.listItem}>
-              <FontAwesomeIcon
-                className={`${styles.icon} ${styles.icon__home}`}
-                icon={faHouse}
-                aria-hidden
-              />
-              <Link className={styles.link} href="/">
-                Home
-              </Link>
-            </li>
-            <li className={styles.listItem}>
-              <FontAwesomeIcon
-                className={`${styles.icon} ${styles.icon__popular}`}
-                icon={faHouse}
-                aria-hidden
-              />
-              <Link className={styles.link} href="/r/popular">
-                Popular
-              </Link>
-            </li>
-            <li className={styles.listItem}>
-              <FontAwesomeIcon
-                className={`${styles.icon} ${styles.icon__all}`}
-                icon={faHouse}
-                aria-hidden
-              />
-              <Link className={styles.link} href="/r/all">
-                All Posts
-              </Link>
-            </li>
-          </motion.ul>
+            {children}
+          </motion.ol>
         )}
       </AnimatePresence>
     </section>
   );
 }
+
 export default SidebarSubmenu;
