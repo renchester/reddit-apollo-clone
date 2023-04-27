@@ -1,4 +1,3 @@
-import styles from './HomePage.module.scss';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,18 +10,22 @@ import HomeAside from '@/components/asides/HomeAside';
 
 function HomePage() {
   return (
-    <div className={styles.pageContainer}>
-      <main className={styles.feed}>
-        <h1 className="page__title">Popular</h1>
-        <PostPreview id="1" />
-        <PostPreview id="2" />
-        <PostPreview id="3" />
-      </main>
-
-      <AsideContainer>
-        <HomeAside />
-      </AsideContainer>
-    </div>
+    <>
+      <Head>
+        <title>Home - Reddit Clone</title>
+      </Head>
+      <div className="page__container">
+        <main className="page__feed">
+          <h1 className="page__title">Popular</h1>
+          <PostPreview id="1" />
+          <PostPreview id="2" />
+          <PostPreview id="3" />
+        </main>
+        <AsideContainer>
+          <HomeAside />
+        </AsideContainer>
+      </div>
+    </>
   );
 }
 
