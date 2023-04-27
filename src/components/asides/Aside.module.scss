@@ -47,8 +47,45 @@
 
   &__btnCreate {
     border: 1px solid;
-    border-radius: 10rem;
+    border-radius: var(--main-border-radius);
     padding-block: 0.5rem;
+    margin-top: 0.675rem;
+
+    &:hover,
+    &:focus {
+      background: gray;
+      color: white;
+    }
+  }
+}
+
+.created {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+  font-size: var(--text-xs);
+}
+
+.members {
+  display: flex;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  padding-block: 1rem;
+
+  &__meta {
+    // border: 1px solid red;
+    width: 50%;
+  }
+
+  &__data {
+    display: block;
+    font-weight: 600;
+  }
+
+  &__description {
+    font-size: var(--text-xs);
   }
 }
 
