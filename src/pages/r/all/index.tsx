@@ -1,3 +1,4 @@
+import styles from './SubredditPage.module.scss';
 import Head from 'next/head';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
@@ -15,7 +16,21 @@ function SubredditPage() {
       </Head>
       <div className="page__container">
         <main className="page__feed">
-          <h1 className="page__title">All</h1>
+          <div className={styles.sub__header}>
+            <h1 className="page__title">All</h1>
+            <p className={styles.sub__description}>
+              Welcome to r/All. This is where everything is found. Reddit&apos;s
+              very own.
+            </p>
+
+            <button
+              type="button"
+              aria-label="Subscribe to this subreddit and join the community"
+              className={styles.btnJoin}
+            >
+              Join
+            </button>
+          </div>
           <PostPreview id="4" />
           <PostPreview id="5" />
           <PostPreview id="6" />
@@ -25,7 +40,6 @@ function SubredditPage() {
 
         <AsideContainer>
           <SubredditAside />
-          <SubredditRules />
         </AsideContainer>
       </div>
     </>
