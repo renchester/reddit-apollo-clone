@@ -1,6 +1,7 @@
 import styles from './Comment.module.scss';
 import { ReactNode, useState } from 'react';
 import Link from 'next/link';
+import CommentMenu from './CommentMenu';
 
 type CommentProps = {
   level: number;
@@ -10,20 +11,31 @@ type CommentProps = {
 function Comment(props: CommentProps) {
   const { level, children } = props;
 
-  const [isExpanded, setExpandedState] = useState(true);
-
   const levelStyles = {
     marginLeft: level > 1 ? '1rem' : '0rem',
   };
 
-  const collapseComment = () => setExpandedState(false);
-  const toggleComment = () => setExpandedState((prev) => !prev);
+  const [isMenuShown, setMenuVisibility] = useState(false);
 
-  const upvoteComment = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const hideMenu = () => {
+    setMenuVisibility(false);
   };
 
-  const showOptions = (e: React.MouseEvent) => {
+  const toggleOptions = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMenuVisibility((prev) => !prev);
+  };
+
+  const [isExpanded, setExpandedState] = useState(true);
+
+  const collapseComment = () => setExpandedState(false);
+
+  const toggleComment = () => {
+    setExpandedState((prev) => !prev);
+    setMenuVisibility(false);
+  };
+
+  const upvoteComment = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
@@ -56,7 +68,8 @@ function Comment(props: CommentProps) {
                 <button
                   type="button"
                   aria-label="Show comment options"
-                  onClick={showOptions}
+                  onClick={toggleOptions}
+                  className={styles.main__btnMenu}
                 >
                   <i
                     className={`material-symbols-outlined ${styles.main__iconMore}`}
@@ -79,6 +92,8 @@ function Comment(props: CommentProps) {
                 </i>
               </button>
             )}
+
+            {isMenuShown && <CommentMenu hideMenu={hideMenu} />}
           </div>
         </div>
         {isExpanded && (

@@ -42,6 +42,11 @@
   &__right {
     @extend %parent-with-centered-children;
     gap: 0.25rem;
+    position: relative;
+  }
+
+  &__btnMenu {
+    position: relative;
   }
 
   &__iconMore {

@@ -1,0 +1,31 @@
+.menu {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 100%;
+  border: 1px solid gray;
+  border-radius: var(--main-border-radius);
+  background: white;
+  display: flex;
+  flex-direction: column;
+
+  &__listItem {
+    margin-inline: 0.5rem;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid rgb(184, 184, 184);
+    }
+  }
+
+  &__button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-block: 0.75rem;
+  }
+
+  &__icon {
+    font-size: var(--text-md);
+  }
+}
