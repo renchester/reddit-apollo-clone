@@ -1,0 +1,93 @@
+@use '@/styles/placeholders';
+
+.tab {
+  margin-top: 1rem;
+  margin-bottom: auto;
+  width: 100%;
+
+  &__list {
+    display: flex;
+    gap: 2px;
+  }
+
+  &__tab {
+    @extend %parent-with-centered-children;
+    gap: 0.5rem;
+    flex-grow: 1;
+    background: rgb(221, 221, 221);
+    padding: 0.75rem;
+    font-size: var(--text-sm);
+  }
+
+  &__panel {
+    padding: 0.75rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+  }
+
+  &__label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
+  }
+
+  &__labelText {
+    font-size: var(--text-sm);
+  }
+
+  &__warning {
+    color: gray;
+  }
+
+  &__titleWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__titleChar {
+    font-size: var(--text-xs);
+    align-self: flex-end;
+  }
+
+  %text-input {
+    width: 100%;
+    border: 1px solid gray;
+    padding-block: 0.5rem;
+    padding-inline: 0.25rem;
+    font-size: var(--text-sm);
+    resize: vertical;
+  }
+
+  &__textTitle {
+    @extend %text-input;
+    min-height: 40px;
+    max-height: 200px;
+  }
+
+  &__textarea {
+    @extend %text-input;
+    min-height: 200px;
+    max-height: 400px;
+  }
+
+  &__imgInput {
+    padding: 1rem;
+    border: 1px solid gray;
+  }
+
+  &__btnSubmit {
+    align-self: flex-end;
+    margin-top: 1rem;
+    padding: 0.5rem 1.675rem;
+    border: 1px solid currentColor;
+    border-radius: 10rem;
+    font-size: var(--text-sm);
+  }
+}
