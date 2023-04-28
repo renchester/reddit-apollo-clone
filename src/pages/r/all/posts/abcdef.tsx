@@ -7,7 +7,8 @@ import AsideContainer from '@/components/asides/AsideContainer';
 import SubredditAside from '@/components/asides/SubredditAside';
 import { ReactElement } from 'react';
 import PostMain from '@/components/posts/PostMain';
-import Comment from '@/components/comments/Comment';
+import { NewCommentProvider } from '@/hooks/useNewComment';
+import CommentFeed from '@/components/comments/CommentFeed';
 
 function PostPage() {
   return (
@@ -19,24 +20,9 @@ function PostPage() {
       <div className="page__container">
         <main className="">
           <PostMain id="123" />
-          <div className={styles.comment__feed}>
-            <Comment level={1}>
-              <Comment level={2}>
-                <Comment level={3} />
-              </Comment>
-              <Comment level={2}>
-                <Comment level={3}>
-                  <Comment level={4}>
-                    <Comment level={5}>
-                      <Comment level={6}></Comment>
-                    </Comment>
-                  </Comment>
-                </Comment>
-              </Comment>
-              <Comment level={2}></Comment>
-            </Comment>
-            <Comment level={1} />
-          </div>
+          <NewCommentProvider>
+            <CommentFeed />
+          </NewCommentProvider>
         </main>
 
         <AsideContainer>
