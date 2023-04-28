@@ -1,4 +1,4 @@
-import styles from './Submit.module.scss';
+import styles from './SubmitPostPage.module.scss';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import { type ReactElement } from 'react';
