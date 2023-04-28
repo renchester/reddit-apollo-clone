@@ -1,12 +1,9 @@
 @use '@/styles/placeholders';
 
 .container {
-  width: min(90%, 1200px);
-  margin-inline: auto;
-  border-bottom: 1px solid gray;
-  border-radius: 0.375rem;
   padding-block: 1rem;
-  padding-inline: 0.5rem;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 .subreddit {
@@ -29,14 +26,13 @@
   }
 
   &__title {
-    margin-bottom: 0.375rem;
+    margin-bottom: 0.625rem;
+    font-size: 1.1rem;
   }
 
   &__details {
     margin-bottom: 0.75rem;
-    font-size: var(--text-sm);
-    transform: scale(0.95);
-    transform-origin: left;
+    font-size: 0.95rem;
     color: rgb(95, 95, 95);
   }
 
