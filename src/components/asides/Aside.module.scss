@@ -12,11 +12,12 @@
 
 .aside {
   &__container {
+    flex-shrink: 0;
     display: none;
     flex-direction: column;
     gap: 1rem;
     height: fit-content;
-    max-width: 300px;
+    max-width: 18rem;
 
     @include mixins.breakpoint(xl) {
       display: flex;
@@ -123,5 +124,45 @@
   &__copy {
     padding-top: var(--gap-between);
     font-size: var(--text-xs);
+  }
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    'index title button'
+    'index details details';
+  row-gap: 0.125rem;
+  align-content: center;
+  padding-block: 0.75rem;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgb(207, 207, 207);
+  }
+
+  &__index {
+    grid-area: index;
+    margin-right: 0.25rem;
+  }
+
+  &__title {
+    grid-area: title;
+    text-align: left;
+    flex-grow: 1;
+  }
+
+  &__btnExpand {
+    grid-area: button;
+  }
+
+  &__expanded {
+    grid-area: details;
+  }
+
+  &__details {
+    text-align: left;
+    font-size: 0.9rem;
+    color: rgb(95, 95, 95);
   }
 }
