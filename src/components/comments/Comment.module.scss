@@ -1,0 +1,60 @@
+@use '@/styles/placeholders';
+
+.comment {
+  --border-bottom: 1px solid rgb(204, 204, 204);
+
+  &__self {
+    margin-block: 1rem;
+    padding-left: 0.875rem;
+    border-left: 2px solid purple;
+  }
+}
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: 0.5rem;
+
+  &__withBorder {
+    padding-bottom: 0.5rem;
+    border-bottom: var(--border-bottom);
+  }
+
+  &__originalPoster {
+    margin-right: 0.5rem;
+    font-weight: 500;
+  }
+
+  &__btnUpvote {
+    @extend %parent-with-centered-children;
+  }
+
+  &__iconUpvote {
+    font-size: var(--text-sm);
+    vertical-align: bottom;
+  }
+
+  &__iconExpand {
+    font-size: var(--text-lg);
+  }
+
+  &__right {
+    @extend %parent-with-centered-children;
+    gap: 0.25rem;
+  }
+
+  &__iconMore {
+    font-size: var(--text-md);
+    vertical-align: middle;
+  }
+
+  &__time {
+    font-size: var(--text-xs);
+  }
+}
+
+.content {
+  padding-bottom: 1rem;
+  border-bottom: var(--border-bottom);
+}
