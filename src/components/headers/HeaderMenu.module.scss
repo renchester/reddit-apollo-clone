@@ -1,0 +1,30 @@
+@use '@/styles/themes' as th;
+
+.menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  border: 1px solid gray;
+  border-radius: var(--main-border-radius);
+
+  @include th.themify() {
+    background: th.themed('backgroundColor');
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__listItem {
+    padding-block: 0.625rem;
+    padding-inline: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    font-size: var(--text-sm);
+  }
+}
