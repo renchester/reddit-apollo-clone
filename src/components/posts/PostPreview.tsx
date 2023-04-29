@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import styles from './PostPreview.module.scss';
 import Link from 'next/link';
+import PostMenu from './PostMenu';
 
 type PostPreviewProps = {
   id: string;
@@ -8,15 +10,25 @@ type PostPreviewProps = {
 function PostPreview(props: PostPreviewProps) {
   const { id } = props;
 
+  const [isMenuShown, setMenuVisibility] = useState(false);
+
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuVisibility((prev) => !prev);
+  };
+
   return (
     <article
       className={styles.container}
       aria-labelledby={`post-${id}__heading`}
     >
-      <Link href="/r/sub" className={styles.subreddit__link}>
-        <span className={`material-symbols-outlined ${styles.subreddit__icon}`}>
+      <Link href="/r/all/posts/abcdef" className={styles.subreddit__link}>
+        <i
+          className={`material-symbols-outlined ${styles.subreddit__icon}`}
+          aria-hidden
+        >
           public
-        </span>
+        </i>
         <h3
           id={`post-${id}__heading`}
           className={styles.subreddit__title}
@@ -25,7 +37,7 @@ function PostPreview(props: PostPreviewProps) {
           AskReddit
         </h3>
       </Link>
-      <Link href="/post" className={styles.post__link}>
+      <Link href="/r/all/posts/abcdef" className={styles.post__link}>
         <p className={styles.post__title}>
           What wild animal is currently thought not to be dangerous, but you
           need to stay the hell away from because they actually are?
@@ -55,11 +67,12 @@ function PostPreview(props: PostPreviewProps) {
                     console.log('upvoting');
                   }}
                 >
-                  <span
+                  <i
                     className={`material-symbols-outlined ${styles.btnUpvote} ${styles.meta__iconLeft}`}
+                    aria-hidden
                   >
                     north
-                  </span>
+                  </i>
                 </button>
                 <span
                   aria-label="Net vote count for post "
@@ -72,11 +85,12 @@ function PostPreview(props: PostPreviewProps) {
               {/* COMMENTS */}
 
               <div className={styles.meta__dataWrapper}>
-                <span
+                <i
                   className={`material-symbols-outlined ${styles.meta__iconLeft}`}
+                  aria-hidden
                 >
                   mode_comment
-                </span>
+                </i>
                 <span aria-label="Comment count" className={styles.meta__data}>
                   402
                 </span>
@@ -85,11 +99,12 @@ function PostPreview(props: PostPreviewProps) {
               {/* TIME */}
 
               <div className={styles.meta__dataWrapper}>
-                <span
+                <i
                   className={`material-symbols-outlined ${styles.meta__iconLeft}`}
+                  aria-hidden
                 >
                   schedule
-                </span>
+                </i>
                 <time
                   aria-label="Time posted"
                   dateTime="2018-07-07"
@@ -107,9 +122,11 @@ function PostPreview(props: PostPreviewProps) {
               type="button"
               aria-label="Show options"
               aria-haspopup
-              onClick={(e) => e.preventDefault()}
+              onClick={toggleMenu}
             >
-              <span className={`material-symbols-outlined`}>more_horiz</span>
+              <i className={`material-symbols-outlined`} aria-hidden>
+                more_horiz
+              </i>
             </button>
             <button
               className={styles.meta__btnRight}
@@ -117,7 +134,9 @@ function PostPreview(props: PostPreviewProps) {
               aria-label="Upvote button"
               onClick={(e) => e.preventDefault()}
             >
-              <span className={`material-symbols-outlined`}>north</span>
+              <i className={`material-symbols-outlined`} aria-hidden>
+                north
+              </i>
             </button>
             <button
               className={styles.meta__btnRight}
@@ -125,8 +144,12 @@ function PostPreview(props: PostPreviewProps) {
               aria-label="Downvote button"
               onClick={(e) => e.preventDefault()}
             >
-              <span className={`material-symbols-outlined`}>south</span>
+              <i className={`material-symbols-outlined`} aria-hidden>
+                south
+              </i>
             </button>
+
+            {isMenuShown && <PostMenu />}
           </div>
         </div>
       </Link>
