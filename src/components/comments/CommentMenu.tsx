@@ -1,5 +1,7 @@
 import { useNewComment } from '@/hooks/useNewComment';
-import styles from './CommentMenu.module.scss';
+import styles from './Menu.module.scss';
+import Menu from '../menus/Menu';
+import MenuButton from '../menus/MenuButton';
 
 type CommentMenuProps = {
   hideMenu: () => void;
@@ -16,48 +18,16 @@ function CommentMenu(props: CommentMenuProps) {
   };
 
   return (
-    <div className={styles.menu}>
-      <ul role="menu" className={styles.menu__list}>
-        <li className={styles.menu__listItem} role="menuitem">
-          <button
-            type="button"
-            className={styles.menu__button}
-            onClick={replyToComment}
-            aria-haspopup
-          >
-            <i
-              className={`material-symbols-outlined ${styles.menu__icon}`}
-              aria-hidden
-            >
-              reply
-            </i>
-            <span>Reply</span>
-          </button>
-        </li>
-        <li className={styles.menu__listItem} role="menuitem">
-          <button type="button" className={styles.menu__button}>
-            <i
-              className={`material-symbols-outlined ${styles.menu__icon}`}
-              aria-hidden
-            >
-              north
-            </i>
-            <span>Upvote</span>
-          </button>
-        </li>
-        <li className={styles.menu__listItem} role="menuitem">
-          <button type="button" className={styles.menu__button}>
-            <i
-              className={`material-symbols-outlined ${styles.menu__icon}`}
-              aria-hidden
-            >
-              south
-            </i>
-            <span>Downvote</span>
-          </button>
-        </li>
-      </ul>
-    </div>
+    <Menu>
+      <MenuButton
+        icon="reply"
+        text="Reply"
+        label="Reply to this comment"
+        handler={replyToComment}
+      />
+      <MenuButton icon="north" text="Upvote" label="Upvote comment" />
+      <MenuButton icon="south" text="Downvote" label="Downvote comment" />
+    </Menu>
   );
 }
 export default CommentMenu;

@@ -1,0 +1,38 @@
+.menu {
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: var(--main-border-radius);
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+
+  &__listItem {
+    padding-block: 0.5rem;
+    margin-inline: 0.5rem;
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid gray;
+    }
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    padding-block: 0.25rem;
+    width: 100%;
+  }
+
+  &__icon {
+    font-size: var(--text-md);
+  }
+
+  &__btnText {
+    display: block;
+    padding-right: 0.5rem;
+    white-space: nowrap;
+  }
+}
