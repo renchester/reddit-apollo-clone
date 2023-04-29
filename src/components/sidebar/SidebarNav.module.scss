@@ -1,9 +1,8 @@
 @use '@/styles/placeholders';
 @use '@/styles/mixins' as mixins;
-@use '@/styles/variables/color-variables' as cv;
+@use '@/styles/themes' as th;
 
 .container {
-  background-color: rgb(199, 199, 199);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -17,6 +16,10 @@
     position: relative;
     border-right: 0.5px solid #9b9b9b;
     width: clamp(300px, 30vw, 500px);
+  }
+
+  @include th.themify() {
+    background-color: th.themed('backgroundColor');
   }
 }
 

@@ -1,5 +1,3 @@
-@use '@/styles/variables/color-variables' as cv;
-
 .post {
   margin-top: 1rem;
 
@@ -33,7 +31,7 @@
     padding: 0.15rem;
     aspect-ratio: 1/1;
     border-radius: 100%;
-    background: cv.$primary-color;
+    // background: cv.$primary-color;
     font-size: var(--text-md);
     color: white;
   }
