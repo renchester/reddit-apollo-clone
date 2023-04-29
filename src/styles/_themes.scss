@@ -1,30 +1,72 @@
-@use 'variables' as v;
-@use 'dark-theme' as dark;
-@use 'light-theme' as light;
+@use 'sass:color';
 
-@mixin theme($theme) {
-  @if $theme == 'dark-mode' {
-    @include dark.color-mixin();
-  } @else {
-    @include light.color-mixin();
+$mainLight: #fff;
+$mainDark: #222;
+
+$themes: (
+  light: (
+    backgroundColor: $mainLight,
+    accentBackgroundColor: color.adjust($mainLight, $lightness: -10%),
+    textColor: #408bbd,
+    buttonTextColor: #408bbd,
+    buttonTextTransform: none,
+    buttonTextHoverColor: #61b0e7,
+    buttonColor: #fff,
+    buttonBorder: 2px solid #fff,
+  ),
+  dark: (
+    backgroundColor: $mainDark,
+    accentBackgroundColor: color.adjust($mainDark, $lightness: 10%),
+    textColor: #ddd,
+    buttonTextColor: #aaa,
+    buttonTextTransform: uppercase,
+    buttonTextHoverColor: #ddd,
+    buttonColor: #333,
+    buttonBorder: 1px solid #aaa,
+  ),
+);
+
+@mixin themify($themes: $themes) {
+  @each $theme, $map in $themes {
+    // Add global for SCSS modules
+    :global(.theme-#{$theme}) & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+
+      @content;
+      $theme-map: null !global;
+    }
   }
 }
 
-.dark-mode {
-  @include dark.color-mixin();
-  transition: all 500ms ease;
+@mixin themifyBody($themes: $themes) {
+  @each $theme, $map in $themes {
+    &.theme-#{$theme} {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+
+      @content;
+      $theme-map: null !global;
+    }
+  }
 }
 
-.light-mode {
-  @include light.color-mixin();
-  transition: all 500ms ease;
-}
-
-:root {
-  .dark-mode {
-    --main-theme-variable: #{dark.$main-theme-variable};
-  }
-  .light-mode {
-    --main-theme-variable: #{light.$main-theme-variable};
-  }
+@function themed($key) {
+  @return map-get($theme-map, $key);
 }
