@@ -1,6 +1,6 @@
 @use '@/styles/placeholders';
 @use '@/styles/mixins' as mixins;
-@use '@/styles/variables/color-variables' as cv;
+@use '@/styles/themes' as th;
 
 %label {
   font-size: var(--text-sm);
@@ -11,8 +11,10 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #f0f0f0;
-  color: cv.$primary-color;
+
+  @include th.themify() {
+    background-color: th.themed('accentBackgroundColor');
+  }
 }
 
 .header__wrapper {

@@ -1,6 +1,6 @@
 import styles from './FeedPageLayout.module.scss';
 import type { ReactNode } from 'react';
-import Header from '@/components/Header';
+import Header from '@/components/headers/Header';
 import Footer from '@/components/Footer';
 
 type FeedPageLayoutProps = {

@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import styles from './Header.module.scss';
-import { AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire } from '@fortawesome/free-solid-svg-icons';
 import { useSwipeable } from 'react-swipeable';
 import { useNavbar } from '@/hooks/useNavbar';
+import HeaderMenu from './HeaderMenu';
 
 function Header() {
   const { showNavbar, toggleNavbar, isNavbarShown } = useNavbar();
+  const [isMenuShown, setMenuVisibility] = useState(false);
+
+  const toggleMenu = () => setMenuVisibility((prev) => !prev);
 
   const swipeHandlers = useSwipeable({
     preventScrollOnSwipe: true,
@@ -37,7 +41,7 @@ function Header() {
                 isNavbarShown && styles.nav__labelWithSidebar
               }`}
             >
-              Subreddits
+              Navigation
             </h2>
           </button>
         </div>
@@ -74,12 +78,10 @@ function Header() {
               aria-hidden
             />
           </button>
-          <button
+          <Link
+            href="/account"
             className={styles.btn__account}
-            type="button"
-            aria-haspopup
-            aria-expanded="false"
-            aria-label="Show account sidebar"
+            aria-label="Go to account page"
           >
             <span
               className={`${styles.btn__icon} ${styles.btn__accountIcon} material-symbols-outlined`}
@@ -87,13 +89,14 @@ function Header() {
             >
               account_circle
             </span>
-          </button>
+          </Link>
           <button
             className={styles.btn__account}
             type="button"
             aria-haspopup
             aria-expanded="false"
             aria-label="Show account sidebar"
+            onClick={toggleMenu}
           >
             <span
               className={`${styles.btn__icon} ${styles.btn__moreIcon} material-symbols-outlined`}
@@ -103,15 +106,8 @@ function Header() {
             </span>
           </button>
         </div>
+        {isMenuShown && <HeaderMenu />}
       </div>
-      {/* 
-      <AnimatePresence>
-        {isNavBarShown && (
-          <Overlay hideChildren={hideNavBar}>
-            <SidebarNav hideNavbar={hideNavBar} />
-          </Overlay>
-        )}
-      </AnimatePresence> */}
     </header>
   );
 }
