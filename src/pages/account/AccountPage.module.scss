@@ -1,0 +1,57 @@
+@use '@/styles/placeholders';
+@use '@/styles/themes' as th;
+
+.main {
+  width: min(100%, 900px);
+  margin: auto;
+}
+
+.account {
+  &__name {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 1.25rem;
+  margin-bottom: 1rem;
+
+  &__dataWrapper {
+    @extend %parent-with-centered-children;
+    flex-direction: column;
+    gap: 0.125rem;
+    width: 33%;
+  }
+
+  &__data {
+    font-weight: 500;
+    font-size: var(--text-md);
+  }
+
+  &__label {
+    font-size: var(--text-xs);
+
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+}
+
+.overview {
+  &__title {
+    font-weight: 500;
+    margin-block: 0.5rem;
+    font-size: var(--text-lg);
+  }
+
+  &__feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
