@@ -1,10 +1,15 @@
+@use '@/styles/themes' as th;
+
 .listItem {
   margin-bottom: 0.5rem;
 }
 
 .heading {
-  background: #e7c9c9;
-  padding-inline: 0.25rem;
-  padding-block: 0.125rem;
+  padding-inline: 0.5rem;
+  padding-block: 0.25rem;
   font-size: var(--text-sm);
+
+  @include th.themify() {
+    background: th.themed(accentBgColor);
+  }
 }

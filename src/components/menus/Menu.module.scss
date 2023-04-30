@@ -1,7 +1,6 @@
 @use '@/styles/themes' as th;
 
 .menu {
-  border: 1px solid gray;
   border-radius: var(--main-border-radius);
   position: absolute;
   z-index: 1;
@@ -10,7 +9,8 @@
   margin-top: 0.5rem;
 
   @include th.themify() {
-    background-color: th.themed('backgroundColor');
+    background-color: th.themed('bgAccent');
+    border: th.themed('border');
   }
 
   &__listItem {
@@ -18,7 +18,9 @@
     margin-inline: 0.5rem;
 
     &:not(:last-of-type) {
-      border-bottom: 1px solid gray;
+      @include th.themify() {
+        border-bottom: th.themed('border');
+      }
     }
   }
 

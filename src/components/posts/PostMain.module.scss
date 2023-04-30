@@ -1,3 +1,5 @@
+@use '@/styles/themes' as th;
+
 .post {
   margin-top: 1rem;
 
@@ -19,7 +21,10 @@
   display: flex;
   align-items: center;
   margin-block: 0.5rem;
-  color: rgb(32, 32, 32);
+
+  @include th.themify() {
+    color: th.themed('textAccent');
+  }
 
   &__subredditLink {
     display: flex;
@@ -31,9 +36,12 @@
     padding: 0.15rem;
     aspect-ratio: 1/1;
     border-radius: 100%;
-    // background: cv.$primary-color;
     font-size: var(--text-md);
-    color: white;
+
+    @include th.themify() {
+      color: th.themed('textColor');
+      border: th.themed('border');
+    }
   }
 
   &__subreddit {
@@ -64,12 +72,19 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
   padding-block: 1rem;
   padding-inline: 0.5rem;
 
+  @include th.themify() {
+    border-color: th.themed('borderColor');
+  }
+
   &__btn {
+    @include th.themify() {
+      color: th.themed('primary');
+    }
   }
 
   &__icon {

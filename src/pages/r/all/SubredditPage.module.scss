@@ -1,4 +1,5 @@
 @use '@/styles/mixins' as mixins;
+@use '@/styles/themes' as th;
 
 .sub__header {
   display: grid;
@@ -11,11 +12,14 @@
 
 .sub__description {
   grid-area: desc;
-  color: rgb(85, 85, 85);
   font-size: 0.95rem;
 
   @include mixins.breakpoint(xl) {
     display: none;
+  }
+
+  @include th.themify() {
+    color: th.themed('textAccent');
   }
 }
 
@@ -29,8 +33,12 @@
     %btn {
       height: 85%;
       display: block;
-      border: 1px solid gray;
+      border: 1px solid;
       border-radius: 10rem;
+
+      @include th.themify() {
+        border-color: th.themed('textAlpha75');
+      }
     }
   }
 

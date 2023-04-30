@@ -1,15 +1,20 @@
 @use '@/styles/placeholders';
 @use '@/styles/mixins' as mixins;
+@use '@/styles/themes' as th;
 
 .modal {
   --modal-padding: 1.675rem;
   @include mixins.center-self(both, absolute);
   border-radius: var(--main-border-radius);
   padding: var(--modal-padding);
-  background: white;
   width: clamp(16rem, 60%, 56rem);
   display: flex;
   flex-direction: column;
+
+  @include th.themify() {
+    background: th.themed('bgAccent');
+    border: th.themed('border');
+  }
 
   &__btnClose {
     position: absolute;
@@ -36,6 +41,11 @@
     min-height: 150px;
     max-height: 300px;
     font-size: var(--text-sm);
+
+    @include th.themify() {
+      background: th.themed('bgAlpha75');
+      border: th.themed('border');
+    }
   }
 
   &__btnSubmit {

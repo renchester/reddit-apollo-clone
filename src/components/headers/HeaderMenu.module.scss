@@ -4,11 +4,13 @@
   position: absolute;
   top: 100%;
   right: 0;
-  border: 1px solid gray;
+  border: 1px solid;
   border-radius: var(--main-border-radius);
 
   @include th.themify() {
-    background: th.themed('backgroundColor');
+    color: th.themed('textColor');
+    background: th.themed('bgAccent');
+    border-color: th.themed('borderColor');
   }
 
   &__list {

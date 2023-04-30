@@ -14,12 +14,16 @@
 
   @include mixins.breakpoint(sm) {
     position: relative;
-    border-right: 0.5px solid #9b9b9b;
+    border-right: 0.5px solid;
     width: clamp(300px, 30vw, 500px);
+
+    @include th.themify() {
+      border-color: th.themed('borderColor');
+    }
   }
 
   @include th.themify() {
-    background-color: th.themed('backgroundColor');
+    background: th.themed('bgAccent');
   }
 }
 
@@ -29,6 +33,10 @@
 
 .btnToggleIcon {
   font-size: var(--text-xxl);
+
+  @include th.themify() {
+    color: th.themed('textAlpha75');
+  }
 }
 
 .logo {
@@ -65,15 +73,20 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgb(206, 206, 206);
     border-radius: 5px;
+
+    @include th.themify() {
+      background: th.themed('bgAlpha25');
+    }
   }
 
   &:hover::-webkit-scrollbar-thumb {
-    background: rgb(155, 155, 155);
+    @include th.themify() {
+      background: th.themed('textAlpha25');
+    }
   }
 
   &:hover::-webkit-scrollbar {
-    width: 0.35em;
+    width: 0.3em;
   }
 }

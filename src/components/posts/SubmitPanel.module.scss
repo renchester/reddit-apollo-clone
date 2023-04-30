@@ -1,4 +1,5 @@
 @use '@/styles/placeholders';
+@use '@/styles/themes' as th;
 
 .tab {
   margin-top: 1rem;
@@ -14,9 +15,14 @@
     @extend %parent-with-centered-children;
     gap: 0.5rem;
     flex-grow: 1;
-    background: rgb(221, 221, 221);
     padding: 0.75rem;
     font-size: var(--text-sm);
+    border-bottom: 1px solid;
+
+    @include th.themify() {
+      background: th.themed('bgAccent');
+      border-color: th.themed('textAlpha75');
+    }
   }
 
   &__panel {
@@ -42,7 +48,9 @@
   }
 
   &__warning {
-    color: gray;
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
   }
 
   &__titleWrapper {
@@ -58,11 +66,17 @@
 
   %text-input {
     width: 100%;
-    border: 1px solid gray;
+    border: 1px solid;
     padding-block: 0.5rem;
     padding-inline: 0.25rem;
     font-size: var(--text-sm);
     resize: vertical;
+
+    @include th.themify() {
+      border-color: th.themed('borderColor');
+      background: th.themed('bgAccent');
+      color: th.themed('textColor');
+    }
   }
 
   &__textTitle {

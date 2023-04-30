@@ -1,10 +1,15 @@
 @use '@/styles/placeholders';
+@use '@/styles/themes' as th;
 
 .container {
-  border-top: 1px solid rgb(172, 172, 172);
-  border-bottom: 1px solid rgb(172, 172, 172);
+  border-top: 1px solid;
+  border-bottom: 1px solid;
   padding-block: 0.625rem;
   padding-inline: 0.5rem;
+
+  @include th.themify() {
+    border-color: th.themed('borderColor');
+  }
 }
 
 .link {
@@ -29,7 +34,10 @@
 
 .meta {
   font-size: var(--text-xs);
-  color: rgb(85, 85, 85);
+
+  @include th.themify() {
+    color: th.themed('textAccent');
+  }
 }
 
 .btnReport {
@@ -37,7 +45,10 @@
   border: 1px solid currentColor;
   border-radius: 0.25rem;
   margin-top: 0.5rem;
-  padding: 0.125rem 0.625rem;
+  padding: 0.25rem 0.625rem;
   font-size: var(--text-xxs);
-  color: rgb(85, 85, 85);
+
+  @include th.themify() {
+    color: th.themed('textAccent');
+  }
 }

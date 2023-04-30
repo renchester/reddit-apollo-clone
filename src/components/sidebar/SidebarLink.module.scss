@@ -1,13 +1,19 @@
+@use '@/styles/themes' as th;
+
 .listItem {
   display: flex;
   justify-content: space-between;
 
   &:not(:last-of-type) {
-    border-bottom: 1px solid rgb(167, 167, 167);
+    @include th.themify() {
+      border-bottom: th.themed('border');
+    }
   }
 
   &Active {
-    color: white;
+    @include th.themify() {
+      color: th.themed('primary');
+    }
   }
 }
 
@@ -25,7 +31,10 @@
   padding: 0.25rem;
   border: 0.25px solid currentColor;
   border-radius: 100%;
-  color: white;
+
+  @include th.themify() {
+    color: th.themed('primary');
+  }
 }
 
 .titleWrapper {
@@ -35,12 +44,20 @@
 
 .subtitle {
   font-size: var(--text-xs);
-  color: rgb(82, 82, 82);
+
+  @include th.themify() {
+    color: th.themed('textAccent');
+  }
 }
 
 .btnFav {
   display: flex;
   align-items: center;
+  padding-right: 0.5rem;
+
+  @include th.themify() {
+    color: th.themed('primary');
+  }
 }
 
 .favIcon__filled {

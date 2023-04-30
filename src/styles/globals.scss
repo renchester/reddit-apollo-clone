@@ -74,6 +74,10 @@ a:visited {
   color: inherit;
 }
 
+p {
+  line-height: 1.35;
+}
+
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
@@ -81,7 +85,7 @@ a:visited {
 //====== THEMES ======//
 body {
   @include th.themifyBody(th.$themes) {
-    background-color: th.themed('backgroundColor');
+    background-color: th.themed('bgColor');
     color: th.themed('textColor');
   }
 }
