@@ -1,3 +1,6 @@
 .layout__feed {
   flex-grow: 1;
+  max-height: 100vh;
+  max-height: 100svh;
+  overflow: auto;
 }

@@ -7,6 +7,7 @@
   top: 0;
   bottom: 0;
   z-index: 20;
+  height: 100vh;
   width: 100vw;
   padding-top: 1rem;
   padding-inline: 1.25rem;
@@ -15,7 +16,7 @@
   @include mixins.breakpoint(sm) {
     position: relative;
     border-right: 0.5px solid;
-    width: clamp(300px, 30vw, 500px);
+    width: clamp(300px, 30vw, 420px);
 
     @include th.themify() {
       border-color: th.themed('borderColor');
