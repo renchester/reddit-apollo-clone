@@ -1,13 +1,37 @@
 @use 'sass:color';
 
-$mainLight: #fff;
-$mainDark: #222;
+//====== Light Mode Variables ======//
+$bgLight: #fff;
+$textLight: #202020;
+$primaryLight: #632be4;
+$borderColorLight: #adadad;
+
+//====== Dark Mode Variables ======//
+$bgDark: #222;
+$textDark: #f1f1f1;
+$primaryDark: #4f8af8;
+$borderColorDark: #525252;
 
 $themes: (
   light: (
-    backgroundColor: $mainLight,
-    accentBackgroundColor: color.adjust($mainLight, $lightness: -10%),
-    textColor: #408bbd,
+    // Accents
+    primary: $primaryLight,
+    // Background
+    bgColor: $bgLight,
+    bgAccent: color.adjust($bgLight, $lightness: -2.5%),
+    bgAlpha75: color.adjust($bgLight, $alpha: -0.25),
+    bgAlpha50: color.adjust($bgLight, $alpha: -0.5),
+    bgAlpha25: color.adjust($bgLight, $alpha: -0.75),
+    // Text
+    textColor: $textLight,
+    textAccent: color.adjust($textLight, $lightness: 20%),
+    textAlpha75: color.adjust($textLight, $alpha: -0.25),
+    textAlpha50: color.adjust($textLight, $alpha: -0.5),
+    textAlpha25: color.adjust($textLight, $alpha: -0.75),
+    // Border
+    border: 1px solid $borderColorLight,
+    borderColor: $borderColorLight,
+    // Buttons
     buttonTextColor: #408bbd,
     buttonTextTransform: none,
     buttonTextHoverColor: #61b0e7,
@@ -15,9 +39,24 @@ $themes: (
     buttonBorder: 2px solid #fff,
   ),
   dark: (
-    backgroundColor: $mainDark,
-    accentBackgroundColor: color.adjust($mainDark, $lightness: 10%),
-    textColor: #ddd,
+    // Accents
+    primary: $primaryDark,
+    // Background
+    bgColor: $bgDark,
+    bgAccent: color.adjust($bgDark, $lightness: 2.5%),
+    bgAlpha75: color.adjust($bgDark, $alpha: -0.25),
+    bgAlpha50: color.adjust($bgDark, $alpha: -0.5),
+    bgAlpha25: color.adjust($bgDark, $alpha: -0.75),
+    // Text
+    textColor: $textDark,
+    textAccent: color.adjust($textDark, $lightness: -30%),
+    textAlpha75: color.adjust($textDark, $alpha: -0.25),
+    textAlpha50: color.adjust($textDark, $alpha: -0.5),
+    textAlpha25: color.adjust($textDark, $alpha: -0.75),
+    // Border
+    border: 1px solid $borderColorDark,
+    borderColor: $borderColorDark,
+    // Buttons
     buttonTextColor: #aaa,
     buttonTextTransform: uppercase,
     buttonTextHoverColor: #ddd,
