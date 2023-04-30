@@ -1,0 +1,178 @@
+@use '@/styles/placeholders';
+@use '@/styles/mixins' as mixins;
+@use '@/styles/themes' as th;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(100%, 420px);
+  margin: 2rem auto;
+
+  %btn-auth {
+    padding: 0.75rem 3rem;
+    border-radius: 10rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-align: center;
+
+    @include th.themify() {
+      border-color: th.themed('textAlpha50');
+    }
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  margin-inline: auto;
+  width: 100%;
+
+  &__title {
+    font-weight: 500;
+    font-size: var(--text-lg);
+  }
+
+  &__terms {
+    font-size: var(--text-xs);
+  }
+}
+
+.auth {
+  margin-inline: auto;
+  width: 100%;
+
+  &__provider {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  &__btnProvider {
+    @extend %btn-auth;
+    position: relative;
+    border: 1px solid;
+  }
+
+  &__providerIcon {
+    @include mixins.center-self(vertical, absolute);
+    left: 0;
+    margin-left: 0.5rem;
+    width: 25px;
+    height: auto;
+  }
+
+  &__separator {
+    padding: 2rem;
+    text-align: center;
+    font-weight: 700;
+
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+}
+
+.form {
+  $self: &;
+
+  &__inputWrapper {
+    --input-margin: 1.25rem;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+    border-radius: 10rem;
+    height: 55px;
+
+    @include th.themify() {
+      border-color: th.themed('textAlpha50');
+    }
+
+    &:focus-within,
+    &:hover {
+      @include th.themify() {
+        border-color: th.themed('textAlpha75');
+      }
+
+      & #{$self}__label {
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+        font-size: var(--text-xs);
+        margin-top: 5px;
+      }
+
+      & #{$self}__input {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  &__label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: var(--input-margin);
+    font-weight: 500;
+    transition: 100ms all ease-in;
+
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+
+  &__input {
+    background: transparent;
+    height: 100%;
+    padding-left: var(--input-margin);
+    font-size: var(--text-sm);
+    font-weight: 500;
+
+    @include th.themify() {
+      color: th.themed('textColor');
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__btnSubmit {
+    @extend %btn-auth;
+    width: 100%;
+    margin-top: 2rem;
+
+    @include th.themify() {
+      background-color: th.themed('primary');
+      color: th.themed('bgAccent');
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+
+      @include th.themify() {
+        background-color: th.themed('bgAccent2');
+        color: th.themed('textAccent');
+      }
+    }
+  }
+}
+
+.other {
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  font-size: 0.9rem;
+
+  &__link {
+    font-weight: 500;
+    margin-left: 0.375rem;
+
+    @include th.themify() {
+      color: th.themed('primary');
+    }
+  }
+}
