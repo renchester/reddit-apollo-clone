@@ -10,7 +10,7 @@ type ContextType = {
   toggleTheme: () => void;
   setToDarkMode?: () => void;
   setToLightMode?: () => void;
-  isDark: boolean;
+  isDark: boolean | null;
 };
 
 const defaultContext: ContextType = {
@@ -27,7 +27,7 @@ type ThemeProviderProps = {
 };
 
 const getThemeFromStorage = () => {
-  const storedTheme = localStorage.getItem('RedditThemeContext');
+  const storedTheme = window.localStorage.getItem('RedditThemeContext');
 
   if (storedTheme !== undefined && storedTheme !== null) {
     return JSON.parse(storedTheme) as boolean;
@@ -38,8 +38,7 @@ const getThemeFromStorage = () => {
 
 export const ThemeProvider = (props: ThemeProviderProps) => {
   const { children } = props;
-
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState<boolean | null>(null);
 
   const setToDarkMode = () => setIsDark(true);
   const setToLightMode = () => setIsDark(false);
@@ -50,18 +49,23 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
 
     if (storedTheme !== null) {
       setIsDark(storedTheme);
+      return;
     } else if (
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: light').matches
     ) {
       setToLightMode();
+      return;
     } else {
       setToDarkMode();
+      return;
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('RedditThemeContext', isDark.toString());
+    if (isDark !== null) {
+      window.localStorage.setItem('RedditThemeContext', isDark.toString());
+    }
 
     if (isDark) {
       document.body.classList.add('theme-dark');
