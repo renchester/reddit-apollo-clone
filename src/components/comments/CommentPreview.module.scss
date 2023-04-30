@@ -1,0 +1,87 @@
+@use '@/styles/themes' as th;
+
+.container {
+  padding-block: 1rem;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+
+  @include th.themify() {
+    border-color: th.themed('borderColor');
+  }
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.25rem;
+
+  &__originalPoster {
+    grid-area: op;
+    font-size: 0.95rem;
+    font-size: var(--text-xs);
+  }
+
+  &__btnUpvote {
+    grid-area: upvote;
+    display: flex;
+    align-items: center;
+    font-size: var(--text-xs);
+
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+
+  &__btnIcon {
+    font-size: var(--text-md);
+  }
+
+  &__date {
+    margin-left: auto;
+    font-size: var(--text-xs);
+
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.subreddit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-inline: 0.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid;
+  border-radius: var(--main-border-radius);
+
+  @include th.themify() {
+    background: th.themed('bgAccent2');
+    border-color: th.themed('bgAlpha75');
+    color: th.themed('textAccent');
+  }
+
+  &__post {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &__title {
+    font-size: var(--text-xs);
+  }
+}

@@ -52,6 +52,7 @@ function Comment(props: CommentProps) {
               type="button"
               aria-label="Upvote comment"
               onClick={upvoteComment}
+              className={styles.main__btnUpvote}
             >
               <i
                 className={`material-symbols-outlined ${styles.main__iconUpvote}`}
