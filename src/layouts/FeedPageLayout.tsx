@@ -5,14 +5,15 @@ import Footer from '@/components/Footer';
 
 type FeedPageLayoutProps = {
   children: ReactNode;
+  label?: string;
 };
 
 function FeedPageLayout(props: FeedPageLayoutProps) {
-  const { children } = props;
+  const { children, label } = props;
 
   return (
     <div className={styles.layout__feed}>
-      <Header />
+      <Header label={label} />
       {children}
       <Footer />
     </div>

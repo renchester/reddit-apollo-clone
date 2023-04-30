@@ -7,7 +7,13 @@ import { useSwipeable } from 'react-swipeable';
 import { useNavbar } from '@/hooks/useNavbar';
 import HeaderMenu from './HeaderMenu';
 
-function Header() {
+type HeaderProps = {
+  label?: string;
+};
+
+function Header(props: HeaderProps) {
+  const { label } = props;
+
   const { showNavbar, toggleNavbar, isNavbarShown } = useNavbar();
   const [isMenuShown, setMenuVisibility] = useState(false);
 
@@ -45,25 +51,32 @@ function Header() {
             </h2>
           </button>
         </div>
-        <div className={styles.feed__labelWrapper}>
-          <h2 className={styles.feed__label} aria-label="Name of current feed">
-            Popular
-          </h2>
-          <button
-            className={styles.feed__labelBtn}
-            type="button"
-            aria-haspopup
-            aria-expanded="false"
-            aria-label="Show other subreddits"
-          >
-            <span
-              className={`${styles.feed__labelBtnIcon} material-symbols-outlined`}
-              aria-hidden
+        {label ? (
+          <h2 className={styles.feed__label}>{label}</h2>
+        ) : (
+          <div className={styles.feed__labelWrapper}>
+            <h2
+              className={styles.feed__label}
+              aria-label="Name of current feed"
             >
-              expand_more
-            </span>
-          </button>
-        </div>
+              Popular
+            </h2>
+            <button
+              className={styles.feed__labelBtn}
+              type="button"
+              aria-haspopup
+              aria-expanded="false"
+              aria-label="Show other subreddits"
+            >
+              <span
+                className={`${styles.feed__labelBtnIcon} material-symbols-outlined`}
+                aria-hidden
+              >
+                expand_more
+              </span>
+            </button>
+          </div>
+        )}
         <div className={styles.btn__container}>
           <button
             className={styles.btn__sort}

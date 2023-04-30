@@ -67,6 +67,10 @@
 
   &__label {
     @extend %label;
+
+    @include th.themify() {
+      color: th.themed('textColor');
+    }
   }
 }
 
