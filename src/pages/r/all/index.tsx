@@ -6,7 +6,7 @@ import { useState, type ReactElement } from 'react';
 import AsideContainer from '@/components/asides/AsideContainer';
 import PostPreview from '@/components/posts/PostPreview';
 import SubredditAside from '@/components/asides/SubredditAside';
-import SubredditMenu from '@/components/menus/SubredditMenu';
+import SubredditMenu from '@/components/subreddits/SubredditMenu';
 
 function SubredditPage() {
   const [isMenuShown, setMenuVisibility] = useState(false);
