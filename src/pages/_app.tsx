@@ -9,6 +9,7 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { NavbarProvider } from '@/hooks/useNavbar';
 import { ThemeProvider } from '@/hooks/useTheme';
+import { AuthProvider } from '@/hooks/useAuth';
 
 fontAwesomeConfig.autoAddCss = false;
 
@@ -25,12 +26,14 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <ThemeProvider>
-      <NavbarProvider>
-        <div className={`${roboto.variable} ${inter.variable}`}>
-          {getLayout(<Component {...pageProps} />)}
-        </div>
-      </NavbarProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <NavbarProvider>
+          <div className={`${roboto.variable} ${inter.variable}`}>
+            {getLayout(<Component {...pageProps} />)}
+          </div>
+        </NavbarProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
