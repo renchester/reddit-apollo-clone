@@ -1,13 +1,36 @@
 import styles from '../AuthPage.module.scss';
 import Head from 'next/head';
+import Link from 'next/link';
 import Image from 'next/image';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import googleLogo from '@/assets/img/google-logo.png';
-import Link from 'next/link';
+
+import createAccountWithGoogle from '@/firebase/auth/googleSignup';
 
 function SignupPage() {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    setTimeout(() => setErrorMessage(''), 7500);
+  }, [errorMessage]);
+
+  const handleGoogleSignUp = async () => {
+    try {
+      await createAccountWithGoogle();
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
+    }
+  };
+
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.currentTarget.value);
+  };
+
   return (
     <>
       <Head>
@@ -27,7 +50,13 @@ function SignupPage() {
 
           <section className={styles.auth}>
             <div className={styles.auth__provider}>
-              <button type="button" className={styles.auth__btnProvider}>
+              <button
+                type="button"
+                className={styles.auth__btnProvider}
+                aria-haspopup
+                aria-label="Create account with Google"
+                onClick={handleGoogleSignUp}
+              >
                 <Image
                   src={googleLogo}
                   alt="Google logo"
@@ -35,20 +64,29 @@ function SignupPage() {
                   className={styles.auth__providerIcon}
                 />
                 <span className={styles.auth__providerText}>
-                  Continue with Google
+                  Sign up with Google
                 </span>
               </button>
             </div>
             <div className={styles.auth__separator}>OR</div>
             <form action="" className={styles.form}>
-              <div className={styles.form__inputWrapper}>
+              <div
+                className={`${
+                  email.length > 1
+                    ? styles.form__inputWrapperFilled
+                    : styles.form__inputWrapper
+                }`}
+              >
                 <label htmlFor="signup_email" className={styles.form__label}>
                   Email
                 </label>
                 <input
                   id="signup_email"
                   type="email"
+                  name="email"
                   className={styles.form__input}
+                  onChange={handleChangeEmail}
+                  value={email}
                 />
               </div>
               <button type="button" disabled className={styles.form__btnSubmit}>
@@ -61,6 +99,7 @@ function SignupPage() {
                 Log in
               </Link>
             </div>
+            {errorMessage && <div className={styles.error}>{errorMessage}</div>}
           </section>
         </main>
       </div>

@@ -77,16 +77,19 @@
 
 .form {
   $self: &;
+  --input-margin: 1.25rem;
 
-  &__inputWrapper {
-    --input-margin: 1.25rem;
-
+  %input-wrapper-base {
     position: relative;
     display: flex;
     flex-direction: column;
     border: 1px solid;
     border-radius: 10rem;
     height: 55px;
+  }
+
+  &__inputWrapper {
+    @extend %input-wrapper-base;
 
     @include th.themify() {
       border-color: th.themed('textAlpha50');
@@ -109,6 +112,26 @@
       & #{$self}__input {
         margin-bottom: 2px;
       }
+    }
+  }
+
+  &__inputWrapperFilled {
+    @extend %input-wrapper-base;
+
+    @include th.themify() {
+      border-color: th.themed('textAlpha75');
+    }
+
+    & #{$self}__label {
+      position: relative;
+      top: 0;
+      transform: translateY(0);
+      font-size: var(--text-xs);
+      margin-top: 5px;
+    }
+
+    & #{$self}__input {
+      margin-bottom: 2px;
     }
   }
 
@@ -174,5 +197,18 @@
     @include th.themify() {
       color: th.themed('primary');
     }
+  }
+}
+
+.error {
+  border-radius: var(--main-border-radius);
+  padding: 0.5rem;
+  font-size: var(--text-xs);
+  color: white;
+  transition: 500ms all ease-in;
+
+  @include th.themify() {
+    // color: th.themed('textColor');
+    background: th.themed('bgError');
   }
 }
