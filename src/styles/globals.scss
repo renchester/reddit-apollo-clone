@@ -84,6 +84,8 @@ p {
 
 //====== THEMES ======//
 body {
+  transition: var(--bg-transition);
+
   @include th.themifyBody(th.$themes) {
     background-color: th.themed('bgColor');
     color: th.themed('textColor');

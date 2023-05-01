@@ -19,6 +19,7 @@ $themes: (
     // Background
     bgColor: $bgLight,
     bgAccent: color.adjust($bgLight, $lightness: -2.5%),
+    bgAccent2: color.adjust($bgLight, $lightness: -5%),
     bgAlpha75: color.adjust($bgLight, $alpha: -0.25),
     bgAlpha50: color.adjust($bgLight, $alpha: -0.5),
     bgAlpha25: color.adjust($bgLight, $alpha: -0.75),
@@ -37,6 +38,9 @@ $themes: (
     buttonTextHoverColor: #61b0e7,
     buttonColor: #fff,
     buttonBorder: 2px solid #fff,
+    // Error
+    textError: #e00000,
+    bgError: #e00000,
   ),
   dark: (
     // Accents
@@ -44,6 +48,7 @@ $themes: (
     // Background
     bgColor: $bgDark,
     bgAccent: color.adjust($bgDark, $lightness: 2.5%),
+    bgAccent2: color.adjust($bgDark, $lightness: 5%),
     bgAlpha75: color.adjust($bgDark, $alpha: -0.25),
     bgAlpha50: color.adjust($bgDark, $alpha: -0.5),
     bgAlpha25: color.adjust($bgDark, $alpha: -0.75),
@@ -62,6 +67,9 @@ $themes: (
     buttonTextHoverColor: #ddd,
     buttonColor: #333,
     buttonBorder: 1px solid #aaa,
+    // Error
+    textError: #fa4343,
+    bgError: #fa4343,
   ),
 );
 
