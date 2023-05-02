@@ -6,7 +6,7 @@ import {
   getAdditionalUserInfo,
 } from 'firebase/auth';
 import checkUsernameAvailability from './checkUsernameAvailability';
-import addUserToDb from './addUserToDb';
+import addUserToDb from '../firestore/addUserToDb';
 import checkEmailAvailability from './checkEmailAvailability';
 import signOutUser from './signOutUser';
 
@@ -26,7 +26,7 @@ const createAccountWithEmail = async (
 
       console.error(`ERROR ${errorCode}: ${errorMessage}`);
 
-      throw new Error(`ERROR ${errorCode}: ${errorMessage}`);
+      throw new Error(`Failed with error code: ${errorCode}`);
     }
   }
 

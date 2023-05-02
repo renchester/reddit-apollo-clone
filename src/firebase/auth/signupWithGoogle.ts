@@ -7,7 +7,7 @@ import {
   type User,
   UserCredential,
 } from 'firebase/auth';
-import addUserToDb from './addUserToDb';
+import addUserToDb from '../firestore/addUserToDb';
 import checkUsernameAvailability from './checkUsernameAvailability';
 import signOutUser from './signOutUser';
 import getRandomUsername from '@/utils/getRandomUsername';
@@ -25,7 +25,7 @@ const createAccountWithGoogle = async () => {
 
       console.error(`ERROR ${errorCode}: ${errorMessage}`);
 
-      throw new Error(`ERROR ${errorCode}: ${errorMessage}`);
+      throw new Error(`Failed with error code: ${errorCode}`);
     }
   }
 
