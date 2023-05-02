@@ -1,0 +1,133 @@
+@use '@/styles/themes' as th;
+
+.wrapper {
+  --input-margin: 1.25rem;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  border-radius: 10rem;
+  height: 55px;
+  margin-bottom: 1.875rem;
+
+  &__empty {
+    @include th.themify() {
+      border-color: th.themed('textAlpha50');
+    }
+
+    &:focus-within,
+    &:hover {
+      @include th.themify() {
+        border-color: th.themed('textAlpha75');
+      }
+
+      & .label {
+        position: relative;
+        top: 0;
+        transform: translateY(0);
+        font-size: var(--text-xs);
+        margin-top: 5px;
+      }
+
+      & .input {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  &__filled {
+    @include th.themify() {
+      border-color: th.themed('textAlpha75');
+    }
+
+    & .label {
+      position: relative;
+      top: 0;
+      transform: translateY(0);
+      font-size: var(--text-xs);
+      margin-top: 5px;
+    }
+
+    & .input {
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--input-margin);
+  font-weight: 500;
+  transition: 100ms all ease-in;
+
+  @include th.themify() {
+    color: th.themed('textAccent');
+  }
+}
+
+.input {
+  background: transparent;
+  height: 100%;
+  padding-left: var(--input-margin);
+  padding-right: calc(var(--input-margin) * 2.5);
+  font-size: var(--text-sm);
+  font-weight: 500;
+
+  @include th.themify() {
+    color: th.themed('textColor');
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.validation {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: calc(var(--input-margin) / 2);
+
+  &__icon {
+    font-size: var(--text-md);
+    aspect-ratio: 1 / 1;
+    padding: 0.25rem;
+    border: 1px solid;
+    border-radius: 100%;
+    color: white;
+    font-variation-settings: 'FILL' 0, 'wght' 1000, 'GRAD' 0, 'opsz' 48;
+
+    @include th.themify() {
+      border-color: th.themed('borderColor');
+    }
+  }
+
+  &__validIcon {
+    @include th.themify() {
+      background: th.themed('primaryAlpha50');
+    }
+  }
+
+  &__invalidIcon {
+    @include th.themify() {
+      background: th.themed('bgErrorAccent');
+    }
+  }
+}
+
+.error__message {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.1rem;
+  margin-left: var(--input-margin);
+  font-size: var(--text-xs);
+  line-height: 1;
+
+  @include th.themify() {
+    color: th.themed('textError');
+  }
+}
