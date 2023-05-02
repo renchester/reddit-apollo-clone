@@ -1,5 +1,7 @@
 import { auth } from '@/firebase/config';
-import { type User, onAuthStateChanged } from 'firebase/auth';
+import getUserDetailsFromDb from '@/firebase/firestore/getUserDetailsFromDb';
+import { onAuthStateChanged } from 'firebase/auth';
+import type { User } from '@/types/types';
 import {
   type ReactNode,
   createContext,
@@ -24,9 +26,11 @@ export const AuthProvider = (props: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUser(user);
+        const userDetails = await getUserDetailsFromDb(user.uid);
+
+        setUser(userDetails);
       } else {
         setUser(null);
       }
