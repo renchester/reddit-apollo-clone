@@ -76,94 +76,6 @@
 }
 
 .form {
-  $self: &;
-  --input-margin: 1.25rem;
-
-  %input-wrapper-base {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid;
-    border-radius: 10rem;
-    height: 55px;
-  }
-
-  &__inputWrapper {
-    @extend %input-wrapper-base;
-
-    @include th.themify() {
-      border-color: th.themed('textAlpha50');
-    }
-
-    &:focus-within,
-    &:hover {
-      @include th.themify() {
-        border-color: th.themed('textAlpha75');
-      }
-
-      & #{$self}__label {
-        position: relative;
-        top: 0;
-        transform: translateY(0);
-        font-size: var(--text-xs);
-        margin-top: 5px;
-      }
-
-      & #{$self}__input {
-        margin-bottom: 2px;
-      }
-    }
-  }
-
-  &__inputWrapperFilled {
-    @extend %input-wrapper-base;
-
-    @include th.themify() {
-      border-color: th.themed('textAlpha75');
-    }
-
-    & #{$self}__label {
-      position: relative;
-      top: 0;
-      transform: translateY(0);
-      font-size: var(--text-xs);
-      margin-top: 5px;
-    }
-
-    & #{$self}__input {
-      margin-bottom: 2px;
-    }
-  }
-
-  &__label {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: var(--input-margin);
-    font-weight: 500;
-    transition: 100ms all ease-in;
-
-    @include th.themify() {
-      color: th.themed('textAccent');
-    }
-  }
-
-  &__input {
-    background: transparent;
-    height: 100%;
-    padding-left: var(--input-margin);
-    font-size: var(--text-sm);
-    font-weight: 500;
-
-    @include th.themify() {
-      color: th.themed('textColor');
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-
   &__btnSubmit {
     @extend %btn-auth;
     width: 100%;
@@ -179,7 +91,7 @@
 
       @include th.themify() {
         background-color: th.themed('bgAccent2');
-        color: th.themed('textAccent');
+        color: th.themed('textAlpha50');
       }
     }
   }
@@ -208,7 +120,12 @@
   transition: 500ms all ease-in;
 
   @include th.themify() {
-    // color: th.themed('textColor');
     background: th.themed('bgError');
   }
+}
+
+.signedIn {
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
 }
