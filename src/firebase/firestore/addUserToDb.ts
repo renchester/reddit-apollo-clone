@@ -1,4 +1,4 @@
-import { Timestamp, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config';
 
 type AddUserToDbProps = {
@@ -19,7 +19,9 @@ const addUserToDb = async (props: AddUserToDbProps) => {
       username,
       email,
       provider,
-      date_created: Timestamp.fromDate(new Date(date_created)),
+      date_created,
+      comment_karma: 0,
+      post_karma: 0,
     });
 
     return true;
