@@ -22,9 +22,10 @@ const addUserToDb = async (props: AddUserToDbProps) => {
       date_created: Timestamp.fromDate(new Date(date_created)),
     });
 
-    console.log('done setting up user');
+    return true;
   } catch (e) {
     console.error('Error: Problem setting new user in database');
+    return null;
   }
 };
 
