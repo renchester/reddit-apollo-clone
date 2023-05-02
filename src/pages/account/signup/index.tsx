@@ -7,9 +7,9 @@ import { ReactElement, useEffect, useState } from 'react';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import googleLogo from '@/assets/img/google-logo.png';
-import { AnimatePresence } from 'framer-motion';
-import createAccountWithGoogle from '@/firebase/auth/googleSignup';
-import createAccountWithEmail from '@/firebase/auth/emailSignup';
+import { AnimatePresence, motion } from 'framer-motion';
+import createAccountWithGoogle from '@/firebase/auth/signupWithGoogle';
+import createAccountWithEmail from '@/firebase/auth/signupWithEmail';
 import { useAuth } from '@/hooks/useAuth';
 import AuthInput from '@/components/auth/AuthInput';
 import validateEmail from '@/utils/validators/validateEmail';
@@ -53,7 +53,7 @@ function SignupPage() {
       if (result) {
         router.push('/');
       } else {
-        signOutUser();
+        await signOutUser();
         router.push('/');
       }
     } catch (e) {
@@ -70,7 +70,7 @@ function SignupPage() {
       if (result) {
         router.push('/');
       } else {
-        signOutUser();
+        await signOutUser();
         router.push('/');
       }
     } catch (e) {
@@ -265,6 +265,35 @@ function SignupPage() {
                   )}
                 </AnimatePresence>
 
+                <AnimatePresence>
+                  {googleError && (
+                    <motion.div
+                      className={styles.error}
+                      role="alert"
+                      aria-live="assertive"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      {googleError}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {signupError && (
+                    <motion.div
+                      className={styles.error}
+                      role="alert"
+                      aria-live="assertive"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      {signupError}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <button
                   type="button"
                   className={styles.form__btnSubmit}
@@ -282,8 +311,6 @@ function SignupPage() {
                   Log in
                 </Link>
               </div>
-              {googleError && <div className={styles.error}>{googleError}</div>}
-              {signupError && <div className={styles.error}>{signupError}</div>}
             </section>
           </main>
         )}
