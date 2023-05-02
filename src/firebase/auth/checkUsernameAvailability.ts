@@ -10,9 +10,8 @@ const checkUsernameAvailability = async (username: string) => {
   querySnapshot.forEach((doc) => {
     if (doc.data()) usernames.push(doc.data());
   });
-  console.log(usernames);
 
-  return !(usernames.length > 1);
+  return !(usernames.length > 0);
 };
 
 export default checkUsernameAvailability;
