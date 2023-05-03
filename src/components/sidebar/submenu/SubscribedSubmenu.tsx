@@ -1,17 +1,21 @@
-import styles from './Submenu.module.scss';
-import SidebarLink from '../SidebarLink';
+import { useAuth } from '@/hooks/useAuth';
 import SidebarSubmenu from './SidebarSubmenu';
 import SidebarListItemAlpha from '../SidebarListItemAlpha';
 
 function SubscribedSubmenu() {
+  const { user } = useAuth();
   return (
     <SidebarSubmenu headingTitle="Subscriptions">
       {/* subscriptions.map(sub => sidebarLink) */}
 
-      <ul className={styles.hi}>
-        <SidebarListItemAlpha letter="A" />
-        <SidebarListItemAlpha letter="B" />
-      </ul>
+      {user ? (
+        <ul>
+          <SidebarListItemAlpha letter="A" />
+          <SidebarListItemAlpha letter="B" />
+        </ul>
+      ) : (
+        <p className="not-signed-in">No subscribed subreddits</p>
+      )}
     </SidebarSubmenu>
   );
 }
