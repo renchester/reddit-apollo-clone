@@ -58,7 +58,7 @@ const createAccountWithGoogle = async () => {
       );
 
     const newUser = {
-      date_created: user.metadata.creationTime || new Date(),
+      date_created: user.metadata.creationTime || new Date().toUTCString(),
       username: newUsername,
       email: user.email,
       user_id: user.uid,

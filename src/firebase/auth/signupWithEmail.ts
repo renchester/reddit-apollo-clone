@@ -48,7 +48,7 @@ const createAccountWithEmail = async (
       throw new Error('Username already taken. Try using another one.');
 
     const newUser = {
-      date_created: user.metadata.creationTime || new Date(),
+      date_created: user.metadata.creationTime || new Date().toUTCString(),
       username: username,
       email: email,
       user_id: user.uid,
