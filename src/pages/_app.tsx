@@ -10,6 +10,7 @@ import type { AppProps } from 'next/app';
 import { NavbarProvider } from '@/hooks/useNavbar';
 import { ThemeProvider } from '@/hooks/useTheme';
 import { AuthProvider } from '@/hooks/useAuth';
+import { SnackbarProvider } from '@/hooks/useSnackbar';
 
 fontAwesomeConfig.autoAddCss = false;
 
@@ -28,11 +29,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <NavbarProvider>
-          <div className={`${roboto.variable} ${inter.variable}`}>
-            {getLayout(<Component {...pageProps} />)}
-          </div>
-        </NavbarProvider>
+        <SnackbarProvider>
+          <NavbarProvider>
+            <div className={`${roboto.variable} ${inter.variable}`}>
+              {getLayout(<Component {...pageProps} />)}
+            </div>
+          </NavbarProvider>
+        </SnackbarProvider>
       </ThemeProvider>
     </AuthProvider>
   );

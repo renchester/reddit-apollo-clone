@@ -1,0 +1,53 @@
+@use '@/styles/themes' as th;
+@use '@/styles/mixins' as mixins;
+
+.snackbar {
+  position: fixed;
+  left: 50vw;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 5rem;
+  min-height: 4rem;
+  width: clamp(120px, 85%, 500px);
+  border-radius: var(--main-border-radius);
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  color: white;
+  z-index: 20;
+
+  &[data-status='success'] {
+    @include th.themify() {
+      background-color: th.themed('bgSuccess');
+    }
+  }
+
+  &[data-status='neutral'] {
+    @include th.themify() {
+      background-color: th.themed('primary');
+    }
+  }
+
+  &[data-status='error'] {
+    @include th.themify() {
+      background-color: th.themed('bgError');
+    }
+  }
+}
+
+.message {
+  font-weight: 800;
+  font-size: var(--text-sm);
+}
+
+.submessage {
+  margin-top: 0.5rem;
+  font-size: var(--text-sm);
+}
+
+.icon {
+  font-size: var(--text-xxl);
+}
