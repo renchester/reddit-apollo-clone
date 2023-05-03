@@ -5,21 +5,9 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   width: min(100%, 420px);
   margin: 2rem auto;
-
-  %btn-auth {
-    padding: 0.75rem 3rem;
-    border-radius: 10rem;
-    font-size: var(--text-sm);
-    font-weight: 500;
-    text-align: center;
-
-    @include th.themify() {
-      border-color: th.themed('textAlpha50');
-    }
-  }
 }
 
 .info {
@@ -77,23 +65,8 @@
 
 .form {
   &__btnSubmit {
-    @extend %btn-auth;
-    width: 100%;
+    @extend %btn-submit;
     margin-top: 2rem;
-
-    @include th.themify() {
-      background-color: th.themed('primary');
-      color: th.themed('bgAccent');
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-
-      @include th.themify() {
-        background-color: th.themed('bgAccent2');
-        color: th.themed('textAlpha50');
-      }
-    }
   }
 }
 
@@ -113,19 +86,10 @@
 }
 
 .error {
-  border-radius: var(--main-border-radius);
-  padding: 0.5rem;
-  font-size: var(--text-xs);
-  color: white;
-  transition: 500ms all ease-in;
-
-  @include th.themify() {
-    background: th.themed('bgError');
-  }
+  @extend %error-snackbar;
 }
 
 .signedIn {
   display: flex;
   flex-direction: column;
-  min-height: 70vh;
 }

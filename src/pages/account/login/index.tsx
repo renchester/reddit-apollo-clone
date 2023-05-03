@@ -10,6 +10,7 @@ import FeedPageLayout from '@/layouts/FeedPageLayout';
 import googleLogo from '@/assets/img/google-logo.png';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
+import { useSnackbar } from '@/hooks/useSnackbar';
 import signOutUser from '@/firebase/auth/signOutUser';
 import AuthInput from '@/components/auth/AuthInput';
 import loginWithGoogle from '@/firebase/auth/loginWithGoogle';
@@ -20,9 +21,7 @@ import validatePassword from '@/utils/validators/validatePassword';
 function LoginPage() {
   const { user } = useAuth();
   const router = useRouter();
-
-  const [googleError, setGoogleError] = useState('');
-  const [signupError, setSignupError] = useState('');
+  const { addAlert } = useSnackbar();
 
   const DEBOUNCE_TIME = 600;
   const [email, setEmail] = useState('');
@@ -40,14 +39,16 @@ function LoginPage() {
       const result = await loginWithGoogle();
 
       if (result) {
+        addAlert({ message: 'Successfully signed in', status: 'success' });
         router.push('/');
       } else {
         await signOutUser();
+        addAlert({ message: 'Cannot login at this moment', status: 'error' });
         router.push('/');
       }
     } catch (e) {
       if (e instanceof Error) {
-        setGoogleError(e.message);
+        addAlert({ message: e.message, status: 'error' });
       }
     }
   };
@@ -65,14 +66,16 @@ function LoginPage() {
       const result = await loginWithEmail(email, password);
 
       if (result) {
+        addAlert({ message: 'Successfully signed in', status: 'success' });
         router.push('/');
       } else {
         await signOutUser();
+        addAlert({ message: 'Cannot login at this moment', status: 'error' });
         router.push('/');
       }
     } catch (e) {
       if (e instanceof Error) {
-        setSignupError(e.message);
+        addAlert({ message: e.message, status: 'error' });
       }
     }
   };
@@ -119,16 +122,6 @@ function LoginPage() {
       setTimeout(() => router.push('/'), 1000);
     }
   }, [user, router]);
-
-  // Remove error message
-  const ERROR_TIME = 10000;
-  useEffect(() => {
-    setTimeout(() => setGoogleError(''), ERROR_TIME);
-  }, [googleError]);
-
-  useEffect(() => {
-    setTimeout(() => setSignupError(''), ERROR_TIME);
-  }, [signupError]);
 
   // Cancel debounce on unmount
   useEffect(() => {
@@ -206,35 +199,6 @@ function LoginPage() {
                   isValid={isPasswordValid}
                   errorMessage={passwordError}
                 />
-
-                <AnimatePresence>
-                  {googleError && (
-                    <motion.div
-                      className={styles.error}
-                      role="alert"
-                      aria-live="assertive"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      {googleError}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                <AnimatePresence>
-                  {signupError && (
-                    <motion.div
-                      className={styles.error}
-                      role="alert"
-                      aria-live="assertive"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      {signupError}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
 
                 <button
                   type="button"
