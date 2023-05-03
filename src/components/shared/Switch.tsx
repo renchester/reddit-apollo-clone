@@ -19,7 +19,15 @@ function Switch(props: SwitchProps) {
 
   return (
     <div className={styles.switch} data-status={isOn}>
-      <label htmlFor={id} aria-hidden className={styles.switch__tablet}>
+      <label
+        htmlFor={id}
+        aria-hidden
+        className={styles.switch__tablet}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && handler) handler();
+        }}
+      >
         <input
           id={id}
           type="checkbox"
