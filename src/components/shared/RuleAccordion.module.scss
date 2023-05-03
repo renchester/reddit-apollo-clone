@@ -1,0 +1,49 @@
+@use '@/styles/themes' as th;
+
+.rule {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    'index title button'
+    'index details details';
+  row-gap: 0.125rem;
+  align-content: center;
+  padding-block: 0.75rem;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid;
+
+    @include th.themify() {
+      border-color: th.themed('borderColor');
+    }
+  }
+
+  &__index {
+    grid-area: index;
+    margin-right: 0.25rem;
+  }
+
+  &__title {
+    grid-area: title;
+    text-align: left;
+    flex-grow: 1;
+  }
+
+  &__btnExpand {
+    grid-area: button;
+  }
+
+  &__expanded {
+    grid-area: details;
+  }
+
+  &__details {
+    margin-top: 0.25rem;
+    line-height: 1.35;
+    text-align: left;
+    font-size: 0.9rem;
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+}

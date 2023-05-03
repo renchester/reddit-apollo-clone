@@ -1,5 +1,5 @@
 import styles from './Aside.module.scss';
-import RuleAccordion from './RuleAccordion';
+import RuleAccordion from '../shared/RuleAccordion';
 
 function SubredditRules() {
   return (

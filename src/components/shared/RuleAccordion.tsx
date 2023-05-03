@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './Aside.module.scss';
+import styles from './RuleAccordion.module.scss';
 
 type RuleAccordionProps = {
   index: number;
