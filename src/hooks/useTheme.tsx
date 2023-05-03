@@ -1,8 +1,10 @@
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -40,9 +42,9 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
   const { children } = props;
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
-  const setToDarkMode = () => setIsDark(true);
-  const setToLightMode = () => setIsDark(false);
-  const toggleTheme = () => setIsDark((prev) => !prev);
+  const setToDarkMode = useCallback(() => setIsDark(true), []);
+  const setToLightMode = useCallback(() => setIsDark(false), []);
+  const toggleTheme = useCallback(() => setIsDark((prev) => !prev), []);
 
   useEffect(() => {
     const storedTheme = getThemeFromStorage();
@@ -60,7 +62,7 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
       setToDarkMode();
       return;
     }
-  }, []);
+  }, [setToDarkMode, setToLightMode]);
 
   useEffect(() => {
     if (isDark !== null) {
@@ -76,12 +78,13 @@ export const ThemeProvider = (props: ThemeProviderProps) => {
     }
   }, [isDark]);
 
+  const value = useMemo(
+    () => ({ isDark, setToDarkMode, setToLightMode, toggleTheme }),
+    [isDark, setToDarkMode, setToLightMode, toggleTheme],
+  );
+
   return (
-    <ThemeContext.Provider
-      value={{ isDark, setToDarkMode, setToLightMode, toggleTheme }}
-    >
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };
 

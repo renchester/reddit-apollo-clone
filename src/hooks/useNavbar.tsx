@@ -1,4 +1,11 @@
-import { type ReactNode, createContext, useState, useContext } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useState,
+  useContext,
+  useCallback,
+  useMemo,
+} from 'react';
 
 type NavbarProvideProps = {
   children: ReactNode;
@@ -16,16 +23,25 @@ export const NavbarProvider = (props: NavbarProvideProps) => {
 
   const [isNavbarShown, setNavbarVisibility] = useState(false);
 
-  const showNavbar = () => setNavbarVisibility(true);
-  const hideNavbar = () => setNavbarVisibility(false);
-  const toggleNavbar = () => setNavbarVisibility((prev) => !prev);
+  const showNavbar = useCallback(() => setNavbarVisibility(true), []);
+  const hideNavbar = useCallback(() => setNavbarVisibility(false), []);
+  const toggleNavbar = useCallback(
+    () => setNavbarVisibility((prev) => !prev),
+    [],
+  );
+
+  const value = useMemo(
+    () => ({
+      isNavbarShown,
+      showNavbar,
+      hideNavbar,
+      toggleNavbar,
+    }),
+    [isNavbarShown, showNavbar, hideNavbar, toggleNavbar],
+  );
 
   return (
-    <NavbarContext.Provider
-      value={{ isNavbarShown, showNavbar, hideNavbar, toggleNavbar }}
-    >
-      {children}
-    </NavbarContext.Provider>
+    <NavbarContext.Provider value={value}>{children}</NavbarContext.Provider>
   );
 };
 

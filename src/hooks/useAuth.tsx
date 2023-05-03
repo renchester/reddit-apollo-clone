@@ -9,6 +9,7 @@ import {
   useContext,
   useEffect,
   useReducer,
+  useMemo,
 } from 'react';
 
 type AuthContextType = {
@@ -66,13 +67,16 @@ export const AuthProvider = (props: AuthProviderProps) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const userDetails = await getUserDetailsFromDb(user.uid);
+        console.log(userDetails);
 
         if (userDetails) {
           // Set user to stored user details from Firestore
           userDispatch({ type: 'set_user_details', userDetails });
 
           // Set user interactions
-        } else throw new Error('Unable to set user details');
+        } else {
+          console.error('ERROR: Unable to set user details');
+        }
       } else {
         userDispatch({ type: 'auth_off' });
       }
@@ -81,11 +85,9 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribe();
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, userDispatch }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = useMemo(() => ({ user, userDispatch }), [user, userDispatch]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
