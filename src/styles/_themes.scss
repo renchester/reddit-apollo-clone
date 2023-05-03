@@ -6,13 +6,17 @@ $textLight: #202020;
 $primaryLight: #632be4;
 $borderColorLight: #adadad;
 $errorLight: #e00000;
+$bgErrorLight: #ee3f3f;
+$successLight: #21c400;
 
 //====== Dark Mode Variables ======//
 $bgDark: #222;
 $textDark: #f1f1f1;
 $primaryDark: #4f8af8;
 $borderColorDark: #525252;
-$errorDark: #fa4343;
+$errorDark: #f74a4a;
+$bgErrorDark: #da4d4d;
+$successDark: #00b600;
 
 $themes: (
   light: (
@@ -43,8 +47,10 @@ $themes: (
     buttonBorder: 2px solid #fff,
     // Error
     textError: $errorLight,
-    bgError: $errorLight,
+    bgError: $bgErrorLight,
     bgErrorAccent: color.adjust($errorLight, $alpha: -0.3),
+    // Success
+    bgSuccess: $successLight,
   ),
   dark: (
     // Accents
@@ -74,8 +80,10 @@ $themes: (
     buttonBorder: 1px solid #aaa,
     // Error
     textError: $errorDark,
-    bgError: $errorDark,
+    bgError: $bgErrorDark,
     bgErrorAccent: color.adjust($errorDark, $alpha: -0.4),
+    // Success
+    bgSuccess: $successDark,
   ),
 );
 

@@ -114,3 +114,9 @@ body {
   flex-direction: column;
   gap: 0.75rem;
 }
+
+.not-signed-in {
+  padding: 1rem;
+  font-size: var(--text-sm);
+  font-weight: 400;
+}
