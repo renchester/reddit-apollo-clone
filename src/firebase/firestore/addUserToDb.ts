@@ -20,6 +20,7 @@ const addUserToDb = async (props: AddUserToDbProps) => {
       email,
       provider,
       date_created,
+      user_id,
       comment_karma: 0,
       post_karma: 0,
     });
