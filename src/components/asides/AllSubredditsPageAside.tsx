@@ -1,4 +1,5 @@
 import styles from './Aside.module.scss';
+import Link from 'next/link';
 
 function AllSubredditsPageAside() {
   return (
@@ -7,9 +8,9 @@ function AllSubredditsPageAside() {
       <p className={styles.aside__description}>
         Find all the subreddits here. Click on any of these communities to join!
       </p>
-      <button type="button" className={styles.aside__btnCreate}>
+      <Link href="/r/create-subreddit" className={styles.aside__btnCreate}>
         Create your own subreddit
-      </button>
+      </Link>
     </aside>
   );
 }
