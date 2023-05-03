@@ -1,3 +1,5 @@
+@use './themes' as th;
+
 %parent-with-centered-children {
   display: flex;
   justify-content: center;
@@ -14,4 +16,48 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+%btn-auth {
+  padding: 0.75rem 3rem;
+  border-radius: 10rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: center;
+
+  @include th.themify() {
+    border-color: th.themed('textAlpha50');
+  }
+}
+
+%btn-submit {
+  @extend %btn-auth;
+  width: 100%;
+
+  @include th.themify() {
+    background-color: th.themed('primary');
+    color: th.themed('bgAccent');
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+
+    @include th.themify() {
+      background-color: th.themed('bgAccent2');
+      color: th.themed('textAlpha50');
+    }
+  }
+}
+
+%error-snackbar {
+  border-radius: 10rem;
+  padding: 0.5rem;
+  padding-left: 1.5rem;
+  font-size: var(--text-xs);
+  color: white;
+  transition: 500ms all ease-in;
+
+  @include th.themify() {
+    background: th.themed('bgError');
+  }
 }
