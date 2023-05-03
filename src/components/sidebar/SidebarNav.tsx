@@ -69,6 +69,14 @@ function SidebarNav() {
             isFavorite={false}
             disableFavorite={true}
           />
+          <SidebarLink
+            title="All Subreddits"
+            href="/r"
+            iconName="density_small"
+            subtitle="Check out all the communities"
+            isFavorite={false}
+            disableFavorite={true}
+          />
         </ul>
 
         <FavoritesSubmenu />

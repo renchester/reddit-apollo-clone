@@ -12,6 +12,7 @@
   padding-top: 1rem;
   padding-inline: 1.25rem;
   flex-shrink: 0;
+  transition: var(--bg-transition);
 
   @include mixins.breakpoint(sm) {
     position: relative;
