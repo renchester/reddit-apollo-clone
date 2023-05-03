@@ -1,9 +1,9 @@
 import { User } from '@/types/types';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
-import { db } from '../config';
+import { db } from '../../config';
 
-const addSubreddit = async (name: string, user: User) => {
+const addSubreddit = async (name: string, description: string, user: User) => {
   try {
     const subRef = doc(db, 'subreddits', name);
 
@@ -11,8 +11,10 @@ const addSubreddit = async (name: string, user: User) => {
       subreddit_id: nanoid(),
       date_created: new Date().toUTCString(),
       name: name,
-      creator: user.user_id,
-      creator_username: user.username,
+      description: description || '',
+      memberCount: 1,
+      creator: user.username,
+      creator_id: user.user_id,
     });
 
     const membersRef = doc(

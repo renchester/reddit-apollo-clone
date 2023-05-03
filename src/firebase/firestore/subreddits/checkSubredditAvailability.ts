@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../config';
+import { db } from '../../config';
 
 const checkSubredditAvailability = async (subreddit: string) => {
   const subRef = collection(db, 'subreddits');
