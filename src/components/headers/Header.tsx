@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire } from '@fortawesome/free-solid-svg-icons';
 import { useSwipeable } from 'react-swipeable';
 import { useNavbar } from '@/hooks/useNavbar';
+import { useAuth } from '@/hooks/useAuth';
+
 import HeaderMenu from './HeaderMenu';
 
 type HeaderProps = {
@@ -13,6 +15,7 @@ type HeaderProps = {
 
 function Header(props: HeaderProps) {
   const { label } = props;
+  const { user } = useAuth();
 
   const { showNavbar, toggleNavbar, isNavbarShown } = useNavbar();
   const [isMenuShown, setMenuVisibility] = useState(false);
@@ -96,12 +99,14 @@ function Header(props: HeaderProps) {
             className={styles.btn__account}
             aria-label="Go to account page"
           >
-            <span
-              className={`${styles.btn__icon} ${styles.btn__accountIcon} material-symbols-outlined`}
-              aria-hidden
-            >
-              account_circle
-            </span>
+            {user && (
+              <span
+                className={`${styles.btn__icon} ${styles.btn__accountIcon} material-symbols-outlined`}
+                aria-hidden
+              >
+                account_circle
+              </span>
+            )}
           </Link>
           <button
             className={styles.btn__account}

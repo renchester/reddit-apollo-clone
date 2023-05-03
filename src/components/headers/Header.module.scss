@@ -11,6 +11,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  transition: var(--bg-transition);
 
   @include th.themify() {
     background-color: th.themed('bgAccent');

@@ -23,6 +23,7 @@
     margin-inline: 0.75rem;
     padding-block: 1rem;
     display: flex;
+    justify-content: flex-start;
     align-items: center;
     gap: 0.5rem;
 
@@ -33,7 +34,13 @@
     }
   }
 
+  &__icon {
+    font-size: var(--text-md);
+    width: 15%;
+  }
+
   &__label {
     font-size: var(--text-xs);
+    white-space: nowrap;
   }
 }
