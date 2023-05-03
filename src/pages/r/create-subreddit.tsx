@@ -48,7 +48,9 @@ function CreateSubredditPage() {
             {user ? (
               <CreateSubredditForm user={user} />
             ) : (
-              <p>You must be signed in to create a subreddit</p>
+              <p className="not-signed-in">
+                You must be signed in to create a subreddit.
+              </p>
             )}
           </section>
         </main>
@@ -56,7 +58,7 @@ function CreateSubredditPage() {
         <AsideContainer>
           <AsideTemplate
             title="Create Subreddit"
-            description="This is the place to create your own community!"
+            description="Looking to create a new community? You're in luck! This is tthe right place!"
           />
         </AsideContainer>
       </div>
