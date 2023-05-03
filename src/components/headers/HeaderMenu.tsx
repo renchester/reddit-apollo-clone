@@ -2,19 +2,23 @@ import styles from './HeaderMenu.module.scss';
 import Link from 'next/link';
 import Switch from '../shared/Switch';
 import { useTheme } from '@/hooks/useTheme';
+import { useSnackbar } from '@/hooks/useSnackbar';
 import { useAuth } from '@/hooks/useAuth';
 import signOutUser from '@/firebase/auth/signOutUser';
 
 function HeaderMenu() {
   const { isDark, toggleTheme } = useTheme();
   const { user } = useAuth();
+  const { addAlert } = useSnackbar();
 
   const handleSignOut = async () => {
     try {
       await signOutUser();
+      addAlert({ message: 'Successfully signed out', status: 'success' });
     } catch (e) {
       if (e instanceof Error) {
         console.error(e.message);
+        addAlert({ message: 'Error signing out', status: 'error' });
       }
     }
   };
@@ -44,15 +48,11 @@ function HeaderMenu() {
               className={`material-symbols-outlined ${styles.menu__icon}`}
               aria-hidden
             >
-              account_circle
+              Edit
             </i>
-            <button
-              type="button"
-              className={styles.menu__label}
-              onClick={handleSignOut}
-            >
-              Create Subreddit
-            </button>
+            <Link href="/r/create-subreddit" className={styles.menu__label}>
+              Create subreddit
+            </Link>
           </li>
         )}
 
