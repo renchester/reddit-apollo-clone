@@ -1,13 +1,16 @@
+import { Subreddit } from '@/types/types';
 import styles from './SubredditPreview.module.scss';
 import Link from 'next/link';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 type SubredditPreviewProps = {
   id: string;
   href: string;
+  subreddit: Subreddit;
 };
 
 function SubredditPreview(props: SubredditPreviewProps) {
-  const { id, href } = props;
+  const { id, href, subreddit } = props;
 
   return (
     <article
@@ -24,15 +27,19 @@ function SubredditPreview(props: SubredditPreviewProps) {
             className={styles.title}
             aria-label="Subreddit name"
           >
-            AskReddit
+            {subreddit.name}
           </h3>
         </div>
-        <p className={styles.description}>
-          r/AskReddit is the place to ask and answer thought-provoking questions
-        </p>
+        <p className={styles.description}>{subreddit.description}</p>
         <p className={styles.meta}>
-          30,100,100 subscribers, a community for{' '}
-          <time dateTime="">10 years</time>
+          {subreddit.members.length}{' '}
+          {subreddit.members.length === 1 ? 'subscriber' : 'subscribers'}, a
+          community for{' '}
+          <time dateTime={subreddit.date_created.toString()}>
+            {formatDistanceToNowStrict(
+              new Date(subreddit.date_created as string),
+            )}
+          </time>
         </p>
         <button type="button" className={styles.btnReport}>
           Report
