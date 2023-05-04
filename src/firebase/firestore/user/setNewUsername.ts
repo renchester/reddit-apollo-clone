@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../config';
+import { db } from '@/firebase/config';
 
 const setNewUsername = async (userId: string, username: string) => {
   try {

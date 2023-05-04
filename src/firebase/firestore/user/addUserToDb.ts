@@ -1,11 +1,11 @@
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../config';
+import { doc, setDoc, FieldValue } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 
 type AddUserToDbProps = {
   user_id: string;
   username: string;
   email: string;
-  date_created: string | Date;
+  date_created: FieldValue;
   provider: string;
 };
 

@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../config';
+import { db } from '@/firebase/config';
 import { User } from '@/types/types';
 
 const getUserDetailsFromDb = async (userId: string) => {
