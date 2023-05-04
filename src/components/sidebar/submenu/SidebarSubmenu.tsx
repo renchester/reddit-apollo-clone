@@ -5,11 +5,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 type SidebarSubmenuProps = {
   headingTitle: string;
   children: ReactNode;
+  initExpandedState?: boolean;
 };
 
 function SidebarSubmenu(props: SidebarSubmenuProps) {
-  const { headingTitle, children } = props;
-  const [isMenuExpanded, setMenuExpansion] = useState(true);
+  const { headingTitle, children, initExpandedState } = props;
+  const [isMenuExpanded, setMenuExpansion] = useState(
+    initExpandedState === undefined ? true : initExpandedState,
+  );
 
   const toggleMenuExpansion = () => setMenuExpansion((prev) => !prev);
 
