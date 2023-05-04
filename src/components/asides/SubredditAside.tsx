@@ -1,30 +1,50 @@
+import { Subreddit } from '@/types/types';
 import styles from './Aside.module.scss';
 import SubredditRules from './SubredditRules';
+import { format } from 'date-fns';
 
-function SubredditAside() {
+type SubredditAsideProps = {
+  subreddit: Subreddit;
+};
+
+function SubredditAside(props: SubredditAsideProps) {
+  const { subreddit } = props;
+
+  const formattedDate = format(
+    new Date(subreddit.date_created as string),
+    'LLLL d, yyyy',
+  );
+
   return (
     <>
       <aside className={styles.aside__main}>
-        <h2 className={styles.aside__heading}>r/All</h2>
-        <p className={styles.aside__description}>
-          Welcome to r/All. This is where everything is found. Reddit&apos;s
-          very own.
-        </p>
-        <p className={styles.created}>
-          <span className={`material-symbols-outlined ${styles.created__icon}`}>
+        <h2 className={styles.aside__heading}>r/{subreddit.name}</h2>
+        <p className={styles.aside__description}>{subreddit.description}</p>
+        <div className={styles.created}>
+          <span
+            className={`material-symbols-outlined ${styles.created__icon}`}
+            aria-hidden
+          >
             cake
           </span>
           <span className={styles.created__description}>
-            Created <time>January 28, 2010</time>
+            Created{' '}
+            <time dateTime={subreddit.date_created.toString()}>
+              {formattedDate}
+            </time>
           </span>
-        </p>
+        </div>
         <div className={styles.members}>
           <div
             className={styles.members__meta}
             aria-label="Total members for this subreddit"
           >
-            <span className={styles.members__data}>41,000</span>{' '}
-            <span className={styles.members__description}>members</span>
+            <span className={styles.members__data}>
+              {subreddit.members.length}
+            </span>{' '}
+            <span className={styles.members__description}>
+              {subreddit.members.length === 1 ? 'member' : 'members'}
+            </span>
           </div>
           <div className={styles.members__meta} aria-label="Subreddit rank">
             <span className={styles.members__data}>#1</span>
@@ -36,7 +56,7 @@ function SubredditAside() {
         </button>
       </aside>
 
-      <SubredditRules />
+      <SubredditRules name={subreddit.name} />
     </>
   );
 }

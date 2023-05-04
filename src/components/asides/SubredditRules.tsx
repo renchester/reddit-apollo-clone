@@ -1,10 +1,15 @@
 import styles from './Aside.module.scss';
 import RuleAccordion from '../shared/RuleAccordion';
 
-function SubredditRules() {
+type SubredditRulesProps = {
+  name: string;
+};
+
+function SubredditRules(props: SubredditRulesProps) {
+  const { name } = props;
   return (
     <aside className={styles.aside__main}>
-      <h3>r/All Rules</h3>
+      <h3>r/{name} Rules</h3>
       <ul>
         <RuleAccordion
           index={1}
