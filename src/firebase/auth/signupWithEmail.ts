@@ -5,8 +5,9 @@ import {
   createUserWithEmailAndPassword,
   getAdditionalUserInfo,
 } from 'firebase/auth';
+import { serverTimestamp } from 'firebase/firestore';
 import checkUsernameAvailability from './checkUsernameAvailability';
-import addUserToDb from '../firestore/addUserToDb';
+import addUserToDb from '../firestore/user/addUserToDb';
 import checkEmailAvailability from './checkEmailAvailability';
 import signOutUser from './signOutUser';
 
@@ -48,7 +49,7 @@ const createAccountWithEmail = async (
       throw new Error('Username already taken. Try using another one.');
 
     const newUser = {
-      date_created: user.metadata.creationTime || new Date().toUTCString(),
+      date_created: serverTimestamp(),
       username: username,
       email: email,
       user_id: user.uid,

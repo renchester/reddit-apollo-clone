@@ -5,12 +5,13 @@ import {
   getAdditionalUserInfo,
   signInWithPopup,
 } from 'firebase/auth';
+import { serverTimestamp } from 'firebase/firestore';
 import { FirebaseError } from 'firebase/app';
-import getUserDetailsFromDb from '../firestore/getUserDetailsFromDb';
-import setNewUsername from '../firestore/setNewUsername';
+import getUserDetailsFromDb from '../firestore/user/getUserDetailsFromDb';
+import setNewUsername from '../firestore/user/setNewUsername';
 import getRandomUsername from '@/utils/getRandomUsername';
 import checkUsernameAvailability from './checkUsernameAvailability';
-import addUserToDb from '../firestore/addUserToDb';
+import addUserToDb from '../firestore/user/addUserToDb';
 
 const loginWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
@@ -74,7 +75,7 @@ const loginWithGoogle = async () => {
         );
 
       const newUser = {
-        date_created: user.metadata.creationTime || new Date().toUTCString(),
+        date_created: serverTimestamp(),
         username: newUsername,
         email: user.email,
         user_id: user.uid,

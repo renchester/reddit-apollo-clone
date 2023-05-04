@@ -7,7 +7,8 @@ import {
   type User,
   UserCredential,
 } from 'firebase/auth';
-import addUserToDb from '../firestore/addUserToDb';
+import { serverTimestamp } from 'firebase/firestore';
+import addUserToDb from '../firestore/user/addUserToDb';
 import checkUsernameAvailability from './checkUsernameAvailability';
 import signOutUser from './signOutUser';
 import getRandomUsername from '@/utils/getRandomUsername';
@@ -58,7 +59,7 @@ const createAccountWithGoogle = async () => {
       );
 
     const newUser = {
-      date_created: user.metadata.creationTime || new Date().toUTCString(),
+      date_created: serverTimestamp(),
       username: newUsername,
       email: user.email,
       user_id: user.uid,
