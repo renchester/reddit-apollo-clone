@@ -1,31 +1,27 @@
 import { User } from '@/types/types';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import { db } from '../../config';
+import joinSubreddit from './joinSubreddit';
 
 const addSubreddit = async (name: string, description: string, user: User) => {
   try {
     const subRef = doc(db, 'subreddits', name);
+    const subredditId = nanoid();
 
+    // Create subreddit document
     await setDoc(subRef, {
-      subreddit_id: nanoid(),
-      date_created: new Date().toUTCString(),
+      subreddit_id: subredditId,
+      date_created: serverTimestamp(),
       name: name,
       description: description || '',
-      memberCount: 1,
-      creator: user.username,
+      posts: [],
+      members: [user.user_id], // Add subreddit creator to members
       creator_id: user.user_id,
     });
 
-    const membersRef = doc(
-      collection(db, `subreddits/${name}/members`),
-      user.user_id,
-    );
-
-    await setDoc(membersRef, {
-      user_id: user.user_id,
-      date_joined: new Date().toUTCString(),
-    });
+    // Add subreddit to user subcollection
+    await joinSubreddit(user, name, subredditId);
 
     return true;
   } catch (error) {

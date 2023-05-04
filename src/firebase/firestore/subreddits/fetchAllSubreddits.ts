@@ -1,7 +1,7 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { Timestamp, collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/config';
-import { Subreddit, SubredditMember } from '@/types/types';
-import fetchSubredditMembers from './fetchSubredditMembers';
+import { Subreddit } from '@/types/types';
+import { timestampToUTCDateString } from '../helpers/dateHelpers';
 
 const fetchAllSubreddits = async () => {
   try {
@@ -11,8 +11,14 @@ const fetchAllSubreddits = async () => {
 
     querySnapshot.forEach(async (doc) => {
       const subData = doc.data() as Subreddit;
+      // Convert serverTimestamp to UTC Date String
+      const convertedSubData = Object.assign(subData, {
+        date_created: timestampToUTCDateString(
+          subData.date_created as Timestamp,
+        ),
+      });
 
-      subreddits = [...subreddits, subData];
+      subreddits = [...subreddits, convertedSubData];
     });
 
     return subreddits;
