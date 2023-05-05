@@ -1,5 +1,6 @@
 @use '@/styles/placeholders';
 @use '@/styles/themes' as th;
+@use '@/styles/mixins' as mixins;
 
 .tab {
   margin-top: 1rem;
@@ -30,6 +31,7 @@
   }
 
   &__form {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin-bottom: 3rem;
@@ -97,11 +99,35 @@
   }
 
   &__btnSubmit {
-    align-self: flex-end;
+    @extend %btn-submit;
+    margin-top: 1.25rem;
+  }
+}
+
+.progress {
+  @include mixins.center-self(both, absolute);
+  z-index: 2;
+  padding: 2.5rem;
+  border: 1px solid;
+  border-radius: var(--main-border-radius);
+
+  @include th.themify() {
+    background-color: th.themed('bgAlpha50');
+    border-color: th.themed('textAlpha50');
+  }
+
+  &__barWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__bar {
     margin-top: 1rem;
-    padding: 0.5rem 1.675rem;
-    border: 1px solid currentColor;
-    border-radius: 10rem;
-    font-size: var(--text-sm);
+  }
+
+  &__label {
+    margin-top: 0.5rem;
+    font-size: var(--text-xs);
   }
 }

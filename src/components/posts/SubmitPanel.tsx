@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import styles from './SubmitPanel.module.scss';
+import { Subreddit } from '@/types/types';
+import CreateTextPost from './CreateTextPost';
+import CreateImagePost from './CreateImagePost';
 
-function SubmitPanel() {
-  const MAX_IMG_SIZE = 2097152; //2MB
+type SubmitPanelProps = {
+  subreddit: Subreddit;
+};
+
+function SubmitPanel(props: SubmitPanelProps) {
+  const { subreddit } = props;
+
   const MAX_TITLE_LENGTH = 300;
-
   const [activePanel, setActivePanel] = useState(1);
 
   const [title, setTitle] = useState('');
@@ -16,6 +23,11 @@ function SubmitPanel() {
 
   const handleDetailChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDetails(e.target.value);
+  };
+
+  const resetFields = () => {
+    setTitle('');
+    setDetails('');
   };
 
   return (
@@ -65,45 +77,15 @@ function SubmitPanel() {
         className={styles.tab__panel}
         {...{ hidden: activePanel === 2 }}
       >
-        <form className={styles.tab__form}>
-          <label htmlFor="text-post_title" className={styles.tab__label}>
-            <span className={styles.tab__labelText}>
-              Title <abbr title="required">*</abbr>:
-            </span>
-            <div className={styles.tab__titleWrapper}>
-              <textarea
-                id="text-post_title"
-                name="title"
-                minLength={1}
-                maxLength={MAX_TITLE_LENGTH}
-                placeholder="Post title"
-                required
-                className={styles.tab__textTitle}
-                onChange={handleTitleChange}
-                value={title}
-              />
-              <span className={styles.tab__titleChar}>
-                {MAX_TITLE_LENGTH - title.length}/300
-              </span>
-            </div>
-          </label>
-
-          <label htmlFor="text-post_details" className={styles.tab__label}>
-            <span className={styles.tab__labelText}>Text (optional):</span>
-            <textarea
-              id="text-post_details"
-              name="details"
-              placeholder="Post details"
-              className={styles.tab__textarea}
-              onChange={handleDetailChange}
-              value={details}
-            />
-          </label>
-
-          <button type="submit" className={styles.tab__btnSubmit}>
-            Submit Post
-          </button>
-        </form>
+        <CreateTextPost
+          subreddit={subreddit}
+          titleLength={MAX_TITLE_LENGTH}
+          title={title}
+          handleTitleChange={handleTitleChange}
+          details={details}
+          handleDetailChange={handleDetailChange}
+          resetFields={resetFields}
+        />
       </div>
       <div
         id="image_panel"
@@ -112,61 +94,15 @@ function SubmitPanel() {
         className={styles.tab__panel}
         {...{ hidden: activePanel === 1 }}
       >
-        <form className={styles.tab__form}>
-          <label htmlFor="image-post_title" className={styles.tab__label}>
-            <span className={styles.tab__labelText}>
-              Title <abbr title="required">*</abbr>:
-            </span>
-            <div className={styles.tab__titleWrapper}>
-              <textarea
-                id="image-post_title"
-                name="title"
-                minLength={1}
-                maxLength={MAX_TITLE_LENGTH}
-                placeholder="Post title"
-                required
-                className={styles.tab__textTitle}
-                onChange={handleTitleChange}
-                value={title}
-              />
-              <span className={styles.tab__titleChar}>
-                {MAX_TITLE_LENGTH - title.length}/300
-              </span>
-            </div>
-          </label>
-          <label htmlFor="image-post_img" className={styles.tab__label}>
-            <span className={styles.tab__labelText}>
-              Image <abbr title="required">*</abbr>:
-            </span>
-            <input
-              type="file"
-              id="image-post_img"
-              name="image"
-              accept="image/png, image/jpeg, image/jpg"
-              size={MAX_IMG_SIZE}
-              required
-              className={styles.tab__imgInput}
-            />
-            <small className={styles.tab__warning}>
-              Note: Images must have a maximum size of 2MB
-            </small>
-          </label>
-          <label htmlFor="image-post_details" className={styles.tab__label}>
-            <span className={styles.tab__labelText}>Text (optional):</span>
-            <textarea
-              id="image-post_details"
-              name="details"
-              placeholder="Post details"
-              className={styles.tab__textarea}
-              onChange={handleDetailChange}
-              value={details}
-            />
-          </label>
-
-          <button type="submit" className={styles.tab__btnSubmit}>
-            Submit Post
-          </button>
-        </form>
+        <CreateImagePost
+          subreddit={subreddit}
+          titleLength={MAX_TITLE_LENGTH}
+          title={title}
+          handleTitleChange={handleTitleChange}
+          details={details}
+          handleDetailChange={handleDetailChange}
+          resetFields={resetFields}
+        />
       </div>
     </div>
   );
