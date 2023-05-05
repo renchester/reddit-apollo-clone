@@ -42,7 +42,7 @@ function SidebarNav() {
 
       <nav className={styles.nav}>
         <Link href="/" className={styles.logo}>
-          <h1>Apollo</h1>
+          <h1>Reddit Clone</h1>
         </Link>
         <ul className={styles.list}>
           <SidebarLink
