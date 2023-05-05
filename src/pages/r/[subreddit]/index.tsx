@@ -10,21 +10,25 @@ import PostPreview from '@/components/posts/PostPreview';
 import SubredditAside from '@/components/asides/SubredditAside';
 import SubredditMenu from '@/components/subreddits/SubredditMenu';
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/fetchAllSubreddits';
-import { Subreddit } from '@/types/types';
+import { ImagePost, Post, Subreddit } from '@/types/types';
 import fetchSubredditData from '@/firebase/firestore/subreddits/fetchSubredditData';
 import Loading from '@/components/Loading';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { useAuth } from '@/hooks/useAuth';
 import leaveSubreddit from '@/firebase/firestore/subreddits/leaveSubreddit';
 import joinSubreddit from '@/firebase/firestore/subreddits/joinSubreddit';
+import fetchPostsBySubreddit from '@/firebase/firestore/posts/fetchPostsBySubreddit';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
+  const posts = await fetchPostsBySubreddit(subreddit?.name as string);
 
   return {
     props: {
       subreddit,
+      posts,
     },
+    revalidate: 120,
   };
 };
 
@@ -43,10 +47,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 type SubredditPageProps = {
   subreddit: Subreddit;
+  posts: (Post | ImagePost)[];
 };
 
 function SubredditPage(props: SubredditPageProps) {
-  const { subreddit } = props;
+  const { subreddit, posts } = props;
   const router = useRouter();
   const { user, subscriptions } = useAuth();
   const { addAlert } = useSnackbar();
@@ -144,11 +149,16 @@ function SubredditPage(props: SubredditPageProps) {
                 </div>
               )}
             </div>
-            <PostPreview id="4" />
-            <PostPreview id="5" />
-            <PostPreview id="6" />
-            <PostPreview id="7" />
-            <PostPreview id="8" />
+
+            <div>
+              {posts.length > 0 ? (
+                posts.map((post) => (
+                  <PostPreview key={`sub-page--${post.post_id}`} post={post} />
+                ))
+              ) : (
+                <p>No posts yet</p>
+              )}
+            </div>
           </main>
 
           <AsideContainer>
