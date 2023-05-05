@@ -7,7 +7,7 @@ import joinSubreddit from './joinSubreddit';
 const addSubreddit = async (name: string, description: string, user: User) => {
   try {
     const subRef = doc(db, 'subreddits', name);
-    const subredditId = nanoid();
+    const subredditId = `subreddit__${nanoid()}`;
 
     // Create subreddit document
     await setDoc(subRef, {
