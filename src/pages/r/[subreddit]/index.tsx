@@ -53,17 +53,19 @@ function SubredditPage(props: SubredditPageProps) {
 
   const [isMenuShown, setMenuVisibility] = useState(false);
   const [isUserSubscribed, setUserSubscription] = useState(false);
+  const [isFavorited, setFavoritedStatus] = useState(false);
 
   useEffect(() => {
     if (!subscriptions) {
       setUserSubscription(false);
     }
 
-    const val = !!subscriptions?.find(
+    const target = subscriptions?.find(
       (curr) => curr.subreddit_id === subreddit.subreddit_id,
     );
 
-    setUserSubscription(val);
+    setUserSubscription(!!target);
+    setFavoritedStatus(target?.isFavorite || false);
   }, [subscriptions, subreddit.subreddit_id]);
 
   const pageTitle = `r/${subreddit.name} - Reddit Clone`;
@@ -71,17 +73,23 @@ function SubredditPage(props: SubredditPageProps) {
   const toggleMenu = () => setMenuVisibility((prev) => !prev);
 
   const handleSubscriptionChange = async () => {
-    if (!user) {
-      addAlert({
-        message: 'Subscriptions are only available for logged in users',
-        status: 'error',
-      });
-    } else if (isUserSubscribed) {
-      await leaveSubreddit(user, subreddit.name);
-      addAlert({ message: `Left r/${subreddit.name}`, status: 'neutral' });
-    } else if (!isUserSubscribed) {
-      await joinSubreddit(user, subreddit.name, subreddit.subreddit_id);
-      addAlert({ message: `Joined r/${subreddit.name}`, status: 'success' });
+    try {
+      if (!user) {
+        addAlert({
+          message: 'Subscriptions are only available for logged in users',
+          status: 'error',
+        });
+      } else if (isUserSubscribed) {
+        await leaveSubreddit(user, subreddit.name);
+        addAlert({ message: `Left r/${subreddit.name}`, status: 'neutral' });
+      } else if (!isUserSubscribed) {
+        await joinSubreddit(user, subreddit.name, subreddit.subreddit_id);
+        addAlert({ message: `Joined r/${subreddit.name}`, status: 'success' });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({ message: error.message, status: 'error' });
+      }
     }
   };
 
@@ -125,7 +133,14 @@ function SubredditPage(props: SubredditPageProps) {
                     </i>
                   </button>
 
-                  {isMenuShown && <SubredditMenu />}
+                  {isMenuShown && (
+                    <SubredditMenu
+                      subreddit={subreddit}
+                      isUserSubscribed={isUserSubscribed}
+                      handleSubscriptionChange={handleSubscriptionChange}
+                      isFavorited={isFavorited}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -146,9 +161,14 @@ function SubredditPage(props: SubredditPageProps) {
 }
 
 SubredditPage.getLayout = function getLayout(page: ReactElement) {
+  let label = '';
+
+  if (page.props.subreddit) {
+    label = page.props.subreddit.name;
+  }
   return (
     <MasterLayout>
-      <FeedPageLayout>{page}</FeedPageLayout>
+      <FeedPageLayout label={label}>{page}</FeedPageLayout>
     </MasterLayout>
   );
 };
