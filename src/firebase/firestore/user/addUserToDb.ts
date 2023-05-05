@@ -23,6 +23,8 @@ const addUserToDb = async (props: AddUserToDbProps) => {
       user_id,
       comment_karma: 0,
       post_karma: 0,
+      posts: [],
+      comments: [],
     });
 
     return true;
