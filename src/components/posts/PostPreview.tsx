@@ -1,16 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './PostPreview.module.scss';
 import Link from 'next/link';
+import Image from 'next/image';
 import PostMenu from './PostMenu';
+import { Post } from '@/types/types';
+import getIcon from '@/utils/getIcon';
+import { formatDistanceToNowStrict } from 'date-fns';
+import { AnimatePresence } from 'framer-motion';
+import ImageViewer from './ImageViewer';
 
 type PostPreviewProps = {
-  id: string;
+  post: Post & { image?: string };
 };
 
 function PostPreview(props: PostPreviewProps) {
-  const { id } = props;
+  const { post } = props;
 
   const [isMenuShown, setMenuVisibility] = useState(false);
+
+  const postKarma = post.upvoted_by.length - post.downvoted_by.length;
+  const formattedDate = formatDistanceToNowStrict(
+    new Date(post.date_created as string),
+  );
 
   const toggleMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -20,32 +31,28 @@ function PostPreview(props: PostPreviewProps) {
   return (
     <article
       className={styles.container}
-      aria-labelledby={`post-${id}__heading`}
+      aria-labelledby={`post-${post.post_id}__heading`}
     >
       <Link href="/r/all/posts/abcdef" className={styles.subreddit__link}>
-        <i
-          className={`material-symbols-outlined ${styles.subreddit__icon}`}
-          aria-hidden
-        >
-          public
+        <i className={styles.subreddit__icon} aria-hidden>
+          {getIcon(post.parent_subreddit)}
         </i>
         <h3
-          id={`post-${id}__heading`}
+          id={`post-${post.post_id}__heading`}
           className={styles.subreddit__title}
           aria-label="Subreddit name"
         >
-          AskReddit
+          {post.parent_subreddit}
         </h3>
       </Link>
       <Link href="/r/all/posts/abcdef" className={styles.post__link}>
-        <p className={styles.post__title}>
-          What wild animal is currently thought not to be dangerous, but you
-          need to stay the hell away from because they actually are?
-        </p>
-        <p className={styles.post__details}>
-          Asking because I&apos;m going to Australia in the next coming months
-          and I want to be as cautious as possible.
-        </p>
+        <p className={styles.post__title}>{post.title}</p>
+
+        <AnimatePresence>
+          {post.image && <ImageViewer imageSrc={post.image} />}
+        </AnimatePresence>
+
+        {post.details && <p className={styles.post__details}>{post.details}</p>}
 
         <div className={styles.meta__container}>
           <div className={styles.meta__left}>
@@ -53,7 +60,7 @@ function PostPreview(props: PostPreviewProps) {
               className={styles.meta__originalPoster}
               aria-label="Original poster"
             >
-              by questioner_inquirer
+              by {post.original_poster}
             </span>
             <div className={styles.meta__details}>
               {/* UPVOTE */}
@@ -78,7 +85,7 @@ function PostPreview(props: PostPreviewProps) {
                   aria-label="Net vote count for post "
                   className={styles.meta__data}
                 >
-                  3.6K
+                  {Math.min(0, postKarma)}
                 </span>
               </div>
 
@@ -92,7 +99,7 @@ function PostPreview(props: PostPreviewProps) {
                   mode_comment
                 </i>
                 <span aria-label="Comment count" className={styles.meta__data}>
-                  402
+                  {post.comments.length}
                 </span>
               </div>
 
@@ -107,10 +114,10 @@ function PostPreview(props: PostPreviewProps) {
                 </i>
                 <time
                   aria-label="Time posted"
-                  dateTime="2018-07-07"
+                  dateTime={post.date_created.toString()}
                   className={styles.meta__data}
                 >
-                  11h
+                  {formattedDate}
                 </time>
               </div>
             </div>

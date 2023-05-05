@@ -15,13 +15,28 @@
   &__link {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
     margin-bottom: 0.625rem;
-    font-size: var(--text-xxs);
   }
 
   &__icon {
-    font-size: var(--text-sm);
+    @extend %parent-with-centered-children;
+    border: 1px solid;
+    border-radius: 100%;
+    aspect-ratio: 1 / 1;
+    width: 22.5px;
+    height: 22.5px;
+    font-size: var(--text-xs);
+    color: white;
+
+    @include th.themify() {
+      border-color: th.themed('borderColor');
+      background: th.themed('primary');
+    }
+  }
+
+  &__title {
+    font-size: 0.85rem;
   }
 }
 
@@ -32,13 +47,17 @@
 
   &__title {
     margin-bottom: 0.625rem;
-    font-size: 1.075rem;
+    font-size: 1.0875rem;
     line-height: 1.2;
   }
 
   &__details {
     margin-bottom: 0.75rem;
     font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
 
     @include th.themify() {
       color: th.themed('textAccent');
@@ -49,6 +68,18 @@
     display: flex;
     flex-direction: column;
     font-size: var(--text-xs);
+  }
+
+  &__imgWrapper {
+    position: relative;
+    min-height: 100px;
+    margin-bottom: 0.75rem;
+  }
+
+  &__img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -61,7 +92,7 @@
   &__left {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.45rem;
     font-size: var(--text-xs);
   }
 
