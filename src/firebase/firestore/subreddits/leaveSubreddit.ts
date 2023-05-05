@@ -1,10 +1,24 @@
 import { db } from '@/firebase/config';
-import { User } from '@/types/types';
-import { arrayRemove, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { Subreddit, User } from '@/types/types';
+import {
+  arrayRemove,
+  deleteDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 
 const leaveSubreddit = async (user: User, subreddit: string) => {
   try {
     const subRef = doc(db, 'subreddits', subreddit);
+    const docSnap = await getDoc(subRef);
+
+    if (docSnap.exists()) {
+      const subredditData = docSnap.data() as Subreddit;
+      if (subredditData.creator_id === user.user_id) {
+        throw new Error('The subreddit creator cannot abandon their ship!');
+      }
+    }
 
     // Remove user_id from subreddit members
     await updateDoc(subRef, {
@@ -23,7 +37,7 @@ const leaveSubreddit = async (user: User, subreddit: string) => {
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
-      throw new Error('Failed to leave subreddit');
+      throw new Error(`ERROR: ${error.message}`);
     }
   }
 };
