@@ -1,0 +1,31 @@
+@use '@/styles/mixins' as mixins;
+@use '@/styles/themes' as th;
+
+.wrapper {
+  position: relative;
+  min-height: 100px;
+  margin-bottom: 0.75rem;
+}
+
+.img {
+  object-fit: contain;
+  width: 100%;
+  height: auto;
+}
+
+.img__fullscreen {
+  @include mixins.center-self(both, absolute);
+  width: min(100vw, 900px);
+  height: auto;
+}
+
+.btn {
+  position: absolute;
+  right: 0;
+  padding: 1.25rem;
+  color: white;
+}
+
+.btn__icon {
+  font-size: var(--text-xxl);
+}
