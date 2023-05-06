@@ -1,7 +1,7 @@
 import { db } from '@/firebase/config';
 import { Subreddit } from '@/types/types';
 import { deleteDoc, doc, getDoc } from 'firebase/firestore';
-import forceDeleteSubscription from './forceDeleteSubscription';
+import forceDeleteSubscription from './hardDeleteSubscription';
 
 const deleteSubreddit = async (name: string) => {
   try {

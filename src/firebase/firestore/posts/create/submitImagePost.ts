@@ -1,30 +1,34 @@
 import { db } from '@/firebase/config';
 import { Subreddit, User } from '@/types/types';
 import {
-  arrayUnion,
   doc,
-  serverTimestamp,
   setDoc,
+  serverTimestamp,
   updateDoc,
+  arrayUnion,
 } from 'firebase/firestore';
-import { nanoid } from 'nanoid';
+import slugifyPost from '../../helpers/slugifyPost';
 
-type TextPostDetails = {
+type ImagePostDetails = {
   title: string;
+  image: string;
   details?: string;
+  postId: string;
 };
 
-const submitTextPost = async (
+const submitImagePost = async (
   user: User,
   subreddit: Subreddit,
-  postDetails: TextPostDetails,
+  postDetails: ImagePostDetails,
 ) => {
   try {
-    const postId = `post__${nanoid()}`;
+    const postId = postDetails.postId;
     const postRef = doc(db, 'posts', postId);
+    const postSlug = slugifyPost(postDetails.title, postId);
 
     // Add post to posts collection
     await setDoc(postRef, {
+      slug: postSlug,
       post_id: postId,
       date_created: serverTimestamp(),
       original_poster_id: user.user_id,
@@ -35,6 +39,7 @@ const submitTextPost = async (
       upvoted_by: [],
       downvoted_by: [],
       comments: [],
+      image: postDetails.image,
     });
 
     // Add post_id to subreddit collection
@@ -58,4 +63,4 @@ const submitTextPost = async (
   }
 };
 
-export default submitTextPost;
+export default submitImagePost;

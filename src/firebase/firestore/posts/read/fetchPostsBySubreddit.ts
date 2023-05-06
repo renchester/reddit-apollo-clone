@@ -7,7 +7,7 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { timestampToUTCDateString } from '../helpers/dateHelpers';
+import { timestampToUTCDateString } from '../../helpers/dateHelpers';
 
 const fetchPostsBySubreddit = async (subredditName: string) => {
   try {

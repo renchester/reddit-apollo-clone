@@ -1,7 +1,7 @@
 import { Timestamp, collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { Subreddit } from '@/types/types';
-import { timestampToUTCDateString } from '../helpers/dateHelpers';
+import { timestampToUTCDateString } from '../../helpers/dateHelpers';
 
 const fetchAllSubreddits = async () => {
   try {

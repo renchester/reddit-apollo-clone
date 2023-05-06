@@ -3,7 +3,7 @@ import { ImagePost, Post } from '@/types/types';
 import { arrayRemove, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
 
-const hardDeletePost = async (post: ImagePost | Post) => {
+const hardDeletePost = async (post: Post) => {
   try {
     // Delete post from db
     const postRef = doc(db, 'posts', post.post_id);

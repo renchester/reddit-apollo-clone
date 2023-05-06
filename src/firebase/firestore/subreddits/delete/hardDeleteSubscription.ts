@@ -2,7 +2,7 @@ import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import { UserSubscription } from '@/types/types';
 
-const forceDeleteSubscription = async (userId: string, subredditId: string) => {
+const hardDeleteSubscription = async (userId: string, subredditId: string) => {
   try {
     const subscriptionRef = collection(
       db,
@@ -34,4 +34,4 @@ const forceDeleteSubscription = async (userId: string, subredditId: string) => {
   }
 };
 
-export default forceDeleteSubscription;
+export default hardDeleteSubscription;

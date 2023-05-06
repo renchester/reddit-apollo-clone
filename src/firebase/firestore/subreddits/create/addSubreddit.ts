@@ -1,8 +1,8 @@
 import { User } from '@/types/types';
 import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
-import { db } from '../../config';
-import joinSubreddit from './joinSubreddit';
+import { db } from '../../../config';
+import joinSubreddit from '../update/joinSubreddit';
 
 const addSubreddit = async (name: string, description: string, user: User) => {
   try {
