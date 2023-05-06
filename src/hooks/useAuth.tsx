@@ -1,7 +1,7 @@
 import { auth, db } from '@/firebase/config';
 import getUserDetailsFromDb from '@/firebase/firestore/user/getUserDetailsFromDb';
 import { onAuthStateChanged } from 'firebase/auth';
-import type { UserSubscription } from '@/types/types';
+import { PostInteraction, UserSubscription } from '@/types/types';
 import {
   type ReactNode,
   createContext,
@@ -16,6 +16,8 @@ import { collection, onSnapshot } from 'firebase/firestore';
 type AuthContextType = {
   user: User | null;
   subscriptions: UserSubscription[] | null;
+  upvotedPosts: PostInteraction[] | null;
+  downvotedPosts: PostInteraction[] | null;
 };
 
 type AuthProviderProps = {
@@ -31,6 +33,12 @@ export const AuthProvider = (props: AuthProviderProps) => {
   const [subscriptions, setSubscriptions] = useState<UserSubscription[] | null>(
     null,
   );
+  const [upvotedPosts, setUpvotedPosts] = useState<PostInteraction[] | null>(
+    null,
+  );
+  const [downvotedPosts, setDownvotedPosts] = useState<
+    PostInteraction[] | null
+  >(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -72,7 +80,50 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeSubscriptions();
   }, [user]);
 
-  const value = useMemo(() => ({ user, subscriptions }), [user, subscriptions]);
+  useEffect(() => {
+    if (!user) {
+      setUpvotedPosts(null);
+    }
+
+    const upvotedPostsRef = collection(
+      db,
+      `users/${user?.user_id}/upvoted_posts`,
+    );
+
+    const unsubscribeUpvotedPosts = onSnapshot(upvotedPostsRef, (snapshot) =>
+      setUpvotedPosts(
+        snapshot.docs.map((doc) => doc.data() as PostInteraction),
+      ),
+    );
+
+    return () => unsubscribeUpvotedPosts();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) {
+      setDownvotedPosts(null);
+    }
+
+    const downvotedPostsRef = collection(
+      db,
+      `users/${user?.user_id}/downvoted_posts`,
+    );
+
+    const unsubscribeDownvotedPosts = onSnapshot(
+      downvotedPostsRef,
+      (snapshot) =>
+        setDownvotedPosts(
+          snapshot.docs.map((doc) => doc.data() as PostInteraction),
+        ),
+    );
+
+    return () => unsubscribeDownvotedPosts();
+  }, [user]);
+
+  const value = useMemo(
+    () => ({ user, subscriptions, upvotedPosts, downvotedPosts }),
+    [user, subscriptions, upvotedPosts, downvotedPosts],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
