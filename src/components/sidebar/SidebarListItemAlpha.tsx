@@ -1,35 +1,27 @@
 import styles from './SidebarListItemAlpha.module.scss';
 import SidebarLink from './SidebarLink';
+import { UserSubscription } from '@/types/types';
 
 type SidebarListItemAlphaProps = {
   letter: string;
+  subreddits: UserSubscription[];
 };
 
 function SidebarListItemAlpha(props: SidebarListItemAlphaProps) {
-  const { letter } = props;
+  const { letter, subreddits } = props;
 
   return (
     <li className={styles.listItem}>
-      <h5 className={styles.heading}>{letter}</h5>
+      <h5 className={styles.heading}>{letter.toUpperCase()}</h5>
       <ul>
-        <SidebarLink
-          href="/r/sub"
-          title="Subreddit"
-          iconName="taunt"
-          isFavorite={false}
-        />
-        <SidebarLink
-          href="/r/sub"
-          title="Subreddit"
-          iconName="taunt"
-          isFavorite={false}
-        />
-        <SidebarLink
-          href="/r/sub"
-          title="Subreddit"
-          iconName="taunt"
-          isFavorite={false}
-        />
+        {subreddits.map((sub) => (
+          <SidebarLink
+            key={`sidebar-link--list-item-${sub.subreddit_id}`}
+            href={`/r/${sub.subreddit}`}
+            title={sub.subreddit}
+            isFavorite={sub.isFavorite}
+          />
+        ))}
       </ul>
     </li>
   );

@@ -10,6 +10,11 @@
   font-size: var(--text-sm);
 
   @include th.themify() {
-    background: th.themed(accentBgColor);
+    background: th.themed('bgAccent3');
+    color: th.themed('textAlpha75');
+  }
+
+  &:first-of-type {
+    margin-top: 0.625rem;
   }
 }

@@ -9,33 +9,18 @@ function FavoritesSubmenu() {
 
   return (
     <>
-      {user ? (
+      {user && (
         <SidebarSubmenu headingTitle="Favorites" initExpandedState={!!user}>
-          {favorites?.length > 0 && (
-            <>
+          {favorites?.length > 0 &&
+            favorites.map((favSub) => (
               <SidebarLink
-                href="/r/sub"
-                title="Subreddit"
-                iconName="taunt"
-                isFavorite={true}
+                key={`fav-submenu--${favSub.subreddit_id}`}
+                href={`/r/${favSub.subreddit}`}
+                title={favSub.subreddit}
+                isFavorite={favSub.isFavorite}
               />
-              <SidebarLink
-                href="/r/sub"
-                title="Subreddit"
-                iconName="taunt"
-                isFavorite={true}
-              />
-              <SidebarLink
-                href="/r/sub"
-                title="Subreddit"
-                iconName="taunt"
-                isFavorite={true}
-              />
-            </>
-          )}
+            ))}
         </SidebarSubmenu>
-      ) : (
-        <p className="not-signed-in">No favorited subreddits</p>
       )}
     </>
   );
