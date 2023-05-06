@@ -1,11 +1,32 @@
+import { Post } from '@/types/types';
 import Menu from '../menus/Menu';
 import MenuButton from '../menus/MenuButton';
 
-function PostMenu() {
+type PostMenuProps = {
+  post: Post;
+  isUpvoted: boolean;
+  isDownvoted: boolean;
+  toggleUpvote: (e?: any) => void;
+  toggleDownvote: (e?: any) => void;
+};
+
+function PostMenu(props: PostMenuProps) {
+  const { post, isUpvoted, isDownvoted, toggleUpvote, toggleDownvote } = props;
+
   return (
     <Menu>
-      <MenuButton icon="north" text="Upvote" label="Upvote post" />
-      <MenuButton icon="south" text="Downvote" label="Downvote post" />
+      <MenuButton
+        icon="north"
+        text={isUpvoted ? 'Unupvote' : 'Upvote'}
+        label={isUpvoted ? 'Remove upvote on post' : 'Upvote post'}
+        handler={toggleUpvote}
+      />
+      <MenuButton
+        icon="south"
+        text={isDownvoted ? 'Undownvote' : 'Downvote'}
+        label={isDownvoted ? 'Remove downvote on post' : 'Downvote post'}
+        handler={toggleDownvote}
+      />
       <MenuButton icon="bookmark" text="Save" label="Bookmark/save post" />
     </Menu>
   );

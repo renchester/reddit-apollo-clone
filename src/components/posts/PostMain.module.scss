@@ -1,7 +1,21 @@
 @use '@/styles/themes' as th;
+@use '@/styles/placeholders';
 
 .post {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+
+  &__btnBack {
+    @extend %parent-with-centered-children;
+    margin-bottom: 1.25rem;
+
+    @include th.themify() {
+      color: th.themed('textAlpha50');
+    }
+  }
+
+  &__btnIcon {
+    font-size: var(--text-xs);
+  }
 
   &__title {
     font-weight: 500;
@@ -33,13 +47,17 @@
   }
 
   &__subredditIcon {
-    padding: 0.15rem;
-    aspect-ratio: 1/1;
+    @extend %parent-with-centered-children;
+    text-align: center;
+    height: 24px;
+    width: 24px;
+    aspect-ratio: 1 / 1;
     border-radius: 100%;
-    font-size: var(--text-md);
+    font-size: 0.875rem;
+    color: white;
 
     @include th.themify() {
-      color: th.themed('textColor');
+      background: th.themed('primary');
       border: th.themed('border');
     }
   }
@@ -74,7 +92,7 @@
   justify-content: space-between;
   border-top: 1px solid;
   border-bottom: 1px solid;
-  padding-block: 1rem;
+  padding-block: 0.875rem;
   padding-inline: 0.5rem;
 
   @include th.themify() {
@@ -82,12 +100,33 @@
   }
 
   &__btn {
+    @extend %parent-with-centered-children;
+    border-radius: 0.25rem;
+    padding: 3.25px 1px;
+
     @include th.themify() {
       color: th.themed('primary');
+    }
+
+    &[data-upvoted='true'] {
+      color: white;
+
+      @include th.themify() {
+        background: th.themed('upvote');
+      }
+    }
+
+    &[data-downvoted='true'] {
+      color: white;
+
+      @include th.themify() {
+        background: th.themed('downvote');
+      }
     }
   }
 
   &__icon {
+    display: block;
     font-size: var(--text-xl);
   }
 }

@@ -1,24 +1,36 @@
 import { useEffect, useState } from 'react';
 import styles from './PostPreview.module.scss';
 import Link from 'next/link';
-import Image from 'next/image';
 import PostMenu from './PostMenu';
 import { Post } from '@/types/types';
 import getIcon from '@/utils/getIcon';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
 import ImageViewer from './ImageViewer';
+import calculateKarma from '@/utils/calculateKarma';
+import { useAuth } from '@/hooks/useAuth';
+import { useSnackbar } from '@/hooks/useSnackbar';
+import upvotePost from '@/firebase/firestore/posts/update/upvotePost';
+import removeUpvoteOnPost from '@/firebase/firestore/posts/update/removeUpvoteOnPost';
+import removeDownvoteOnPost from '@/firebase/firestore/posts/update/removeDownvoteOnPost';
+import downvotePost from '@/firebase/firestore/posts/update/downvotePost';
 
 type PostPreviewProps = {
-  post: Post & { image?: string };
+  post: Post;
 };
 
 function PostPreview(props: PostPreviewProps) {
   const { post } = props;
+  const { user, upvotedPosts, downvotedPosts } = useAuth();
+  const { addAlert } = useSnackbar();
 
   const [isMenuShown, setMenuVisibility] = useState(false);
+  const [isUpvoted, setUpvotedStatus] = useState(false);
+  const [isDownvoted, setDownvotedStatus] = useState(false);
+  const [postKarma, setPostKarma] = useState(
+    calculateKarma(post.upvoted_by.length, post.downvoted_by.length, true),
+  );
 
-  const postKarma = post.upvoted_by.length - post.downvoted_by.length;
   const formattedDate = formatDistanceToNowStrict(
     new Date(post.date_created as string),
   );
@@ -28,12 +40,85 @@ function PostPreview(props: PostPreviewProps) {
     setMenuVisibility((prev) => !prev);
   };
 
+  const toggleUpvote = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    try {
+      if (!user) return;
+
+      if (isUpvoted) {
+        await removeUpvoteOnPost(user, post);
+        setPostKarma((prev) => Math.max(prev - 1, 0));
+      } else if (!isUpvoted) {
+        await upvotePost(user, post);
+        setPostKarma((prev) => {
+          return prev < 0 ? 0 : prev + 1;
+        });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
+  };
+
+  const toggleDownvote = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    try {
+      if (!user) return;
+
+      if (isDownvoted) {
+        await removeDownvoteOnPost(user, post);
+        setPostKarma((prev) => {
+          return prev <= 0 ? 0 : prev + 1;
+        });
+      } else if (!isDownvoted) {
+        await downvotePost(user, post);
+        setPostKarma((prev) => Math.max(prev - 1, 0));
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
+  };
+
+  // Upvote Handler
+  useEffect(() => {
+    if (!user || !upvotedPosts) return;
+
+    const isUserUpvoted = !!upvotedPosts.find(
+      (currPost) => currPost.post_id === post.post_id,
+    );
+    setUpvotedStatus(isUserUpvoted);
+  }, [upvotedPosts, user, post.post_id]);
+
+  // Downvote Handler
+  useEffect(() => {
+    if (!user || !downvotedPosts) return;
+
+    const isUserDownvoted = !!downvotedPosts.find(
+      (currPost) => currPost.post_id === post.post_id,
+    );
+    setDownvotedStatus(isUserDownvoted);
+  }, [downvotedPosts, user, post.post_id]);
+
   return (
     <article
       className={styles.container}
       aria-labelledby={`post-${post.post_id}__heading`}
     >
-      <Link href="/r/all/posts/abcdef" className={styles.subreddit__link}>
+      <Link
+        href={`/r/${post.parent_subreddit}`}
+        className={styles.subreddit__link}
+      >
         <i className={styles.subreddit__icon} aria-hidden>
           {getIcon(post.parent_subreddit)}
         </i>
@@ -45,7 +130,10 @@ function PostPreview(props: PostPreviewProps) {
           {post.parent_subreddit}
         </h3>
       </Link>
-      <Link href="/r/all/posts/abcdef" className={styles.post__link}>
+      <Link
+        href={`/r/${post.parent_subreddit}/${post.slug}`}
+        className={styles.post__link}
+      >
         <p className={styles.post__title}>{post.title}</p>
 
         <AnimatePresence>
@@ -69,23 +157,23 @@ function PostPreview(props: PostPreviewProps) {
                 <button
                   type="button"
                   aria-label="Upvote button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log('upvoting');
-                  }}
+                  onClick={toggleUpvote}
+                  className={styles.btnUpvote}
+                  data-upvoted={isUpvoted}
                 >
                   <i
-                    className={`material-symbols-outlined ${styles.btnUpvote} ${styles.meta__iconLeft}`}
+                    className={`material-symbols-outlined ${styles.meta__iconLeft}`}
                     aria-hidden
                   >
                     north
                   </i>
                 </button>
                 <span
-                  aria-label="Net vote count for post "
+                  aria-label="Post karma"
                   className={styles.meta__data}
+                  data-upvoted={isUpvoted}
                 >
-                  {Math.min(0, postKarma)}
+                  {Math.max(postKarma, 0)}
                 </span>
               </div>
 
@@ -139,9 +227,13 @@ function PostPreview(props: PostPreviewProps) {
               className={styles.meta__btnRight}
               type="button"
               aria-label="Upvote button"
-              onClick={(e) => e.preventDefault()}
+              onClick={toggleUpvote}
+              data-upvoted={isUpvoted}
             >
-              <i className={`material-symbols-outlined`} aria-hidden>
+              <i
+                className={`material-symbols-outlined ${styles.meta__btnIcon}`}
+                aria-hidden
+              >
                 north
               </i>
             </button>
@@ -149,14 +241,26 @@ function PostPreview(props: PostPreviewProps) {
               className={styles.meta__btnRight}
               type="button"
               aria-label="Downvote button"
-              onClick={(e) => e.preventDefault()}
+              onClick={toggleDownvote}
+              data-downvoted={isDownvoted}
             >
-              <i className={`material-symbols-outlined`} aria-hidden>
+              <i
+                className={`material-symbols-outlined ${styles.meta__btnIcon}`}
+                aria-hidden
+              >
                 south
               </i>
             </button>
 
-            {isMenuShown && <PostMenu />}
+            {isMenuShown && (
+              <PostMenu
+                post={post}
+                isUpvoted={isUpvoted}
+                isDownvoted={isDownvoted}
+                toggleUpvote={toggleUpvote}
+                toggleDownvote={toggleDownvote}
+              />
+            )}
           </div>
         </div>
       </Link>
