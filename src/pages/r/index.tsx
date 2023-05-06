@@ -5,7 +5,7 @@ import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import AllSubredditsPageAside from '@/components/asides/AllSubredditsPageAside';
 import SubredditPreview from '@/components/subreddits/SubredditPreview';
-import fetchAllSubreddits from '@/firebase/firestore/subreddits/fetchAllSubreddits';
+import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import { Subreddit } from '@/types/types';
 
 export async function getStaticProps() {

@@ -9,15 +9,15 @@ import AsideContainer from '@/components/asides/AsideContainer';
 import PostPreview from '@/components/posts/PostPreview';
 import SubredditAside from '@/components/asides/SubredditAside';
 import SubredditMenu from '@/components/subreddits/SubredditMenu';
-import fetchAllSubreddits from '@/firebase/firestore/subreddits/fetchAllSubreddits';
+import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import { ImagePost, Post, Subreddit } from '@/types/types';
-import fetchSubredditData from '@/firebase/firestore/subreddits/fetchSubredditData';
+import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
 import Loading from '@/components/Loading';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { useAuth } from '@/hooks/useAuth';
-import leaveSubreddit from '@/firebase/firestore/subreddits/leaveSubreddit';
-import joinSubreddit from '@/firebase/firestore/subreddits/joinSubreddit';
-import fetchPostsBySubreddit from '@/firebase/firestore/posts/fetchPostsBySubreddit';
+import leaveSubreddit from '@/firebase/firestore/subreddits/update/leaveSubreddit';
+import joinSubreddit from '@/firebase/firestore/subreddits/update/joinSubreddit';
+import fetchPostsBySubreddit from '@/firebase/firestore/posts/read/fetchPostsBySubreddit';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);

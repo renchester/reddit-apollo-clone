@@ -5,8 +5,8 @@ import { useSnackbar } from '@/hooks/useSnackbar';
 import AuthInput from '../auth/AuthInput';
 import validateSubreddit from '@/utils/validators/validateSubreddit';
 import debounce from 'lodash.debounce';
-import addSubreddit from '@/firebase/firestore/subreddits/addSubreddit';
-import checkSubredditAvailability from '@/firebase/firestore/subreddits/checkSubredditAvailability';
+import addSubreddit from '@/firebase/firestore/subreddits/create/addSubreddit';
+import checkSubredditAvailability from '@/firebase/firestore/subreddits/read/checkSubredditAvailability';
 
 type CreateSubredditFormProps = {
   user: User;
@@ -95,7 +95,7 @@ function CreateSubredditForm(props: CreateSubredditFormProps) {
   };
 
   useEffect(() => {
-    setTimeout(() => setSubNameError(''), 7500);
+    const timeoutId = setTimeout(() => setSubNameError(''), 7500);
   }, [subNameError]);
 
   useEffect(() => {

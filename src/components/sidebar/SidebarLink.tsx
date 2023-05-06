@@ -3,7 +3,7 @@ import styles from './SidebarLink.module.scss';
 import Link from 'next/link';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { useAuth } from '@/hooks/useAuth';
-import toggleFavoriteSubreddit from '@/firebase/firestore/subreddits/toggleFavoriteSubreddit';
+import toggleFavoriteSubreddit from '@/firebase/firestore/subreddits/update/toggleFavoriteSubreddit';
 
 type SidebarLinkProps = {
   href: string;

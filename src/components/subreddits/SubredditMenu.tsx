@@ -4,7 +4,7 @@ import MenuButton from '../menus/MenuButton';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
-import toggleFavoriteSubreddit from '@/firebase/firestore/subreddits/toggleFavoriteSubreddit';
+import toggleFavoriteSubreddit from '@/firebase/firestore/subreddits/update/toggleFavoriteSubreddit';
 
 type SubredditMenuProps = {
   subreddit: Subreddit;
