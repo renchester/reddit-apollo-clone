@@ -1,0 +1,17 @@
+@use '@/styles/themes' as th;
+@use '@/styles/placeholders';
+
+.empty {
+  @extend %parent-with-centered-children;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: 2.25rem;
+
+  @include th.themify() {
+    color: th.themed('textAlpha50');
+  }
+
+  &__h2 {
+    font-size: var(--text-xs);
+  }
+}
