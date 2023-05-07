@@ -31,6 +31,7 @@ const submitImagePost = async (
       slug: postSlug,
       post_id: postId,
       date_created: serverTimestamp(),
+      original_poster: user.username,
       original_poster_id: user.user_id,
       parent_subreddit: subreddit.name,
       parent_subreddit_id: subreddit.subreddit_id,
@@ -38,7 +39,7 @@ const submitImagePost = async (
       details: postDetails.details || '',
       upvoted_by: [],
       downvoted_by: [],
-      comments: [],
+      comment_count: 0,
       image: postDetails.image,
     });
 

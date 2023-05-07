@@ -6,7 +6,7 @@ const removeDownvoteOnPost = async (user: User, post: Post) => {
   try {
     const postRef = doc(db, 'posts', post.post_id);
 
-    // Delete user id from upvoted_by array
+    // Delete user id from downvoted_by array
     await updateDoc(postRef, {
       downvoted_by: arrayRemove(user.user_id),
     });

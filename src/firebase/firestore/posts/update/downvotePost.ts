@@ -1,38 +1,26 @@
 import { db } from '@/firebase/config';
 import { Post, User } from '@/types/types';
 import {
-  arrayRemove,
   arrayUnion,
   collection,
-  deleteDoc,
   doc,
   serverTimestamp,
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
+import removeUpvoteOnPost from './removeUpvoteOnPost';
 
 const downvotePost = async (user: User, post: Post) => {
   try {
-    const postRef = doc(db, 'posts', post.post_id);
+    // Remove upvote
+    await removeUpvoteOnPost(user, post);
 
-    // Remove user_id from downvoted_by array
-    await updateDoc(postRef, {
-      upvoted_by: arrayRemove(user.user_id),
-    });
+    const postRef = doc(db, 'posts', post.post_id);
 
     // Add user id to upvoted_by array
     await updateDoc(postRef, {
       downvoted_by: arrayUnion(user.user_id),
     });
-
-    const upvotedPostsRef = doc(
-      db,
-      `users/${user.user_id}/upvoted_posts`,
-      post.post_id,
-    );
-
-    // Remove post from upvoted posts
-    await deleteDoc(upvotedPostsRef);
 
     const downvotedPostsRef = collection(
       db,

@@ -30,6 +30,7 @@ const submitTextPost = async (
       slug: postSlug,
       post_id: postId,
       date_created: serverTimestamp(),
+      original_poster: user.username,
       original_poster_id: user.user_id,
       parent_subreddit: subreddit.name,
       parent_subreddit_id: subreddit.subreddit_id,
@@ -37,7 +38,7 @@ const submitTextPost = async (
       details: postDetails.details || '',
       upvoted_by: [],
       downvoted_by: [],
-      comments: [],
+      comment_count: 0,
     });
 
     // Add post_id to subreddit collection
