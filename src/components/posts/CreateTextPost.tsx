@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { Subreddit } from '@/types/types';
-import submitTextPost from '@/firebase/firestore/posts/submitTextPost';
+import submitTextPost from '@/firebase/firestore/posts/create/submitTextPost';
 
 type CreateTextPostProps = {
   subreddit: Subreddit;

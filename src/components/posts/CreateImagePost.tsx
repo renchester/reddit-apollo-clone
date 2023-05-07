@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { Subreddit } from '@/types/types';
 import Loading from '../Loading';
-import submitImagePost from '@/firebase/firestore/posts/submitImagePost';
+import submitImagePost from '@/firebase/firestore/posts/create/submitImagePost';
 import uploadImage from '@/firebase/storage/uploadImage';
 import { nanoid } from 'nanoid';
 

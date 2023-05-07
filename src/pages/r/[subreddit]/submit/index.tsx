@@ -9,8 +9,8 @@ import SubmitPanel from '@/components/posts/SubmitPanel';
 import AsideContainer from '@/components/asides/AsideContainer';
 import SubredditAside from '@/components/asides/SubredditAside';
 
-import fetchSubredditData from '@/firebase/firestore/subreddits/fetchSubredditData';
-import fetchAllSubreddits from '@/firebase/firestore/subreddits/fetchAllSubreddits';
+import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
+import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import { Subreddit } from '@/types/types';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
