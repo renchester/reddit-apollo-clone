@@ -14,6 +14,7 @@ import upvotePost from '@/firebase/firestore/posts/update/upvotePost';
 import removeUpvoteOnPost from '@/firebase/firestore/posts/update/removeUpvoteOnPost';
 import downvotePost from '@/firebase/firestore/posts/update/downvotePost';
 import removeDownvoteOnPost from '@/firebase/firestore/posts/update/removeDownvoteOnPost';
+import { useNewComment } from '@/hooks/useNewComment';
 
 type PostMainProps = {
   post: Post;
@@ -23,6 +24,7 @@ function PostMain(props: PostMainProps) {
   const { post } = props;
   const { user, upvotedPosts, downvotedPosts } = useAuth();
   const { addAlert } = useSnackbar();
+  const { showCommentModal } = useNewComment();
   const router = useRouter();
 
   const [isUpvoted, setUpvotedStatus] = useState(false);
@@ -46,13 +48,16 @@ function PostMain(props: PostMainProps) {
       if (!user) return;
 
       if (isUpvoted) {
-        await removeUpvoteOnPost(user, post);
+        setUpvotedStatus(false);
         setPostKarma((prev) => Math.max(prev - 1, 0));
+        await removeUpvoteOnPost(user, post);
       } else if (!isUpvoted) {
-        await upvotePost(user, post);
+        setDownvotedStatus(false);
+        setUpvotedStatus(true);
         setPostKarma((prev) => {
           return prev < 0 ? 0 : prev + 1;
         });
+        await upvotePost(user, post);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -71,13 +76,16 @@ function PostMain(props: PostMainProps) {
       if (!user) return;
 
       if (isDownvoted) {
-        await removeDownvoteOnPost(user, post);
+        setDownvotedStatus(false);
         setPostKarma((prev) => {
           return prev <= 0 ? 0 : prev + 1;
         });
+        await removeDownvoteOnPost(user, post);
       } else if (!isDownvoted) {
-        await downvotePost(user, post);
+        setUpvotedStatus(false);
+        setDownvotedStatus(true);
         setPostKarma((prev) => Math.max(prev - 1, 0));
+        await downvotePost(user, post);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -89,19 +97,30 @@ function PostMain(props: PostMainProps) {
     }
   };
 
+  const handleReplyToPost = () => {
+    if (!user) return;
+    showCommentModal();
+  };
+
   // Upvote Handler
   useEffect(() => {
-    if (!user || !upvotedPosts) return;
+    if (!user || !upvotedPosts) {
+      setUpvotedStatus(false);
+      return;
+    }
 
     const isUserUpvoted = !!upvotedPosts.find(
       (currPost) => currPost.post_id === post.post_id,
     );
     setUpvotedStatus(isUserUpvoted);
-  }, [upvotedPosts, user, post.post_id]);
+  }, [upvotedPosts, user, post]);
 
   // Downvote Handler
   useEffect(() => {
-    if (!user || !downvotedPosts) return;
+    if (!user || !downvotedPosts) {
+      setDownvotedStatus(false);
+      return;
+    }
 
     const isUserDownvoted = !!downvotedPosts.find(
       (currPost) => currPost.post_id === post.post_id,
@@ -164,6 +183,7 @@ function PostMain(props: PostMainProps) {
           aria-label="Upvote post"
           className={styles.meta__data}
           onClick={toggleUpvote}
+          data-upvoted={isUpvoted}
         >
           <i
             className={`material-symbols-outlined ${styles.meta__icon} `}
@@ -234,6 +254,7 @@ function PostMain(props: PostMainProps) {
           type="button"
           className={styles.control__btn}
           aria-label="Reply to post"
+          onClick={handleReplyToPost}
         >
           <i
             className={`material-symbols-outlined ${styles.control__icon}`}

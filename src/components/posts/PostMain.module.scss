@@ -79,6 +79,12 @@
     align-items: center;
     gap: 0.125rem;
     font-size: var(--text-xs);
+
+    &[data-upvoted='true'] {
+      @include th.themify() {
+        color: th.themed('upvote');
+      }
+    }
   }
 
   &__icon {

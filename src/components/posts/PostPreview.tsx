@@ -47,13 +47,18 @@ function PostPreview(props: PostPreviewProps) {
       if (!user) return;
 
       if (isUpvoted) {
-        await removeUpvoteOnPost(user, post);
+        setUpvotedStatus(false);
         setPostKarma((prev) => Math.max(prev - 1, 0));
+
+        await removeUpvoteOnPost(user, post);
       } else if (!isUpvoted) {
-        await upvotePost(user, post);
+        setDownvotedStatus(false);
+        setUpvotedStatus(true);
         setPostKarma((prev) => {
           return prev < 0 ? 0 : prev + 1;
         });
+
+        await upvotePost(user, post);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -72,13 +77,18 @@ function PostPreview(props: PostPreviewProps) {
       if (!user) return;
 
       if (isDownvoted) {
-        await removeDownvoteOnPost(user, post);
+        setDownvotedStatus(false);
         setPostKarma((prev) => {
           return prev <= 0 ? 0 : prev + 1;
         });
+
+        await removeDownvoteOnPost(user, post);
       } else if (!isDownvoted) {
-        await downvotePost(user, post);
+        setUpvotedStatus(false);
+        setDownvotedStatus(true);
         setPostKarma((prev) => Math.max(prev - 1, 0));
+
+        await downvotePost(user, post);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -92,7 +102,10 @@ function PostPreview(props: PostPreviewProps) {
 
   // Upvote Handler
   useEffect(() => {
-    if (!user || !upvotedPosts) return;
+    if (!user || !upvotedPosts) {
+      setUpvotedStatus(false);
+      return;
+    }
 
     const isUserUpvoted = !!upvotedPosts.find(
       (currPost) => currPost.post_id === post.post_id,
@@ -102,7 +115,10 @@ function PostPreview(props: PostPreviewProps) {
 
   // Downvote Handler
   useEffect(() => {
-    if (!user || !downvotedPosts) return;
+    if (!user || !downvotedPosts) {
+      setDownvotedStatus(false);
+      return;
+    }
 
     const isUserDownvoted = !!downvotedPosts.find(
       (currPost) => currPost.post_id === post.post_id,
@@ -187,7 +203,7 @@ function PostPreview(props: PostPreviewProps) {
                   mode_comment
                 </i>
                 <span aria-label="Comment count" className={styles.meta__data}>
-                  {post.comments.length}
+                  {post.comment_count}
                 </span>
               </div>
 

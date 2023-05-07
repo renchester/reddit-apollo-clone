@@ -17,13 +17,13 @@ function PostMenu(props: PostMenuProps) {
     <Menu>
       <MenuButton
         icon="north"
-        text={isUpvoted ? 'Unupvote' : 'Upvote'}
+        text={isUpvoted ? 'Un-upvote' : 'Upvote'}
         label={isUpvoted ? 'Remove upvote on post' : 'Upvote post'}
         handler={toggleUpvote}
       />
       <MenuButton
         icon="south"
-        text={isDownvoted ? 'Undownvote' : 'Downvote'}
+        text={isDownvoted ? 'Un-downvote' : 'Downvote'}
         label={isDownvoted ? 'Remove downvote on post' : 'Downvote post'}
         handler={toggleDownvote}
       />
