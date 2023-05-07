@@ -4,6 +4,12 @@
 .comment {
   --border-bottom: 1px solid rgb(204, 204, 204);
 
+  &:hover {
+    @include th.themify() {
+      box-shadow: -0.75px 0px 0px 0px th.themed('textAlpha25');
+    }
+  }
+
   &__self {
     margin-block: 1rem;
     padding-left: 0.875rem;
@@ -11,6 +17,28 @@
 
     @include th.themify() {
       border-color: th.themed('primary');
+    }
+
+    &[data-level='1'] {
+      border-color: red;
+    }
+    &[data-level='2'] {
+      border-color: orange;
+    }
+    &[data-level='3'] {
+      border-color: yellow;
+    }
+    &[data-level='4'] {
+      border-color: green;
+    }
+    &[data-level='5'] {
+      border-color: blue;
+    }
+    &[data-level='6'] {
+      border-color: indigo;
+    }
+    &[data-level='7'] {
+      border-color: violet;
     }
   }
 }
@@ -37,6 +65,18 @@
   &__btnUpvote {
     @include th.themify() {
       color: th.themed('textAccent');
+    }
+
+    &[data-upvoted='true'] {
+      @include th.themify() {
+        color: th.themed('upvote');
+      }
+    }
+
+    &[data-downvoted='true'] {
+      @include th.themify() {
+        color: th.themed('downvote');
+      }
     }
   }
 

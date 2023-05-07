@@ -1,21 +1,52 @@
 import styles from './Comment.module.scss';
-import { ReactNode, useState } from 'react';
-import Link from 'next/link';
+import { ReactNode, useEffect, useState } from 'react';
 import CommentMenu from './CommentMenu';
+import { Comment } from '@/types/types';
+import { formatDistanceToNowStrict } from 'date-fns';
+import { useNewComment } from '@/hooks/useNewComment';
+import { useAuth } from '@/hooks/useAuth';
+import { useSnackbar } from '@/hooks/useSnackbar';
+import calculateKarma from '@/utils/calculateKarma';
+import removeUpvoteOnComment from '@/firebase/firestore/comments/update/removeUpvoteOnComment';
+import upvoteComment from '@/firebase/firestore/comments/update/upvoteComment';
+import downvoteComment from '@/firebase/firestore/comments/update/downvoteComment';
+import removeDownvoteOnComment from '@/firebase/firestore/comments/update/removeDownvoteOnComment';
 
 type CommentProps = {
-  level: number;
+  comment: Comment;
   children?: ReactNode;
 };
 
 function Comment(props: CommentProps) {
-  const { level, children } = props;
-
-  const levelStyles = {
-    marginLeft: level > 1 ? '1rem' : '0rem',
-  };
+  const { comment } = props;
+  const { user, upvotedComments, downvotedComments } = useAuth();
+  const { addAlert } = useSnackbar();
+  const { comments } = useNewComment();
 
   const [isMenuShown, setMenuVisibility] = useState(false);
+  const [isExpanded, setExpandedState] = useState(true);
+  const [isUpvoted, setUpvotedStatus] = useState(false);
+  const [isDownvoted, setDownvotedStatus] = useState(false);
+  const [commentKarma, setCommentKarma] = useState(
+    calculateKarma(
+      comment.upvoted_by.length,
+      comment.downvoted_by.length,
+      true,
+    ),
+  );
+
+  // Get comment data/content of "this" comment's children
+  const childComments = comments.filter((curr) =>
+    comment.child_comments.includes(curr.comment_id),
+  );
+
+  const formattedDate = formatDistanceToNowStrict(
+    new Date(comment.date_created as string),
+  );
+
+  const levelStyles = {
+    marginLeft: comment.comment_level > 1 ? '1rem' : '0rem',
+  };
 
   const hideMenu = () => {
     setMenuVisibility(false);
@@ -26,8 +57,6 @@ function Comment(props: CommentProps) {
     setMenuVisibility((prev) => !prev);
   };
 
-  const [isExpanded, setExpandedState] = useState(true);
-
   const collapseComment = () => setExpandedState(false);
 
   const toggleComment = () => {
@@ -35,32 +64,118 @@ function Comment(props: CommentProps) {
     setMenuVisibility(false);
   };
 
-  const upvoteComment = (e: React.MouseEvent) => {
+  const toggleUpvote = async (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    try {
+      if (!user) return;
+
+      if (isUpvoted) {
+        setUpvotedStatus(false);
+        setCommentKarma((prev) => Math.max(prev - 1, 0));
+
+        await removeUpvoteOnComment(user, comment);
+      } else if (!isUpvoted) {
+        setDownvotedStatus(false);
+        setUpvotedStatus(true);
+        setCommentKarma((prev) => {
+          return prev < 0 ? 0 : prev + 1;
+        });
+
+        await upvoteComment(user, comment);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
   };
+
+  const toggleDownvote = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    try {
+      if (!user) return;
+
+      if (isDownvoted) {
+        setDownvotedStatus(false);
+        setCommentKarma((prev) => Math.max(prev - 1, 0));
+
+        await removeDownvoteOnComment(user, comment);
+      } else if (!isDownvoted) {
+        setUpvotedStatus(false);
+        setDownvotedStatus(true);
+        setCommentKarma((prev) => Math.max(prev - 1, 0));
+
+        await downvoteComment(user, comment);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
+  };
+
+  // Upvote Handler
+  useEffect(() => {
+    if (!user || !upvotedComments) {
+      setUpvotedStatus(false);
+      return;
+    }
+
+    const isUserUpvoted = !!upvotedComments.find(
+      (currComment) => currComment.comment_id === comment.comment_id,
+    );
+
+    setUpvotedStatus(isUserUpvoted);
+  }, [user, upvotedComments, comment]);
+
+  // Downvote Handler
+  useEffect(() => {
+    if (!user || !downvotedComments) {
+      setDownvotedStatus(false);
+      return;
+    }
+
+    const isUserUpvoted = !!downvotedComments.find(
+      (currComment) => currComment.comment_id === comment.comment_id,
+    );
+
+    setUpvotedStatus(isUserUpvoted);
+  }, [user, downvotedComments, comment]);
 
   return (
     <div className={styles.comment} style={levelStyles}>
-      <div className={styles.comment__self}>
+      <div className={styles.comment__self} data-level={comment.comment_level}>
         <div
           className={`${styles.main} ${!isExpanded && styles.main__withBorder}`}
           onClick={toggleComment}
         >
           <div className={styles.main__left}>
-            <span className={styles.main__originalPoster}>redditor123</span>
+            <span className={styles.main__originalPoster}>
+              {comment.original_poster}
+            </span>
             <button
               type="button"
               aria-label="Upvote comment"
-              onClick={upvoteComment}
+              onClick={toggleUpvote}
               className={styles.main__btnUpvote}
+              data-upvoted={isUpvoted}
+              data-downvoted={isDownvoted}
             >
               <i
                 className={`material-symbols-outlined ${styles.main__iconUpvote}`}
                 aria-hidden
               >
-                north
+                {isDownvoted ? 'south' : 'north'}
               </i>
-              <span>124</span>
+              <span>{Math.max(commentKarma, 0)}</span>
             </button>
           </div>
           <div className={styles.main__right}>
@@ -79,8 +194,11 @@ function Comment(props: CommentProps) {
                     more_horiz
                   </i>
                 </button>
-                <time className={styles.main__time} dateTime="">
-                  1d
+                <time
+                  className={styles.main__time}
+                  dateTime={comment.date_created as string}
+                >
+                  {formattedDate}
                 </time>
               </>
             ) : (
@@ -94,21 +212,29 @@ function Comment(props: CommentProps) {
               </button>
             )}
 
-            {isMenuShown && <CommentMenu hideMenu={hideMenu} />}
+            {isMenuShown && (
+              <CommentMenu
+                parentComment={comment}
+                isUpvoted={isUpvoted}
+                isDownvoted={isDownvoted}
+                hideMenu={hideMenu}
+                toggleUpvote={toggleUpvote}
+                toggleDownvote={toggleDownvote}
+              />
+            )}
           </div>
         </div>
         {isExpanded && (
           <p className={styles.content} onClick={collapseComment}>
-            At least for the Original Reddit you can go to your Preferences and
-            uncheck &quot;Show trending subreddits on the home feed&quot; so it
-            won&apos;t show it any more. There might be a way to make
-            &quot;home&quot; your default area when logging in but I don&apos;t
-            remember if that&apos;s already default or not.
+            {comment.content}
           </p>
         )}
       </div>
 
-      {isExpanded && children}
+      {isExpanded &&
+        childComments.map((cm) => (
+          <Comment key={`comment-post__${comment.comment_id}`} comment={cm} />
+        ))}
     </div>
   );
 }
