@@ -7,9 +7,11 @@
   @include mixins.center-self(both, absolute);
   border-radius: var(--main-border-radius);
   padding: var(--modal-padding);
-  width: clamp(16rem, 60%, 56rem);
+  padding-bottom: 2.5rem;
+  width: min(100%, 36rem);
   display: flex;
   flex-direction: column;
+  z-index: 11;
 
   @include th.themify() {
     background: th.themed('bgAccent');
@@ -38,21 +40,58 @@
     padding: 0.375rem;
     width: 100%;
     resize: vertical;
-    min-height: 150px;
-    max-height: 300px;
+    min-height: 200px;
+    max-height: 420px;
     font-size: var(--text-sm);
 
     @include th.themify() {
+      color: th.themed('textColor');
       background: th.themed('bgAlpha75');
       border: th.themed('border');
     }
   }
 
   &__btnSubmit {
-    width: 100%;
-    margin-top: 1rem;
-    padding: 0.375rem;
-    border: 1px solid;
-    border-radius: 0.25rem;
+    @extend %btn-submit;
+    display: block;
+    margin-top: 1.25rem;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+
+    @include th.themify() {
+      border: th.themed('border');
+    }
+  }
+}
+
+.reply {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+
+  @include th.themify() {
+    background: th.themed('bgAccent3');
+    color: th.themed('textAlpha75');
+  }
+
+  &__to {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: var(--text-xs);
+
+    @include th.themify() {
+      color: th.themed('textAlpha50');
+    }
+  }
+
+  &__icon {
+    font-size: var(--text-sm);
+    margin-right: 0.25rem;
+  }
+
+  &__content {
+    font-size: 0.9rem;
+    @include th.themify() {
+      color: th.themed('textAlpha75');
+    }
   }
 }
