@@ -2,17 +2,37 @@ import { useNewComment } from '@/hooks/useNewComment';
 import styles from './Menu.module.scss';
 import Menu from '../menus/Menu';
 import MenuButton from '../menus/MenuButton';
+import { Comment, Post } from '@/types/types';
+import { useAuth } from '@/hooks/useAuth';
 
 type CommentMenuProps = {
+  parentComment: Comment;
   hideMenu: () => void;
+  isUpvoted: boolean;
+  isDownvoted: boolean;
+  toggleUpvote: (e?: any) => void;
+  toggleDownvote: (e?: any) => void;
 };
 
 function CommentMenu(props: CommentMenuProps) {
-  const { hideMenu } = props;
-  const { isCommentModalShown, showCommentModal } = useNewComment();
+  const {
+    hideMenu,
+    parentComment,
+    toggleDownvote,
+    toggleUpvote,
+    isUpvoted,
+    isDownvoted,
+  } = props;
+
+  const { user } = useAuth();
+  const { showCommentModal, setParentComment } = useNewComment();
 
   const replyToComment = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    if (!user) return;
+
+    setParentComment(parentComment);
     hideMenu();
     showCommentModal();
   };
@@ -25,8 +45,18 @@ function CommentMenu(props: CommentMenuProps) {
         label="Reply to this comment"
         handler={replyToComment}
       />
-      <MenuButton icon="north" text="Upvote" label="Upvote comment" />
-      <MenuButton icon="south" text="Downvote" label="Downvote comment" />
+      <MenuButton
+        icon="north"
+        text={isUpvoted ? 'Un-upvote' : 'Upvote'}
+        label="Upvote comment"
+        handler={toggleUpvote}
+      />
+      <MenuButton
+        icon="south"
+        text={isDownvoted ? 'Un-downvote' : 'Downvote'}
+        label="Downvote comment"
+        handler={toggleDownvote}
+      />
     </Menu>
   );
 }
