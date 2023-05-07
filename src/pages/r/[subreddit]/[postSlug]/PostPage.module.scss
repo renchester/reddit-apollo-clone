@@ -1,6 +1,12 @@
 @use '@/styles/themes' as th;
 @use '@/styles/placeholders';
 
+.main {
+  flex-grow: 1;
+  margin-inline: auto;
+  max-width: 760px;
+}
+
 .empty {
   @extend %parent-with-centered-children;
   flex-direction: column;

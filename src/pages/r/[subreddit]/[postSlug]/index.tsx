@@ -13,16 +13,19 @@ import fetchPostsBySubreddit from '@/firebase/firestore/posts/read/fetchPostsByS
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
 import fetchPostData from '@/firebase/firestore/posts/read/fetchPostData';
-import { Post, Subreddit } from '@/types/types';
+import fetchPostComments from '@/firebase/firestore/comments/read/fetchPostComments';
+import { Comment, Post, Subreddit } from '@/types/types';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
   const post = await fetchPostData(params?.postSlug as string);
+  const comments = (await fetchPostComments(post?.post_id as string)) || [];
 
   return {
     props: {
       subreddit,
       post,
+      comments,
     },
   };
 };
@@ -54,10 +57,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 type PostPageProps = {
   subreddit: Subreddit;
   post: Post;
+  comments: Comment[];
 };
 
 function PostPage(props: PostPageProps) {
-  const { subreddit, post } = props;
+  const { subreddit, post, comments } = props;
   const pageTitle = `${post.title} - Reddit Clone`;
 
   return (
@@ -67,10 +71,10 @@ function PostPage(props: PostPageProps) {
       </Head>
 
       <div className="page__container">
-        <main className="">
-          <PostMain post={post} />
-          <NewCommentProvider>
-            {post.comments.length > 0 ? (
+        <main className={styles.main}>
+          <NewCommentProvider parentPost={post} comments={comments}>
+            <PostMain post={post} />
+            {comments.length > 0 ? (
               <CommentFeed />
             ) : (
               <div className={styles.empty}>
