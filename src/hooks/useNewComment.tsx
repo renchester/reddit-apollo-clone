@@ -1,24 +1,37 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
+import Overlay from '@/components/Overlay';
+import AddCommentModal from '@/components/comments/AddCommentModal';
+import { Comment, Post } from '@/types/types';
 
 type NewCommentProviderProps = {
   children: ReactNode;
+  parentPost: Post;
+  comments: Comment[];
 };
 
 const NewCommentContext = createContext<{
+  parentPost: Post | undefined;
+  comments: Comment[];
   isCommentModalShown: boolean;
-  showCommentModal: () => void;
+  showCommentModal: (parentComment?: Comment) => void;
   hideCommentModal: () => void;
-  toggleCommentModal: () => void;
+  setParentComment: React.Dispatch<React.SetStateAction<Comment | null>>;
 } | null>(null);
 
 export const NewCommentProvider = (props: NewCommentProviderProps) => {
-  const { children } = props;
+  const { parentPost, children, comments } = props;
 
   const [isCommentModalShown, setCommentModalVisibility] = useState(false);
+  const [parentComment, setParentComment] = useState<Comment | null>(null);
 
-  const showCommentModal = () => setCommentModalVisibility(true);
+  const showCommentModal = (parentComment?: Comment) => {
+    if (parentComment) {
+      setParentComment(parentComment);
+    }
+    setCommentModalVisibility(true);
+  };
+
   const hideCommentModal = () => setCommentModalVisibility(false);
-  const toggleCommentModal = () => setCommentModalVisibility((prev) => !prev);
 
   return (
     <NewCommentContext.Provider
@@ -26,10 +39,20 @@ export const NewCommentProvider = (props: NewCommentProviderProps) => {
         isCommentModalShown,
         showCommentModal,
         hideCommentModal,
-        toggleCommentModal,
+        setParentComment,
+        parentPost,
+        comments,
       }}
     >
       {children}
+      {isCommentModalShown && (
+        <Overlay hideChildren={hideCommentModal}>
+          <AddCommentModal
+            parentPost={parentPost}
+            parentComment={parentComment}
+          />
+        </Overlay>
+      )}
     </NewCommentContext.Provider>
   );
 };
