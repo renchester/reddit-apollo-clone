@@ -1,7 +1,11 @@
 import { auth, db } from '@/firebase/config';
 import getUserDetailsFromDb from '@/firebase/firestore/user/getUserDetailsFromDb';
 import { onAuthStateChanged } from 'firebase/auth';
-import { PostInteraction, UserSubscription } from '@/types/types';
+import {
+  CommentInteraction,
+  PostInteraction,
+  UserSubscription,
+} from '@/types/types';
 import {
   type ReactNode,
   createContext,
@@ -18,6 +22,8 @@ type AuthContextType = {
   subscriptions: UserSubscription[] | null;
   upvotedPosts: PostInteraction[] | null;
   downvotedPosts: PostInteraction[] | null;
+  upvotedComments: CommentInteraction[] | null;
+  downvotedComments: CommentInteraction[] | null;
 };
 
 type AuthProviderProps = {
@@ -38,6 +44,13 @@ export const AuthProvider = (props: AuthProviderProps) => {
   );
   const [downvotedPosts, setDownvotedPosts] = useState<
     PostInteraction[] | null
+  >(null);
+
+  const [upvotedComments, setUpvotedComments] = useState<
+    CommentInteraction[] | null
+  >(null);
+  const [downvotedComments, setDownvotedComments] = useState<
+    CommentInteraction[] | null
   >(null);
 
   useEffect(() => {
@@ -120,9 +133,65 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeDownvotedPosts();
   }, [user]);
 
+  useEffect(() => {
+    if (!user) {
+      setUpvotedComments(null);
+    }
+
+    const upvotedCommentsRef = collection(
+      db,
+      `users/${user?.user_id}/upvoted_comments`,
+    );
+
+    const unsubscribeUpvotedComments = onSnapshot(
+      upvotedCommentsRef,
+      (snapshot) =>
+        setUpvotedComments(
+          snapshot.docs.map((doc) => doc.data() as CommentInteraction),
+        ),
+    );
+
+    return () => unsubscribeUpvotedComments();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) {
+      setDownvotedComments(null);
+    }
+
+    const downvotedCommentsRef = collection(
+      db,
+      `users/${user?.user_id}/downvoted_comments`,
+    );
+
+    const unsubscribeDownvotedComments = onSnapshot(
+      downvotedCommentsRef,
+      (snapshot) =>
+        setUpvotedComments(
+          snapshot.docs.map((doc) => doc.data() as CommentInteraction),
+        ),
+    );
+
+    return () => unsubscribeDownvotedComments();
+  }, [user]);
+
   const value = useMemo(
-    () => ({ user, subscriptions, upvotedPosts, downvotedPosts }),
-    [user, subscriptions, upvotedPosts, downvotedPosts],
+    () => ({
+      user,
+      subscriptions,
+      upvotedPosts,
+      downvotedPosts,
+      upvotedComments,
+      downvotedComments,
+    }),
+    [
+      user,
+      subscriptions,
+      upvotedPosts,
+      downvotedPosts,
+      upvotedComments,
+      downvotedComments,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
