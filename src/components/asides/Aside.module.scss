@@ -60,13 +60,18 @@
     font-size: var(--text-xs);
 
     @include th.themify() {
-      border-color: th.themed('textAlpha50');
+      border-color: th.themed('textAlpha25');
     }
 
     &:hover,
     &:focus {
-      background: gray;
-      color: white;
+      border-color: transparent;
+      font-weight: 500;
+
+      @include th.themify() {
+        background: th.themed('primary');
+        color: th.themed('bgColor');
+      }
     }
   }
 }

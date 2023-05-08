@@ -2,6 +2,7 @@ import { Subreddit } from '@/types/types';
 import styles from './Aside.module.scss';
 import SubredditRules from './SubredditRules';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 
 type SubredditAsideProps = {
   subreddit: Subreddit;
@@ -9,11 +10,16 @@ type SubredditAsideProps = {
 
 function SubredditAside(props: SubredditAsideProps) {
   const { subreddit } = props;
+  const router = useRouter();
 
   const formattedDate = format(
     new Date(subreddit.date_created as string),
     'LLLL d, yyyy',
   );
+
+  const goToCreatePost = () => {
+    router.push(`/r/${subreddit.name}/submit`);
+  };
 
   return (
     <>
@@ -51,7 +57,11 @@ function SubredditAside(props: SubredditAsideProps) {
             <span className={styles.members__description}> on this site</span>
           </div>
         </div>
-        <button type="button" className={styles.aside__btnCreate}>
+        <button
+          type="button"
+          className={styles.aside__btnCreate}
+          onClick={goToCreatePost}
+        >
           Create Post
         </button>
       </aside>
