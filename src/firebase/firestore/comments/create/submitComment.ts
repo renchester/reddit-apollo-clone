@@ -66,7 +66,10 @@ const submitComment = async (
     // Add comment_id to user creations
     const userRef = doc(db, 'users', user.user_id);
     await updateDoc(userRef, {
-      comments: arrayUnion(newCommentId),
+      comments: arrayUnion({
+        parent_post_id: parentPost.post_id,
+        comment_id: newCommentId,
+      }),
     });
 
     return true;
