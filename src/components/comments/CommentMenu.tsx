@@ -1,5 +1,4 @@
 import { useNewComment } from '@/hooks/useNewComment';
-import styles from './Menu.module.scss';
 import Menu from '../menus/Menu';
 import MenuButton from '../menus/MenuButton';
 import { Comment, Post } from '@/types/types';
@@ -40,7 +39,7 @@ function CommentMenu(props: CommentMenuProps) {
   };
 
   return (
-    <Menu>
+    <Menu hideMenu={hideMenu}>
       <MenuButton
         icon="reply"
         text="Reply"

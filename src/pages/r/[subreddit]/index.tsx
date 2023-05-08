@@ -75,7 +75,11 @@ function SubredditPage(props: SubredditPageProps) {
 
   const pageTitle = `r/${subreddit.name} - Reddit Clone`;
 
-  const toggleMenu = () => setMenuVisibility((prev) => !prev);
+  const hideMenu = () => setMenuVisibility(false);
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMenuVisibility((prev) => !prev);
+  };
 
   const handleSubscriptionChange = async () => {
     try {
@@ -140,6 +144,7 @@ function SubredditPage(props: SubredditPageProps) {
 
                   {isMenuShown && (
                     <SubredditMenu
+                      hideMenu={hideMenu}
                       subreddit={subreddit}
                       isUserSubscribed={isUserSubscribed}
                       handleSubscriptionChange={handleSubscriptionChange}
@@ -150,15 +155,13 @@ function SubredditPage(props: SubredditPageProps) {
               )}
             </div>
 
-            <div>
-              {posts.length > 0 ? (
-                posts.map((post) => (
-                  <PostPreview key={`sub-page--${post.post_id}`} post={post} />
-                ))
-              ) : (
-                <p>No posts yet</p>
-              )}
-            </div>
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <PostPreview key={`sub-page--${post.post_id}`} post={post} />
+              ))
+            ) : (
+              <p>No posts yet</p>
+            )}
           </main>
 
           <AsideContainer>

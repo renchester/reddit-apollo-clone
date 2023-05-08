@@ -40,7 +40,12 @@ function PostPreview(props: PostPreviewProps) {
 
   const toggleMenu = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setMenuVisibility((prev) => !prev);
+  };
+
+  const hideMenu = () => {
+    setMenuVisibility(false);
   };
 
   const toggleUpvote = async (e: React.MouseEvent) => {
@@ -294,6 +299,7 @@ function PostPreview(props: PostPreviewProps) {
 
             {isMenuShown && (
               <PostMenu
+                hideMenu={hideMenu}
                 isUpvoted={isUpvoted}
                 isDownvoted={isDownvoted}
                 isBookmarked={isBookmarked}

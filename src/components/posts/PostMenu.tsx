@@ -2,6 +2,7 @@ import Menu from '../menus/Menu';
 import MenuButton from '../menus/MenuButton';
 
 type PostMenuProps = {
+  hideMenu: () => void;
   isUpvoted: boolean;
   isDownvoted: boolean;
   isBookmarked: boolean;
@@ -12,6 +13,7 @@ type PostMenuProps = {
 
 function PostMenu(props: PostMenuProps) {
   const {
+    hideMenu,
     isUpvoted,
     isDownvoted,
     isBookmarked,
@@ -21,7 +23,7 @@ function PostMenu(props: PostMenuProps) {
   } = props;
 
   return (
-    <Menu>
+    <Menu hideMenu={hideMenu}>
       <MenuButton
         icon="north"
         text={isUpvoted ? 'Un-upvote' : 'Upvote'}

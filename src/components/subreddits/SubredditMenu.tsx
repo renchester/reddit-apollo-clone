@@ -7,6 +7,7 @@ import { useSnackbar } from '@/hooks/useSnackbar';
 import toggleFavoriteSubreddit from '@/firebase/firestore/subreddits/update/toggleFavoriteSubreddit';
 
 type SubredditMenuProps = {
+  hideMenu: () => void;
   subreddit: Subreddit;
   isUserSubscribed: boolean;
   handleSubscriptionChange: () => void;
@@ -14,8 +15,13 @@ type SubredditMenuProps = {
 };
 
 function SubredditMenu(props: SubredditMenuProps) {
-  const { subreddit, isUserSubscribed, handleSubscriptionChange, isFavorited } =
-    props;
+  const {
+    hideMenu,
+    subreddit,
+    isUserSubscribed,
+    handleSubscriptionChange,
+    isFavorited,
+  } = props;
   const { user } = useAuth();
   const { addAlert } = useSnackbar();
   const router = useRouter();
@@ -38,7 +44,7 @@ function SubredditMenu(props: SubredditMenuProps) {
   };
 
   return (
-    <Menu>
+    <Menu hideMenu={hideMenu}>
       <MenuButton
         icon="history_edu"
         text="Submit Post"

@@ -27,6 +27,10 @@
     align-items: center;
     gap: 0.5rem;
 
+    @include th.themify() {
+      color: th.themed('textColor');
+    }
+
     &:not(:last-of-type) {
       @include th.themify() {
         border-bottom: th.themed('border');

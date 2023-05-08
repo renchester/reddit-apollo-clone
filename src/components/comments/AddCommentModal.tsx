@@ -26,7 +26,6 @@ function AddCommentModal(props: AddCommentModalProps) {
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ parentComment, parentPost, comment, commentLevel });
 
     try {
       if (!user) throw new Error('Only logged in users may submit a comment');
@@ -61,6 +60,16 @@ function AddCommentModal(props: AddCommentModalProps) {
 
     return () => setParentComment(null);
   }, [parentComment, setParentComment]);
+
+  useEffect(() => {
+    function escKeyListener(e: KeyboardEvent) {
+      if (e.key === 'Escape') hideCommentModal();
+    }
+
+    window.addEventListener('keydown', escKeyListener);
+
+    return () => window.removeEventListener('keydown', escKeyListener);
+  }, [hideCommentModal]);
 
   return (
     <div className={styles.modal}>
