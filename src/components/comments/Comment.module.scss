@@ -59,6 +59,7 @@
 
   &__originalPoster {
     margin-right: 0.5rem;
+    font-size: 0.9rem;
     font-weight: 500;
   }
 
@@ -111,6 +112,8 @@
 
 .content {
   padding-bottom: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 
   @include th.themify() {
     border-bottom: th.themed('border');

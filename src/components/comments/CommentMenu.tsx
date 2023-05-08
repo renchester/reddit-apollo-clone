@@ -12,6 +12,7 @@ type CommentMenuProps = {
   isDownvoted: boolean;
   toggleUpvote: (e?: any) => void;
   toggleDownvote: (e?: any) => void;
+  deleteComment: (e?: any) => void;
 };
 
 function CommentMenu(props: CommentMenuProps) {
@@ -22,6 +23,7 @@ function CommentMenu(props: CommentMenuProps) {
     toggleUpvote,
     isUpvoted,
     isDownvoted,
+    deleteComment,
   } = props;
 
   const { user } = useAuth();
@@ -57,6 +59,14 @@ function CommentMenu(props: CommentMenuProps) {
         label="Downvote comment"
         handler={toggleDownvote}
       />
+      {user?.user_id === parentComment.original_poster_id && (
+        <MenuButton
+          icon="delete"
+          text="Delete"
+          label="Delete comment"
+          handler={deleteComment}
+        />
+      )}
     </Menu>
   );
 }

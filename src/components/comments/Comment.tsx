@@ -11,6 +11,7 @@ import removeUpvoteOnComment from '@/firebase/firestore/comments/update/removeUp
 import upvoteComment from '@/firebase/firestore/comments/update/upvoteComment';
 import downvoteComment from '@/firebase/firestore/comments/update/downvoteComment';
 import removeDownvoteOnComment from '@/firebase/firestore/comments/update/removeDownvoteOnComment';
+import deleteComment from '@/firebase/firestore/comments/delete/deleteComment';
 
 type CommentProps = {
   comment: Comment;
@@ -122,6 +123,32 @@ function Comment(props: CommentProps) {
     }
   };
 
+  const handleDeleteComment = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    try {
+      if (!user || user.user_id !== comment.original_poster_id)
+        throw new Error('You do not have permission to delete this post');
+
+      const result = await deleteComment(
+        user,
+        comment.parent_post_id,
+        comment.comment_id,
+      );
+
+      if (result) {
+        addAlert({ message: 'Deleted comment', status: 'neutral' });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
+  };
+
   // Upvote Handler
   useEffect(() => {
     if (!user || !upvotedComments) {
@@ -143,11 +170,11 @@ function Comment(props: CommentProps) {
       return;
     }
 
-    const isUserUpvoted = !!downvotedComments.find(
+    const isUserDownvoted = !!downvotedComments.find(
       (currComment) => currComment.comment_id === comment.comment_id,
     );
 
-    setUpvotedStatus(isUserUpvoted);
+    setDownvotedStatus(isUserDownvoted);
   }, [user, downvotedComments, comment]);
 
   return (
@@ -220,6 +247,7 @@ function Comment(props: CommentProps) {
                 hideMenu={hideMenu}
                 toggleUpvote={toggleUpvote}
                 toggleDownvote={toggleDownvote}
+                deleteComment={handleDeleteComment}
               />
             )}
           </div>
