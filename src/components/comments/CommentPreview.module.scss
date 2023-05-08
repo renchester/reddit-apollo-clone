@@ -37,6 +37,12 @@
     @include th.themify() {
       color: th.themed('textAccent');
     }
+
+    &[data-upvoted='true'] {
+      @include th.themify() {
+        color: th.themed('upvote');
+      }
+    }
   }
 
   &__btnIcon {
@@ -58,6 +64,11 @@
   flex-direction: column;
   gap: 0.75rem;
   font-size: 0.95rem;
+
+  &__paragraph {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 }
 
 .subreddit {
