@@ -28,6 +28,7 @@ const submitTextPost = async (
     // Add post to posts collection
     await setDoc(postRef, {
       slug: postSlug,
+      post_karma: 0,
       post_id: postId,
       date_created: serverTimestamp(),
       original_poster: user.username,

@@ -1,6 +1,12 @@
 import { db } from '@/firebase/config';
 import { Comment, User } from '@/types/types';
-import { arrayRemove, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  deleteDoc,
+  doc,
+  increment,
+  updateDoc,
+} from 'firebase/firestore';
 
 const removeUpvoteOnComment = async (user: User, comment: Comment) => {
   try {
@@ -13,6 +19,7 @@ const removeUpvoteOnComment = async (user: User, comment: Comment) => {
     // Delete user id from upvoted_by array
     await updateDoc(commentRef, {
       upvoted_by: arrayRemove(user.user_id),
+      comment_karma: increment(-1),
     });
 
     // Delete comment from user interactions

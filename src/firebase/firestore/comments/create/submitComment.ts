@@ -32,6 +32,7 @@ const submitComment = async (
     // Set comment details
     await setDoc(commentRef, {
       comment_id: newCommentId,
+      comment_karma: 0,
       content: commentDetails.content,
       comment_level: commentDetails.level,
       date_created: serverTimestamp(),

@@ -1,6 +1,12 @@
 import { db } from '@/firebase/config';
 import { Post, User } from '@/types/types';
-import { arrayRemove, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  deleteDoc,
+  doc,
+  increment,
+  updateDoc,
+} from 'firebase/firestore';
 
 const removeUpvoteOnPost = async (user: User, post: Post) => {
   try {
@@ -9,6 +15,7 @@ const removeUpvoteOnPost = async (user: User, post: Post) => {
     // Delete user id from upvoted_by array
     await updateDoc(postRef, {
       upvoted_by: arrayRemove(user.user_id),
+      post_karma: increment(-1),
     });
 
     const upvotedPostsRef = doc(

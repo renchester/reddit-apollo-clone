@@ -4,6 +4,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  increment,
   serverTimestamp,
   setDoc,
   updateDoc,
@@ -20,6 +21,7 @@ const upvotePost = async (user: User, post: Post) => {
     // Add user id to upvoted_by array
     await updateDoc(postRef, {
       upvoted_by: arrayUnion(user.user_id),
+      post_karma: increment(1),
     });
 
     const upvotedPostsRef = collection(

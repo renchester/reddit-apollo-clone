@@ -6,6 +6,7 @@ import {
   arrayUnion,
   setDoc,
   serverTimestamp,
+  increment,
 } from 'firebase/firestore';
 import removeUpvoteOnComment from './removeUpvoteOnComment';
 
@@ -22,6 +23,7 @@ const downvoteComment = async (user: User, comment: Comment) => {
     // Add user id to downvoted_by array
     await updateDoc(commentRef, {
       downvoted_by: arrayUnion(user.user_id),
+      comment_karma: increment(-1),
     });
 
     // Add comment to user downvoted comments
