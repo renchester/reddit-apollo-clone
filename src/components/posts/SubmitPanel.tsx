@@ -42,6 +42,7 @@ function SubmitPanel(props: SubmitPanelProps) {
           id="text_tab"
           className={styles.tab__tab}
           onClick={() => setActivePanel(1)}
+          data-active={activePanel === 1}
         >
           <i
             className={`material-symbols-outlined ${styles.tab__tabIcon}`}
@@ -60,6 +61,7 @@ function SubmitPanel(props: SubmitPanelProps) {
           id="image_tab"
           className={styles.tab__tab}
           onClick={() => setActivePanel(2)}
+          data-active={activePanel === 2}
         >
           <i
             className={`material-symbols-outlined ${styles.tab__tabIcon}`}
