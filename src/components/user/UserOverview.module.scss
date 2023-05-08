@@ -1,0 +1,13 @@
+.overview {
+  &__title {
+    font-weight: 500;
+    margin-block: 0.5rem;
+    font-size: var(--text-lg);
+  }
+
+  &__feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

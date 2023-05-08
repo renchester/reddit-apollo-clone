@@ -1,0 +1,39 @@
+@use '@/styles/themes' as th;
+@use '@/styles/placeholders';
+
+.account {
+  &__name {
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 1.25rem;
+  margin-bottom: 1rem;
+
+  &__dataWrapper {
+    @extend %parent-with-centered-children;
+    flex-direction: column;
+    gap: 0.125rem;
+    width: 33%;
+  }
+
+  &__data {
+    font-weight: 500;
+    font-size: var(--text-md);
+  }
+
+  &__label {
+    font-size: var(--text-xs);
+
+    @include th.themify() {
+      color: th.themed('textAccent');
+    }
+  }
+}
