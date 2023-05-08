@@ -129,6 +129,14 @@
         background: th.themed('downvote');
       }
     }
+
+    &[data-bookmarked='true'] {
+      color: white;
+
+      @include th.themify() {
+        background: th.themed('bookmark');
+      }
+    }
   }
 
   &__icon {

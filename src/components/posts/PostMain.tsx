@@ -15,6 +15,8 @@ import removeUpvoteOnPost from '@/firebase/firestore/posts/update/removeUpvoteOn
 import downvotePost from '@/firebase/firestore/posts/update/downvotePost';
 import removeDownvoteOnPost from '@/firebase/firestore/posts/update/removeDownvoteOnPost';
 import { useNewComment } from '@/hooks/useNewComment';
+import removeBookmarkOnPost from '@/firebase/firestore/posts/update/removeBookmarkOnPost';
+import bookmarkPost from '@/firebase/firestore/posts/update/bookmarkPost';
 
 type PostMainProps = {
   post: Post;
@@ -22,13 +24,14 @@ type PostMainProps = {
 
 function PostMain(props: PostMainProps) {
   const { post } = props;
-  const { user, upvotedPosts, downvotedPosts } = useAuth();
+  const { user, upvotedPosts, downvotedPosts, bookmarkedPosts } = useAuth();
   const { addAlert } = useSnackbar();
   const { showCommentModal } = useNewComment();
   const router = useRouter();
 
   const [isUpvoted, setUpvotedStatus] = useState(false);
   const [isDownvoted, setDownvotedStatus] = useState(false);
+  const [isBookmarked, setBookmarkedStatus] = useState(false);
   const [postKarma, setPostKarma] = useState(
     calculateKarma(post.upvoted_by.length, post.downvoted_by.length, true),
   );
@@ -97,6 +100,27 @@ function PostMain(props: PostMainProps) {
     }
   };
 
+  const toggleBookmark = async (e: React.MouseEvent) => {
+    try {
+      if (!user) return;
+
+      if (isBookmarked) {
+        setBookmarkedStatus(true);
+        await removeBookmarkOnPost(user, post.post_id);
+      } else if (!isBookmarked) {
+        setBookmarkedStatus(false);
+        await bookmarkPost(user, post.post_id);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
+  };
+
   const handleReplyToPost = () => {
     if (!user) return;
     showCommentModal();
@@ -127,6 +151,19 @@ function PostMain(props: PostMainProps) {
     );
     setDownvotedStatus(isUserDownvoted);
   }, [downvotedPosts, user, post.post_id]);
+
+  // Bookmark Handler
+  useEffect(() => {
+    if (!user || !bookmarkedPosts) {
+      setBookmarkedStatus(false);
+      return;
+    }
+
+    const isUserDownvoted = !!bookmarkedPosts.find(
+      (currPost) => currPost.post_id === post.post_id,
+    );
+    setBookmarkedStatus(isUserDownvoted);
+  }, [bookmarkedPosts, user, post.post_id]);
 
   return (
     <section aria-label="Post details" className={styles.post}>
@@ -242,6 +279,8 @@ function PostMain(props: PostMainProps) {
           type="button"
           className={styles.control__btn}
           aria-label="Save/bookmark post button"
+          onClick={toggleBookmark}
+          data-bookmarked={isBookmarked}
         >
           <i
             className={`material-symbols-outlined ${styles.control__icon}`}

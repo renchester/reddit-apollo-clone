@@ -14,6 +14,8 @@ import upvotePost from '@/firebase/firestore/posts/update/upvotePost';
 import removeUpvoteOnPost from '@/firebase/firestore/posts/update/removeUpvoteOnPost';
 import removeDownvoteOnPost from '@/firebase/firestore/posts/update/removeDownvoteOnPost';
 import downvotePost from '@/firebase/firestore/posts/update/downvotePost';
+import removeBookmarkOnPost from '@/firebase/firestore/posts/update/removeBookmarkOnPost';
+import bookmarkPost from '@/firebase/firestore/posts/update/bookmarkPost';
 
 type PostPreviewProps = {
   post: Post;
@@ -27,6 +29,7 @@ function PostPreview(props: PostPreviewProps) {
   const [isMenuShown, setMenuVisibility] = useState(false);
   const [isUpvoted, setUpvotedStatus] = useState(false);
   const [isDownvoted, setDownvotedStatus] = useState(false);
+  const [isBookmarked, setBookmarkedStatus] = useState(false);
   const [postKarma, setPostKarma] = useState(
     calculateKarma(post.upvoted_by.length, post.downvoted_by.length, true),
   );
@@ -89,6 +92,27 @@ function PostPreview(props: PostPreviewProps) {
         setPostKarma((prev) => Math.max(prev - 1, 0));
 
         await downvotePost(user, post);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({
+          message: error.message,
+          status: 'error',
+        });
+      }
+    }
+  };
+
+  const toggleBookmark = async (e: React.MouseEvent) => {
+    try {
+      if (!user) return;
+
+      if (isBookmarked) {
+        setBookmarkedStatus(true);
+        await removeBookmarkOnPost(user, post.post_id);
+      } else if (!isBookmarked) {
+        setBookmarkedStatus(false);
+        await bookmarkPost(user, post.post_id);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -270,11 +294,12 @@ function PostPreview(props: PostPreviewProps) {
 
             {isMenuShown && (
               <PostMenu
-                post={post}
                 isUpvoted={isUpvoted}
                 isDownvoted={isDownvoted}
+                isBookmarked={isBookmarked}
                 toggleUpvote={toggleUpvote}
                 toggleDownvote={toggleDownvote}
+                toggleBookmark={toggleBookmark}
               />
             )}
           </div>
