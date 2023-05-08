@@ -1,22 +1,48 @@
 import styles from './AccountPage.module.scss';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
-import PostPreview from '@/components/posts/PostPreview';
-import CommentPreview from '@/components/comments/CommentPreview';
 import { useAuth } from '@/hooks/useAuth';
-import { formatDistanceToNowStrict } from 'date-fns';
+import fetchPostsByUser from '@/firebase/firestore/posts/read/fetchPostsByUser';
+import fetchCommentsByUser from '@/firebase/firestore/comments/read/fetchCommentsByUser';
+import UserMain from '@/components/user/UserMain';
+import { Comment, Post } from '@/types/types';
+import { useSnackbar } from '@/hooks/useSnackbar';
+import UserOverview from '@/components/user/UserOverview';
 
 function AccountPage() {
   const { user } = useAuth();
+  const { addAlert } = useSnackbar();
 
-  let dateCreated = '';
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
-  if (user) {
-    dateCreated = formatDistanceToNowStrict(new Date(user.date_created));
-  }
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchUserCreations = async () => {
+      try {
+        const userPosts =
+          (await fetchPostsByUser(user.user_id as string)) || [];
+        const userComments =
+          (await fetchCommentsByUser(user.user_id as string)) || [];
+
+        setPosts(userPosts);
+        setComments(userComments);
+      } catch (error) {
+        if (error instanceof Error) {
+          addAlert({
+            message: error.message,
+            status: 'error',
+          });
+        }
+      }
+    };
+
+    fetchUserCreations();
+  }, [user, addAlert]);
 
   return (
     <>
@@ -26,41 +52,40 @@ function AccountPage() {
       <div className="page__container">
         {user ? (
           <main className={styles.main}>
-            <section className={styles.account}>
-              <h1 className={styles.account__name}>{user.username}</h1>
+            <UserMain user={user} />
+            <Link href={`/account/saved`} className={styles.interaction}>
+              <div className={styles.interaction__left}>
+                <i
+                  className={`material-symbols-outlined ${styles.interaction__leftIcon}`}
+                  aria-hidden
+                >
+                  bookmark
+                </i>
+                <span>Saved Posts</span>
+              </div>
+              <i
+                className={`material-symbols-outlined ${styles.interaction__right}`}
+                aria-hidden
+              >
+                arrow_forward_ios
+              </i>
+            </Link>
 
-              <div className={styles.meta}>
-                <div className={styles.meta__dataWrapper}>
-                  <span className={styles.meta__data}>
-                    {user.comment_karma}
-                  </span>
-                  <span className={styles.meta__label}>Comment Karma</span>
-                </div>
-                <div className={styles.meta__dataWrapper}>
-                  <span className={styles.meta__data}>{user.post_karma}</span>
-                  <span className={styles.meta__label}>Post Karma</span>
-                </div>
-                <div className={styles.meta__dataWrapper}>
-                  <time
-                    dateTime={user.date_created.toString()}
-                    className={styles.meta__data}
-                  >
-                    {dateCreated || user.date_created.toString()}
-                  </time>
-                  <span className={styles.meta__label}>Account Age</span>
-                </div>
-              </div>
-            </section>
-            <section className={styles.overview}>
-              <h2 className={styles.overview__title}>Overview</h2>
-              <div className={styles.overview__feed}>
-                <PostPreview id="2345" />
-                <CommentPreview id="23456" />
-              </div>
-            </section>
+            <UserOverview posts={posts} comments={comments} />
           </main>
         ) : (
-          <Link href="/account/login">Log in</Link>
+          <div className={styles.noAuth}>
+            <p className="not-signed-in">
+              You must be logged in to view this page
+            </p>
+            <Link
+              href="/account/login"
+              className={styles.noAuth__link}
+              aria-label="Link to log in page"
+            >
+              Log in
+            </Link>
+          </div>
         )}
       </div>
     </>
@@ -70,7 +95,7 @@ function AccountPage() {
 AccountPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MasterLayout>
-      <FeedPageLayout>{page}</FeedPageLayout>
+      <FeedPageLayout label="Account">{page}</FeedPageLayout>
     </MasterLayout>
   );
 };
