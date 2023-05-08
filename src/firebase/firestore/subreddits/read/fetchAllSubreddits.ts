@@ -9,7 +9,7 @@ const fetchAllSubreddits = async () => {
     const querySnapshot = await getDocs(subRef);
     let subreddits: Subreddit[] = [];
 
-    querySnapshot.forEach(async (doc) => {
+    querySnapshot.forEach((doc) => {
       const subData = doc.data() as Subreddit;
       // Convert serverTimestamp to UTC Date String
       const convertedSubData = Object.assign(subData, {
