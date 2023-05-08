@@ -22,6 +22,7 @@ type AuthContextType = {
   subscriptions: UserSubscription[] | null;
   upvotedPosts: PostInteraction[] | null;
   downvotedPosts: PostInteraction[] | null;
+  bookmarkedPosts: PostInteraction[] | null;
   upvotedComments: CommentInteraction[] | null;
   downvotedComments: CommentInteraction[] | null;
 };
@@ -43,6 +44,9 @@ export const AuthProvider = (props: AuthProviderProps) => {
     null,
   );
   const [downvotedPosts, setDownvotedPosts] = useState<
+    PostInteraction[] | null
+  >(null);
+  const [bookmarkedPosts, setBookmarkedPosts] = useState<
     PostInteraction[] | null
   >(null);
 
@@ -96,6 +100,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
   useEffect(() => {
     if (!user) {
       setUpvotedPosts(null);
+      return;
     }
 
     const upvotedPostsRef = collection(
@@ -115,6 +120,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
   useEffect(() => {
     if (!user) {
       setDownvotedPosts(null);
+      return;
     }
 
     const downvotedPostsRef = collection(
@@ -135,7 +141,30 @@ export const AuthProvider = (props: AuthProviderProps) => {
 
   useEffect(() => {
     if (!user) {
+      setBookmarkedPosts(null);
+      return;
+    }
+
+    const bookmarkedPostsRef = collection(
+      db,
+      `users/${user?.user_id}/saved_posts`,
+    );
+
+    const unsubscribeBookmarkedPosts = onSnapshot(
+      bookmarkedPostsRef,
+      (snapshot) =>
+        setBookmarkedPosts(
+          snapshot.docs.map((doc) => doc.data() as PostInteraction),
+        ),
+    );
+
+    return () => unsubscribeBookmarkedPosts();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) {
       setUpvotedComments(null);
+      return;
     }
 
     const upvotedCommentsRef = collection(
@@ -157,6 +186,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
   useEffect(() => {
     if (!user) {
       setDownvotedComments(null);
+      return;
     }
 
     const downvotedCommentsRef = collection(
@@ -167,7 +197,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     const unsubscribeDownvotedComments = onSnapshot(
       downvotedCommentsRef,
       (snapshot) =>
-        setUpvotedComments(
+        setDownvotedComments(
           snapshot.docs.map((doc) => doc.data() as CommentInteraction),
         ),
     );
@@ -181,6 +211,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
       subscriptions,
       upvotedPosts,
       downvotedPosts,
+      bookmarkedPosts,
       upvotedComments,
       downvotedComments,
     }),
@@ -189,6 +220,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
       subscriptions,
       upvotedPosts,
       downvotedPosts,
+      bookmarkedPosts,
       upvotedComments,
       downvotedComments,
     ],
