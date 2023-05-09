@@ -1,63 +1,97 @@
-export type Interactables = 'comment' | 'post' | 'subreddit';
+import { Timestamp } from 'firebase/firestore';
 
-export interface InteractedType {
-  date_interacted: Date | string;
-  id: string;
-  type: Interactables;
+export type Alert = {
+  message: string;
+  submessage?: string;
+  action?: string;
+  status: 'success' | 'error' | 'neutral';
+};
+
+export interface UserCommentRef {
+  parent_post_id: string;
+  comment_id: string;
 }
 
 export interface User {
-  date_created: Date | string;
+  date_created: string | Timestamp;
   username: string;
   email: string;
   user_id: string;
-  posts?: Post[];
   post_karma: number;
-  comments?: Comment[];
   comment_karma: number;
-  upvoted_posts?: InteractedType[];
-  downvoted_posts?: InteractedType[];
-  upvoted_comments?: InteractedType[];
-  downvoted_comments?: InteractedType[];
-  saved_posts?: InteractedType[];
-  saved_comments?: InteractedType[];
-  subscribed_subreddits?: Subreddit[];
-  favorite_subreddits?: Subreddit[];
+  posts?: string[]; // array of post_ids
+  comments?: UserCommentRef[]; // array of comment_ids
+}
+
+export interface Interactions {
+  upvoted_posts?: PostInteraction[];
+  downvoted_posts?: PostInteraction[];
+  saved_posts?: PostInteraction[];
+  upvoted_comments?: CommentInteraction[];
+  downvoted_comments?: CommentInteraction[];
+  subscribed_subreddits?: UserSubscription[];
+}
+
+export interface PostInteraction {
+  date_created: string | Timestamp;
+  post_id: string;
+}
+
+export interface CommentInteraction {
+  date_created: string | Timestamp;
+  comment_id: string;
+}
+
+export interface UserSubscription {
+  date_subscribed: string | Timestamp;
+  subreddit: string;
+  subreddit_id: string;
+  isFavorite: boolean;
 }
 
 export interface Comment {
   comment_id: string;
-  date_created: Date | string;
+  comment_karma: number;
+  content: string;
+  comment_level: number;
+  date_created: string | Timestamp;
   original_poster: string;
   original_poster_id: string;
   parent_post_id: string;
-  comment_level: number;
-  content: string;
-  upvoted_by?: User[];
-  downvoted_by?: User[];
-  parent_comment?: Comment;
-  child_comments?: Comment[];
+  parent_post_slug: string;
+  parent_comment_id: string; // comment id
+  child_comments: string[]; // array of comment ids
+  upvoted_by: string[]; // user id
+  downvoted_by: string[]; // user id
 }
 
 export interface Subreddit {
   subreddit_id: string;
-  date_created: Date | string;
+  date_created: string | Timestamp;
   name: string;
-  posts: Post[];
-  members?: User[];
+  description?: string;
+  creator_id: string;
+  posts?: string[]; // array of post ids
+  members: string[]; // array of user ids
 }
 
 export interface Post {
   post_id: string;
-  date_created: Date | string;
+  post_karma: number;
+  slug: string;
+  date_created: string | Timestamp;
   original_poster: string;
   original_poster_id: string;
   parent_subreddit: string;
   parent_subreddit_id: string;
-  type: 'image' | 'text';
   title: string;
   details?: string;
-  upvoted_by?: User[];
-  downvoted_by?: User[];
-  comments?: Comment[];
+  upvoted_by: string[];
+  downvoted_by: string[];
+  comment_count: number;
+  image?: string;
+}
+
+export interface ImagePost extends Post {
+  image: string;
 }
