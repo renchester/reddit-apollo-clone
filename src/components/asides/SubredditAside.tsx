@@ -3,6 +3,7 @@ import styles from './Aside.module.scss';
 import SubredditRules from './SubredditRules';
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 type SubredditAsideProps = {
   subreddit: Subreddit;
@@ -24,8 +25,10 @@ function SubredditAside(props: SubredditAsideProps) {
   return (
     <>
       <aside className={styles.aside__main}>
-        <h2 className={styles.aside__heading}>r/{subreddit.name}</h2>
-        <p className={styles.aside__description}>{subreddit.description}</p>
+        <Link href={`/r/${subreddit.name}`}>
+          <h2 className={styles.aside__heading}>r/{subreddit.name}</h2>
+          <p className={styles.aside__description}>{subreddit.description}</p>
+        </Link>
         <div className={styles.created}>
           <span
             className={`material-symbols-outlined ${styles.created__icon}`}
