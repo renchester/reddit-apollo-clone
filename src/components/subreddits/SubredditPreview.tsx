@@ -2,6 +2,11 @@ import { Subreddit } from '@/types/types';
 import styles from './SubredditPreview.module.scss';
 import Link from 'next/link';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { useAuth } from '@/hooks/useAuth';
+import { useEffect, useState } from 'react';
+import leaveSubreddit from '@/firebase/firestore/subreddits/update/leaveSubreddit';
+import joinSubreddit from '@/firebase/firestore/subreddits/update/joinSubreddit';
+import { useSnackbar } from '@/hooks/useSnackbar';
 
 type SubredditPreviewProps = {
   id: string;
@@ -11,6 +16,46 @@ type SubredditPreviewProps = {
 
 function SubredditPreview(props: SubredditPreviewProps) {
   const { id, href, subreddit } = props;
+  const { user, subscriptions } = useAuth();
+  const { addAlert } = useSnackbar();
+
+  const [isUserSubscribed, setSubscription] = useState(false);
+
+  const handleSubscriptionChange = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    try {
+      if (!user) {
+        addAlert({
+          message: 'Subscriptions are only available for logged in users',
+          status: 'error',
+        });
+      } else if (isUserSubscribed) {
+        await leaveSubreddit(user, subreddit.name);
+        addAlert({ message: `Left r/${subreddit.name}`, status: 'neutral' });
+      } else if (!isUserSubscribed) {
+        await joinSubreddit(user, subreddit.name, subreddit.subreddit_id);
+        addAlert({ message: `Joined r/${subreddit.name}`, status: 'success' });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        addAlert({ message: error.message, status: 'error' });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!user || !subscriptions) {
+      setSubscription(false);
+      return;
+    }
+
+    if (
+      !!subscriptions.find((sub) => sub.subreddit_id === subreddit.subreddit_id)
+    ) {
+      setSubscription(true);
+    }
+  }, [user, subscriptions, subreddit]);
 
   return (
     <article
@@ -41,7 +86,20 @@ function SubredditPreview(props: SubredditPreviewProps) {
             )}
           </time>
         </p>
-        <button type="button" className={styles.btnReport}>
+        {user && (
+          <button
+            type="button"
+            className={styles.btnJoin}
+            onClick={handleSubscriptionChange}
+          >
+            {isUserSubscribed ? 'Leave' : 'Join'}
+          </button>
+        )}
+        <button
+          type="button"
+          className={styles.btnReport}
+          onClick={(e) => e.preventDefault()}
+        >
           Report
         </button>
       </Link>
