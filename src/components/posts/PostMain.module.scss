@@ -24,6 +24,8 @@
 
   &__details {
     margin-block: 0.75rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 
     &:last-of-type {
       margin-bottom: 1.125rem;

@@ -2,12 +2,29 @@
 @use '@/styles/themes' as th;
 
 .container {
+  $self: &;
   padding-block: 1rem;
   border-top: 1px solid;
   border-bottom: 1px solid;
+  position: relative;
 
   @include th.themify() {
     border-color: th.themed('borderColor');
+  }
+
+  &[data-saved='true']::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 25px;
+    bottom: 0;
+    right: 0;
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+
+    @include th.themify() {
+      background: th.themed('bookmark');
+    }
   }
 }
 
@@ -31,7 +48,7 @@
 
     @include th.themify() {
       border-color: th.themed('borderColor');
-      background: th.themed('primary');
+      background: th.themed('primaryAlpha50');
     }
   }
 

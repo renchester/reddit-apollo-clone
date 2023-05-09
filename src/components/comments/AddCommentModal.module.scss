@@ -90,6 +90,10 @@
 
   &__content {
     font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
     @include th.themify() {
       color: th.themed('textAlpha75');
     }

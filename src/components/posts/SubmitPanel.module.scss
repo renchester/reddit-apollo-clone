@@ -122,8 +122,8 @@
   border-radius: var(--main-border-radius);
 
   @include th.themify() {
-    background-color: th.themed('bgAlpha50');
-    border-color: th.themed('textAlpha50');
+    background-color: th.themed('bgAccent3');
+    border-color: th.themed('borderColor');
   }
 
   &__barWrapper {
