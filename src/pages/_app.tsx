@@ -11,6 +11,7 @@ import { NavbarProvider } from '@/hooks/useNavbar';
 import { ThemeProvider } from '@/hooks/useTheme';
 import { AuthProvider } from '@/hooks/useAuth';
 import { SnackbarProvider } from '@/hooks/useSnackbar';
+import { PreferredSortProvider } from '@/hooks/usePreferredSort';
 
 fontAwesomeConfig.autoAddCss = false;
 
@@ -31,9 +32,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <ThemeProvider>
         <SnackbarProvider>
           <NavbarProvider>
-            <div className={`${roboto.variable} ${inter.variable}`}>
-              {getLayout(<Component {...pageProps} />)}
-            </div>
+            <PreferredSortProvider>
+              <div className={`${roboto.variable} ${inter.variable}`}>
+                {getLayout(<Component {...pageProps} />)}
+              </div>
+            </PreferredSortProvider>
           </NavbarProvider>
         </SnackbarProvider>
       </ThemeProvider>

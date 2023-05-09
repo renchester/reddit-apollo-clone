@@ -11,7 +11,9 @@ type UserOverviewProps = {
 function UserOverview(props: UserOverviewProps) {
   const { comments, posts } = props;
   const sortedUnion = [...comments, ...posts].sort((a, b) =>
-    a.date_created > b.date_created ? -1 : 1,
+    new Date(a.date_created as string) > new Date(b.date_created as string)
+      ? -1
+      : 1,
   );
 
   return (

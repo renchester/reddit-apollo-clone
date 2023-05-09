@@ -1,30 +1,43 @@
 import { useState } from 'react';
 import styles from './Header.module.scss';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFire } from '@fortawesome/free-solid-svg-icons';
 import { useSwipeable } from 'react-swipeable';
 import { useNavbar } from '@/hooks/useNavbar';
 import { useAuth } from '@/hooks/useAuth';
 
 import HeaderMenu from './HeaderMenu';
+import SortMenu from './SortMenu';
+import { usePreferredSort } from '@/hooks/usePreferredSort';
 
 type HeaderProps = {
   label?: string;
+  isSortable?: boolean;
 };
 
 function Header(props: HeaderProps) {
-  const { label } = props;
+  const { label, isSortable } = props;
   const { user } = useAuth();
+  const { preferredSort } = usePreferredSort();
 
   const { showNavbar, toggleNavbar, isNavbarShown } = useNavbar();
   const [isMenuShown, setMenuVisibility] = useState(false);
+  const [isSortMenuShown, setSortMenuVisibility] = useState(false);
 
-  const toggleMenu = () => setMenuVisibility((prev) => !prev);
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMenuVisibility((prev) => !prev);
+  };
+  const hideMenu = () => setMenuVisibility(false);
+
+  const toggleSortMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSortMenuVisibility((prev) => !prev);
+  };
+  const hideSortMenu = () => setSortMenuVisibility(false);
 
   const swipeHandlers = useSwipeable({
-    preventScrollOnSwipe: true,
     onSwipedRight: showNavbar,
+    trackMouse: true,
   });
 
   return (
@@ -55,7 +68,9 @@ function Header(props: HeaderProps) {
           </button>
         </div>
         {label ? (
-          <h2 className={styles.feed__label}>{label}</h2>
+          <div className={styles.feed__labelWrapper}>
+            <h2 className={styles.feed__label}>{label}</h2>
+          </div>
         ) : (
           <div className={styles.feed__labelWrapper}>
             <h2
@@ -81,19 +96,23 @@ function Header(props: HeaderProps) {
           </div>
         )}
         <div className={styles.btn__container}>
-          <button
-            className={styles.btn__sort}
-            type="button"
-            aria-haspopup
-            aria-expanded="false"
-            aria-label="Show menu for changing sort method"
-          >
-            <FontAwesomeIcon
-              className={`${styles.btn__icon} ${styles.btn__sortIcon}`}
-              icon={faFire}
-              aria-hidden
-            />
-          </button>
+          {isSortable && (
+            <button
+              className={styles.btn__sort}
+              type="button"
+              aria-haspopup
+              aria-expanded={isSortMenuShown}
+              aria-label="Show menu for changing sort method"
+              onClick={toggleSortMenu}
+            >
+              <span
+                className={`${styles.btn__icon} ${styles.btn__accountIcon} material-symbols-outlined`}
+                aria-hidden
+              >
+                {preferredSort === 'new' ? 'schedule' : 'local_fire_department'}
+              </span>
+            </button>
+          )}
           <Link
             href="/account"
             className={styles.btn__account}
@@ -112,7 +131,7 @@ function Header(props: HeaderProps) {
             className={styles.btn__account}
             type="button"
             aria-haspopup
-            aria-expanded="false"
+            aria-expanded={isMenuShown}
             aria-label="Show account sidebar"
             onClick={toggleMenu}
           >
@@ -123,8 +142,9 @@ function Header(props: HeaderProps) {
               more_horiz
             </span>
           </button>
+          {isSortMenuShown && <SortMenu hideMenu={hideSortMenu} />}
         </div>
-        {isMenuShown && <HeaderMenu />}
+        {isMenuShown && <HeaderMenu hideMenu={hideMenu} />}
       </div>
     </header>
   );

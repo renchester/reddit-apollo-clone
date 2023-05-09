@@ -18,6 +18,7 @@ import { useAuth } from '@/hooks/useAuth';
 import leaveSubreddit from '@/firebase/firestore/subreddits/update/leaveSubreddit';
 import joinSubreddit from '@/firebase/firestore/subreddits/update/joinSubreddit';
 import fetchPostsBySubreddit from '@/firebase/firestore/posts/read/fetchPostsBySubreddit';
+import { usePreferredSort } from '@/hooks/usePreferredSort';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
@@ -51,14 +52,37 @@ type SubredditPageProps = {
 };
 
 function SubredditPage(props: SubredditPageProps) {
-  const { subreddit, posts } = props;
+  const { subreddit, posts: _posts } = props;
   const router = useRouter();
   const { user, subscriptions } = useAuth();
   const { addAlert } = useSnackbar();
+  const { preferredSort } = usePreferredSort();
 
   const [isMenuShown, setMenuVisibility] = useState(false);
   const [isUserSubscribed, setUserSubscription] = useState(false);
   const [isFavorited, setFavoritedStatus] = useState(false);
+
+  const [posts, setPosts] = useState(_posts);
+
+  useEffect(() => {
+    const postsCopy = [..._posts];
+
+    if (preferredSort === 'new') {
+      const sortedPostsByDate = postsCopy.sort((a, b) =>
+        new Date(a.date_created as string) > new Date(b.date_created as string)
+          ? -1
+          : 1,
+      );
+
+      setPosts(sortedPostsByDate);
+    } else if (preferredSort === 'popular') {
+      const sortedPostsByUpvotes = postsCopy.sort((a, b) =>
+        a.post_karma > b.post_karma ? -1 : 1,
+      );
+
+      setPosts(sortedPostsByUpvotes);
+    }
+  }, [preferredSort, _posts]);
 
   useEffect(() => {
     if (!subscriptions) {
@@ -181,7 +205,9 @@ SubredditPage.getLayout = function getLayout(page: ReactElement) {
   }
   return (
     <MasterLayout>
-      <FeedPageLayout label={label}>{page}</FeedPageLayout>
+      <FeedPageLayout label={label || 'Community'} isSortable>
+        {page}
+      </FeedPageLayout>
     </MasterLayout>
   );
 };

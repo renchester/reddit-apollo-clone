@@ -6,16 +6,16 @@ import Footer from '@/components/Footer';
 type FeedPageLayoutProps = {
   children: ReactNode;
   label?: string;
+  isSortable?: boolean;
 };
 
 function FeedPageLayout(props: FeedPageLayoutProps) {
-  const { children, label } = props;
+  const { children, label, isSortable } = props;
 
   return (
     <div className={styles.layout__feed}>
-      <Header label={label} />
+      <Header label={label} isSortable={isSortable} />
       {children}
-      <Footer />
     </div>
   );
 }

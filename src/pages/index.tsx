@@ -10,6 +10,8 @@ import { Post } from '@/types/types';
 import { GetStaticProps } from 'next';
 import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
 import PostPreview from '@/components/posts/PostPreview';
+import { usePreferredSort } from '@/hooks/usePreferredSort';
+import ScrollToTop from '@/components/utility/ScrollToTop';
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await fetchAllPosts(50);
@@ -27,21 +29,56 @@ type HomePageProps = {
 function HomePage(props: HomePageProps) {
   const { posts } = props;
   const { user, subscriptions } = useAuth();
+  const { preferredSort } = usePreferredSort();
   const [homePosts, setHomePosts] = useState<Post[]>(posts);
 
   useEffect(() => {
+    const postsCopy = [...posts];
+
+    // For non-logged in users, set to all posts
     if (!user || !subscriptions) {
-      setHomePosts(posts);
-      return;
+      let sortedPosts: Post[];
+
+      if (preferredSort === 'new') {
+        sortedPosts = postsCopy.sort((a, b) =>
+          new Date(a.date_created as string) >
+          new Date(b.date_created as string)
+            ? -1
+            : 1,
+        );
+      } else {
+        sortedPosts = postsCopy.sort((a, b) =>
+          a.post_karma > b.post_karma ? -1 : 1,
+        );
+      }
+
+      setHomePosts(sortedPosts);
+    } else {
+      // For logged-in users, set to subscribed subs
+      const subscriptionNames = subscriptions.map((sub) => sub.subreddit);
+
+      const userSubscribedPosts = posts.filter((post) =>
+        subscriptionNames.includes(post.parent_subreddit),
+      );
+
+      let sortedPosts: Post[];
+
+      if (preferredSort === 'new') {
+        sortedPosts = userSubscribedPosts.sort((a, b) =>
+          new Date(a.date_created as string) >
+          new Date(b.date_created as string)
+            ? -1
+            : 1,
+        );
+      } else {
+        sortedPosts = userSubscribedPosts.sort((a, b) =>
+          a.post_karma > b.post_karma ? -1 : 1,
+        );
+      }
+
+      setHomePosts(sortedPosts);
     }
-    const subscriptionNames = subscriptions.map((sub) => sub.subreddit);
-
-    const userSubscribedPosts = posts.filter((post) =>
-      subscriptionNames.includes(post.parent_subreddit),
-    );
-
-    setHomePosts(userSubscribedPosts);
-  }, [user, posts, subscriptions]);
+  }, [user, posts, subscriptions, preferredSort]);
 
   return (
     <>
@@ -56,7 +93,7 @@ function HomePage(props: HomePageProps) {
               <PostPreview key={`home-${post.post_id}`} post={post} />
             ))
           ) : (
-            <p>No posts yet</p>
+            <p>{user ? 'You have no subscriptions yet' : 'No posts yet'}</p>
           )}
         </main>
         <AsideContainer>
@@ -66,6 +103,7 @@ function HomePage(props: HomePageProps) {
           />
         </AsideContainer>
       </div>
+      <ScrollToTop />
     </>
   );
 }
@@ -73,7 +111,9 @@ function HomePage(props: HomePageProps) {
 HomePage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MasterLayout>
-      <FeedPageLayout>{page}</FeedPageLayout>
+      <FeedPageLayout label="Home" isSortable>
+        {page}
+      </FeedPageLayout>
     </MasterLayout>
   );
 };
