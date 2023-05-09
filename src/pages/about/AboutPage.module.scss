@@ -1,0 +1,11 @@
+.link {
+  &:link,
+  &:visited {
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+  }
+}
+
+.info {
+  margin-top: 1rem;
+}
