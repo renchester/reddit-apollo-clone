@@ -39,7 +39,7 @@ function PostMenu(props: PostMenuProps) {
       <MenuButton
         icon="bookmark"
         text={isBookmarked ? 'Unsave' : 'Save'}
-        label="Bookmark/save post"
+        label={isBookmarked ? 'Remove bookmark on post' : 'Bookmark post'}
         handler={toggleBookmark}
       />
     </Menu>
