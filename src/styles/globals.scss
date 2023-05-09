@@ -100,6 +100,8 @@ body {
   width: min(95%, var(--max-page-width));
   margin-inline: auto;
   margin-top: var(--distance-from-header);
+  margin-bottom: 3rem;
+  min-height: 90vh;
 }
 
 .page__title {

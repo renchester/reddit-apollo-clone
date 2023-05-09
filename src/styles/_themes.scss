@@ -1,6 +1,11 @@
 @use 'sass:color';
 
 //====== Light Mode Variables ======//
+$upvote: #ff5416;
+$downvote: #714aff;
+$bookmark: #00be20;
+
+//====== Light Mode Variables ======//
 $bgLight: #fff;
 $textLight: #202020;
 $primaryLight: #632be4;
@@ -22,11 +27,13 @@ $themes: (
   light: (
     // Accents
     primary: $primaryLight,
+    primaryAlpha75: color.adjust($primaryLight, $alpha: -0.25),
     primaryAlpha50: color.adjust($primaryLight, $alpha: -0.5),
     // Background
     bgColor: $bgLight,
     bgAccent: color.adjust($bgLight, $lightness: -2.5%),
     bgAccent2: color.adjust($bgLight, $lightness: -5%),
+    bgAccent3: color.adjust($bgLight, $lightness: -10%),
     bgAlpha75: color.adjust($bgLight, $alpha: -0.25),
     bgAlpha50: color.adjust($bgLight, $alpha: -0.5),
     bgAlpha25: color.adjust($bgLight, $alpha: -0.75),
@@ -51,15 +58,21 @@ $themes: (
     bgErrorAccent: color.adjust($errorLight, $alpha: -0.3),
     // Success
     bgSuccess: $successLight,
+    // Upvote
+    upvote: $upvote,
+    downvote: $downvote,
+    bookmark: $bookmark,
   ),
   dark: (
     // Accents
     primary: $primaryDark,
+    primaryAlpha75: color.adjust($primaryDark, $alpha: -0.25),
     primaryAlpha50: color.adjust($primaryDark, $alpha: -0.5),
     // Background
     bgColor: $bgDark,
     bgAccent: color.adjust($bgDark, $lightness: 2.5%),
     bgAccent2: color.adjust($bgDark, $lightness: 5%),
+    bgAccent3: color.adjust($bgDark, $lightness: 10%),
     bgAlpha75: color.adjust($bgDark, $alpha: -0.25),
     bgAlpha50: color.adjust($bgDark, $alpha: -0.5),
     bgAlpha25: color.adjust($bgDark, $alpha: -0.75),
@@ -84,6 +97,10 @@ $themes: (
     bgErrorAccent: color.adjust($errorDark, $alpha: -0.4),
     // Success
     bgSuccess: $successDark,
+    // Upvote
+    upvote: $upvote,
+    downvote: $downvote,
+    bookmark: $bookmark,
   ),
 );
 
