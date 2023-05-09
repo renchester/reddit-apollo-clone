@@ -12,6 +12,7 @@ import upvoteComment from '@/firebase/firestore/comments/update/upvoteComment';
 import downvoteComment from '@/firebase/firestore/comments/update/downvoteComment';
 import removeDownvoteOnComment from '@/firebase/firestore/comments/update/removeDownvoteOnComment';
 import deleteComment from '@/firebase/firestore/comments/delete/deleteComment';
+import useTimeDistance from '@/hooks/useTimeDistance';
 
 type CommentProps = {
   comment: Comment;
@@ -41,9 +42,9 @@ function Comment(props: CommentProps) {
     comment.child_comments.includes(curr.comment_id),
   );
 
-  const formattedDate = formatDistanceToNowStrict(
-    new Date(comment.date_created as string),
-  );
+  const formattedDate = useTimeDistance({
+    endDate: new Date(comment.date_created as string),
+  });
 
   const levelStyles = {
     marginLeft: comment.comment_level > 1 ? '1rem' : '0rem',

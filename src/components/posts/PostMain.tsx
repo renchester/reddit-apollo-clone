@@ -17,6 +17,7 @@ import removeDownvoteOnPost from '@/firebase/firestore/posts/update/removeDownvo
 import { useNewComment } from '@/hooks/useNewComment';
 import removeBookmarkOnPost from '@/firebase/firestore/posts/update/removeBookmarkOnPost';
 import bookmarkPost from '@/firebase/firestore/posts/update/bookmarkPost';
+import useTimeDistance from '@/hooks/useTimeDistance';
 
 type PostMainProps = {
   post: Post;
@@ -40,9 +41,10 @@ function PostMain(props: PostMainProps) {
     post.upvoted_by.length,
     post.downvoted_by.length,
   );
-  const formattedDate = formatDistanceToNowStrict(
-    new Date(post.date_created as string),
-  );
+
+  const formattedDate = useTimeDistance({
+    endDate: new Date(post.date_created as string),
+  });
 
   const toggleUpvote = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -101,6 +103,8 @@ function PostMain(props: PostMainProps) {
   };
 
   const toggleBookmark = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
     try {
       if (!user) return;
 

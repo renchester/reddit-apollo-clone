@@ -4,7 +4,6 @@ import Link from 'next/link';
 import PostMenu from './PostMenu';
 import { Post } from '@/types/types';
 import getIcon from '@/utils/getIcon';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { AnimatePresence } from 'framer-motion';
 import ImageViewer from './ImageViewer';
 import calculateKarma from '@/utils/calculateKarma';
@@ -16,6 +15,7 @@ import removeDownvoteOnPost from '@/firebase/firestore/posts/update/removeDownvo
 import downvotePost from '@/firebase/firestore/posts/update/downvotePost';
 import removeBookmarkOnPost from '@/firebase/firestore/posts/update/removeBookmarkOnPost';
 import bookmarkPost from '@/firebase/firestore/posts/update/bookmarkPost';
+import useTimeDistance from '@/hooks/useTimeDistance';
 
 type PostPreviewProps = {
   post: Post;
@@ -23,7 +23,7 @@ type PostPreviewProps = {
 
 function PostPreview(props: PostPreviewProps) {
   const { post } = props;
-  const { user, upvotedPosts, downvotedPosts } = useAuth();
+  const { user, upvotedPosts, downvotedPosts, bookmarkedPosts } = useAuth();
   const { addAlert } = useSnackbar();
 
   const [isMenuShown, setMenuVisibility] = useState(false);
@@ -34,9 +34,9 @@ function PostPreview(props: PostPreviewProps) {
     calculateKarma(post.upvoted_by.length, post.downvoted_by.length, true),
   );
 
-  const formattedDate = formatDistanceToNowStrict(
-    new Date(post.date_created as string),
-  );
+  const formattedDate = useTimeDistance({
+    endDate: new Date(post.date_created as string),
+  });
 
   const toggleMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -109,6 +109,8 @@ function PostPreview(props: PostPreviewProps) {
   };
 
   const toggleBookmark = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
     try {
       if (!user) return;
 
@@ -155,10 +157,24 @@ function PostPreview(props: PostPreviewProps) {
     setDownvotedStatus(isUserDownvoted);
   }, [downvotedPosts, user, post.post_id]);
 
+  // Bookmark Handler
+  useEffect(() => {
+    if (!user || !bookmarkedPosts) {
+      setBookmarkedStatus(false);
+      return;
+    }
+
+    const isUserDownvoted = !!bookmarkedPosts.find(
+      (currPost) => currPost.post_id === post.post_id,
+    );
+    setBookmarkedStatus(isUserDownvoted);
+  }, [bookmarkedPosts, user, post.post_id]);
+
   return (
     <article
       className={styles.container}
       aria-labelledby={`post-${post.post_id}__heading`}
+      data-saved={isBookmarked}
     >
       <Link
         href={`/r/${post.parent_subreddit}`}
@@ -185,7 +201,9 @@ function PostPreview(props: PostPreviewProps) {
           {post.image && <ImageViewer imageSrc={post.image} />}
         </AnimatePresence>
 
-        {post.details && <p className={styles.post__details}>{post.details}</p>}
+        {!post.image && post.details && (
+          <p className={styles.post__details}>{post.details}</p>
+        )}
 
         <div className={styles.meta__container}>
           <div className={styles.meta__left}>

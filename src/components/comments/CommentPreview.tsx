@@ -4,11 +4,11 @@ import { Comment, Post } from '@/types/types';
 import { useEffect, useState } from 'react';
 import fetchPostData from '@/firebase/firestore/posts/read/fetchPostData';
 import calculateKarma from '@/utils/calculateKarma';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import upvoteComment from '@/firebase/firestore/comments/update/upvoteComment';
 import removeUpvoteOnComment from '@/firebase/firestore/comments/update/removeUpvoteOnComment';
+import useTimeDistance from '@/hooks/useTimeDistance';
 
 type CommentPreviewProps = {
   comment: Comment;
@@ -29,9 +29,9 @@ function CommentPreview(props: CommentPreviewProps) {
   );
   const [isUpvoted, setUpvotedStatus] = useState(false);
 
-  const formattedDate = formatDistanceToNowStrict(
-    new Date(comment.date_created as string),
-  );
+  const formattedDate = useTimeDistance({
+    endDate: new Date(comment.date_created as string),
+  });
 
   const toggleUpvote = async (e: React.MouseEvent) => {
     e.stopPropagation();
