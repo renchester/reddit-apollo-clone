@@ -10,7 +10,6 @@ import { Subreddit } from '@/types/types';
 
 export async function getStaticProps() {
   let subreddits = (await fetchAllSubreddits()) || [];
-  console.log(subreddits);
 
   return {
     props: {
@@ -60,7 +59,7 @@ function AllSubredditsPage(props: AllSubredditsPageProps) {
 AllSubredditsPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MasterLayout>
-      <FeedPageLayout>{page}</FeedPageLayout>
+      <FeedPageLayout label="Subreddits">{page}</FeedPageLayout>
     </MasterLayout>
   );
 };

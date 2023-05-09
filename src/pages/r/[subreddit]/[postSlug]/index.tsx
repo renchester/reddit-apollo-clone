@@ -4,7 +4,7 @@ import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import AsideContainer from '@/components/asides/AsideContainer';
 import SubredditAside from '@/components/asides/SubredditAside';
-import { ReactElement } from 'react';
+import { ReactElement, Suspense } from 'react';
 import PostMain from '@/components/posts/PostMain';
 import { NewCommentProvider } from '@/hooks/useNewComment';
 import CommentFeed from '@/components/comments/CommentFeed';
@@ -15,6 +15,8 @@ import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubred
 import fetchPostData from '@/firebase/firestore/posts/read/fetchPostData';
 import fetchPostComments from '@/firebase/firestore/comments/read/fetchPostComments';
 import { Comment, Post, Subreddit } from '@/types/types';
+import Loading from '@/components/Loading';
+import ScrollToTop from '@/components/utility/ScrollToTop';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
@@ -27,6 +29,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       post,
       comments,
     },
+    revalidate: 30,
   };
 };
 
@@ -75,7 +78,9 @@ function PostPage(props: PostPageProps) {
           <NewCommentProvider parentPost={post} comments={comments}>
             <PostMain post={post} />
             {comments.length > 0 ? (
-              <CommentFeed />
+              <Suspense fallback={<Loading message="Loading comments" />}>
+                <CommentFeed />
+              </Suspense>
             ) : (
               <div className={styles.empty}>
                 <span className={styles.empty__h1}>No comments yet</span>
@@ -91,14 +96,17 @@ function PostPage(props: PostPageProps) {
           <SubredditAside subreddit={subreddit} />
         </AsideContainer>
       </div>
+      <ScrollToTop />
     </>
   );
 }
 
 PostPage.getLayout = function getLayout(page: ReactElement) {
+  const label = `${page.props.comments.length} comments`;
+
   return (
     <MasterLayout>
-      <FeedPageLayout>{page}</FeedPageLayout>
+      <FeedPageLayout label={label}>{page}</FeedPageLayout>
     </MasterLayout>
   );
 };

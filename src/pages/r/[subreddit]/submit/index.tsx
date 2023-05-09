@@ -12,6 +12,7 @@ import SubredditAside from '@/components/asides/SubredditAside';
 import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import { Subreddit } from '@/types/types';
+import { useAuth } from '@/hooks/useAuth';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
@@ -42,6 +43,7 @@ type SubmitPostPageProps = {
 
 function SubmitPostPage(props: SubmitPostPageProps) {
   const { subreddit } = props;
+  const { user } = useAuth();
   const pageTitle = `Submit a post - r/${subreddit.name} - Reddit Clone`;
 
   return (
@@ -51,19 +53,25 @@ function SubmitPostPage(props: SubmitPostPageProps) {
       </Head>
 
       <div className="page__container">
-        <main className={styles.main}>
-          <h1
-            className={styles.title}
-          >{`Create a post in r/${subreddit.name}`}</h1>
-          <p className={styles.rules}>
-            Make sure to follow site and subreddit rules. No NSFW and
-            discriminatory posts.
-          </p>
-          <SubmitPanel subreddit={subreddit} />
-        </main>
-        <AsideContainer>
-          <SubredditAside subreddit={subreddit} />
-        </AsideContainer>
+        {user ? (
+          <>
+            <main className={styles.main}>
+              <h1
+                className={styles.title}
+              >{`Create a post in r/${subreddit.name}`}</h1>
+              <p className={styles.rules}>
+                Make sure to follow site and subreddit rules. No NSFW and
+                discriminatory posts.
+              </p>
+              <SubmitPanel subreddit={subreddit} />
+            </main>
+            <AsideContainer>
+              <SubredditAside subreddit={subreddit} />
+            </AsideContainer>
+          </>
+        ) : (
+          <p>You must be logged in to submit a post</p>
+        )}
       </div>
     </>
   );
@@ -72,7 +80,7 @@ function SubmitPostPage(props: SubmitPostPageProps) {
 SubmitPostPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MasterLayout>
-      <FeedPageLayout>{page}</FeedPageLayout>
+      <FeedPageLayout label="Create post">{page}</FeedPageLayout>
     </MasterLayout>
   );
 };

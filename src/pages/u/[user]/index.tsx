@@ -85,7 +85,7 @@ UserPage.getLayout = function getLayout(page: ReactElement) {
 
   return (
     <MasterLayout>
-      <FeedPageLayout label={label}>{page}</FeedPageLayout>
+      <FeedPageLayout label={label || 'User'}>{page}</FeedPageLayout>
     </MasterLayout>
   );
 };
