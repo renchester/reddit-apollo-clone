@@ -39,6 +39,8 @@ function HeaderMenu(props: HeaderMenuProps) {
   }, [hideMenu]);
 
   const handleSignOut = async () => {
+    hideMenu();
+
     try {
       await signOutUser();
       addAlert({ message: 'Successfully signed out', status: 'success' });
@@ -106,6 +108,20 @@ function HeaderMenu(props: HeaderMenuProps) {
           />
         </li>
 
+        {/* ABOUT PAGE */}
+
+        <li className={styles.menu__listItem}>
+          <i
+            className={`material-symbols-outlined ${styles.menu__icon}`}
+            aria-hidden
+          >
+            lightbulb
+          </i>
+          <Link href="/about" className={styles.menu__label}>
+            About Us
+          </Link>
+        </li>
+
         {/* LOGOUT / SIGN IN */}
 
         <li className={styles.menu__listItem}>
@@ -133,7 +149,11 @@ function HeaderMenu(props: HeaderMenuProps) {
               >
                 login
               </i>
-              <Link href="/account/login" className={styles.menu__label}>
+              <Link
+                href="/account/login"
+                className={styles.menu__label}
+                onClick={hideMenu}
+              >
                 Log in
               </Link>
             </>
