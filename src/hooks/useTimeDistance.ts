@@ -27,6 +27,7 @@ const useTimeDistance = (props: TimeDistanceProps) => {
   } = props;
 
   const [latestDate, setLatesDate] = useState(_latestDate || new Date());
+  const [formattedDuration, setFormattedDuration] = useState('');
   const isEnded = isBefore(endDate, latestDate);
 
   const formatDistanceLocale = {
@@ -85,14 +86,14 @@ const useTimeDistance = (props: TimeDistanceProps) => {
     formatDurationOptions,
   );
 
-  const formattedDuration = formatDuration(
-    duration,
-    mergedFormatDurationOptions,
-  );
+  useEffect(() => {
+    const formatted = formatDuration(duration, mergedFormatDurationOptions);
+    const formattedShortened = formatted.split(' ')[0];
 
-  const formattedDurationShortened = formattedDuration.split(' ')[0];
+    setFormattedDuration(formattedShortened);
+  }, [duration, mergedFormatDurationOptions]);
 
-  return formattedDurationShortened;
+  return formattedDuration;
 };
 
 export default useTimeDistance;
