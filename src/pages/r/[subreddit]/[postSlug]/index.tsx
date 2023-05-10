@@ -66,11 +66,12 @@ type PostPageProps = {
 function PostPage(props: PostPageProps) {
   const { subreddit, post, comments } = props;
   const router = useRouter();
-  const pageTitle = `${post.title} - Reddit Clone`;
 
   if (router.isFallback || !subreddit || !post || !comments) {
     return <Loading message="Loading post data" />;
   }
+
+  const pageTitle = `${post.title} - Reddit Clone`;
 
   return (
     <>
@@ -106,7 +107,11 @@ function PostPage(props: PostPageProps) {
 }
 
 PostPage.getLayout = function getLayout(page: ReactElement) {
-  const label = `${page.props.comments.length || 0} comments`;
+  let label = '';
+
+  if (page.props.comments) {
+    label = `${page.props.comments.length} comments`;
+  } else label = 'Post';
 
   return (
     <MasterLayout>

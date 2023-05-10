@@ -51,7 +51,6 @@ function UserPage(props: UserPageProps) {
   const { user, posts, comments } = props;
   const { user: currentUser } = useAuth();
   const router = useRouter();
-  const pageTitle = `u/${user.username} - Reddit Clone`;
 
   useEffect(() => {
     if (!currentUser) return;
@@ -65,6 +64,8 @@ function UserPage(props: UserPageProps) {
   if (router.isFallback || !user || !posts || !comments) {
     return <Loading message="Loading user data" />;
   }
+
+  const pageTitle = `u/${user.username} - Reddit Clone`;
 
   return (
     <div>

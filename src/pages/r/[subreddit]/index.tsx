@@ -85,8 +85,11 @@ function SubredditPage(props: SubredditPageProps) {
   }, [preferredSort, _posts]);
 
   useEffect(() => {
+    if (!subreddit) return;
+
     if (!subscriptions) {
       setUserSubscription(false);
+      return;
     }
 
     const target = subscriptions?.find(
@@ -95,7 +98,11 @@ function SubredditPage(props: SubredditPageProps) {
 
     setUserSubscription(!!target);
     setFavoritedStatus(target?.isFavorite || false);
-  }, [subscriptions, subreddit.subreddit_id]);
+  }, [subscriptions, subreddit]);
+
+  if (router.isFallback || !subreddit || !_posts) {
+    return <Loading message="Loading subreddit" />;
+  }
 
   const pageTitle = `r/${subreddit.name} - Reddit Clone`;
 
@@ -125,10 +132,6 @@ function SubredditPage(props: SubredditPageProps) {
       }
     }
   };
-
-  if (router.isFallback || !subreddit || !_posts) {
-    return <Loading message="Loading subreddit" />;
-  }
 
   return (
     <>
