@@ -126,6 +126,10 @@ function SubredditPage(props: SubredditPageProps) {
     }
   };
 
+  if (router.isFallback) {
+    return <Loading message="Loading subreddit" />;
+  }
+
   return (
     <>
       <Head>

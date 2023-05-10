@@ -11,6 +11,7 @@ import fetchAllUsers from '@/firebase/firestore/user/fetchAllUsers';
 import fetchUserDetailsByUsername from '@/firebase/firestore/user/fetchUserDetailsByUsername';
 import UserMain from '@/components/user/UserMain';
 import UserOverview from '@/components/user/UserOverview';
+import Loading from '@/components/Loading';
 import { Post, User, Comment } from '@/types/types';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -60,6 +61,10 @@ function UserPage(props: UserPageProps) {
       router.push(`/account`);
     }
   }, [user, currentUser, router]);
+
+  if (router.isFallback) {
+    return <Loading message="Loading user data" />;
+  }
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import styles from './PostPage.module.scss';
 import { ReactElement, Suspense } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { NewCommentProvider } from '@/hooks/useNewComment';
 import MasterLayout from '@/layouts/MasterLayout';
@@ -64,7 +65,12 @@ type PostPageProps = {
 
 function PostPage(props: PostPageProps) {
   const { subreddit, post, comments } = props;
+  const router = useRouter();
   const pageTitle = `${post.title} - Reddit Clone`;
+
+  if (router.isFallback) {
+    return <Loading message="Loading post data" />;
+  }
 
   return (
     <>
@@ -100,7 +106,7 @@ function PostPage(props: PostPageProps) {
 }
 
 PostPage.getLayout = function getLayout(page: ReactElement) {
-  const label = `${page.props.comments.length} comments`;
+  const label = `${page.props.comments.length || 0} comments`;
 
   return (
     <MasterLayout>
