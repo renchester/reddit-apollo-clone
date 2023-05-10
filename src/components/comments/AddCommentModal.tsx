@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { useAuth } from '@/hooks/useAuth';
 import submitComment from '@/firebase/firestore/comments/create/submitComment';
+import { useRouter } from 'next/router';
+import { useNavbar } from '@/hooks/useNavbar';
 
 type AddCommentModalProps = {
   parentPost: Post;
@@ -16,6 +18,8 @@ function AddCommentModal(props: AddCommentModalProps) {
   const { user } = useAuth();
   const { hideCommentModal, setParentComment } = useNewComment();
   const { addAlert } = useSnackbar();
+  const { hideNavbar } = useNavbar();
+  const router = useRouter();
 
   const [comment, setComment] = useState('');
   const commentLevel = parentComment ? parentComment.comment_level + 1 : 1;
@@ -42,6 +46,7 @@ function AddCommentModal(props: AddCommentModalProps) {
       if (result) {
         hideCommentModal();
         addAlert({ message: 'Comment added', status: 'success' });
+        router.reload();
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -52,6 +57,10 @@ function AddCommentModal(props: AddCommentModalProps) {
       }
     }
   };
+
+  useEffect(() => {
+    hideNavbar();
+  }, [hideNavbar]);
 
   useEffect(() => {
     if (parentComment) {
