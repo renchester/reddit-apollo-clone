@@ -1,6 +1,7 @@
 import styles from './FeedPageLayout.module.scss';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { usePreferredSort } from '@/hooks/usePreferredSort';
 import Header from '@/components/headers/Header';
 
 type FeedPageLayoutProps = {
@@ -11,7 +12,7 @@ type FeedPageLayoutProps = {
 
 function FeedPageLayout(props: FeedPageLayoutProps) {
   const { children, label, isSortable } = props;
-
+  const { preferredSort } = usePreferredSort();
   const feedRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
@@ -23,7 +24,7 @@ function FeedPageLayout(props: FeedPageLayoutProps) {
         behavior: 'smooth',
       });
     }
-  }, [router.pathname]);
+  }, [router.pathname, preferredSort]);
 
   return (
     <div className={styles.layout__feed} ref={feedRef}>
