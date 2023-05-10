@@ -11,7 +11,6 @@ import { GetStaticProps } from 'next';
 import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
 import PostPreview from '@/components/posts/PostPreview';
 import { usePreferredSort } from '@/hooks/usePreferredSort';
-import ScrollToTop from '@/components/utility/ScrollToTop';
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await fetchAllPosts(50);
@@ -103,7 +102,6 @@ function HomePage(props: HomePageProps) {
           />
         </AsideContainer>
       </div>
-      <ScrollToTop />
     </>
   );
 }
