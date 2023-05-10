@@ -8,8 +8,10 @@ import {
 } from 'react';
 
 type ContextType = {
-  preferredSort: 'new' | 'popular';
-  setPreferredSort: React.Dispatch<React.SetStateAction<'new' | 'popular'>>;
+  preferredSort: 'new' | 'popular' | null;
+  setPreferredSort: React.Dispatch<
+    React.SetStateAction<'new' | 'popular' | null>
+  >;
 };
 
 type PreferredSortProviderProps = {
@@ -30,8 +32,8 @@ const getPreferredSortFromStorage = () => {
 
 export const PreferredSortProvider = (props: PreferredSortProviderProps) => {
   const { children } = props;
-  const [preferredSort, setPreferredSort] = useState<'new' | 'popular'>(
-    'popular',
+  const [preferredSort, setPreferredSort] = useState<'new' | 'popular' | null>(
+    null,
   );
 
   useEffect(() => {
@@ -39,14 +41,18 @@ export const PreferredSortProvider = (props: PreferredSortProviderProps) => {
 
     if (storedPreference !== null) {
       setPreferredSort(storedPreference);
+    } else {
+      setPreferredSort('popular');
     }
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(
-      'RedditPreferredSort',
-      JSON.stringify(preferredSort),
-    );
+    if (preferredSort !== null) {
+      window.localStorage.setItem(
+        'RedditPreferredSort',
+        JSON.stringify(preferredSort),
+      );
+    }
   }, [preferredSort]);
 
   const value = useMemo(
