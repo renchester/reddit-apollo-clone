@@ -126,7 +126,7 @@ function SubredditPage(props: SubredditPageProps) {
     }
   };
 
-  if (router.isFallback) {
+  if (router.isFallback || !subreddit || !_posts) {
     return <Loading message="Loading subreddit" />;
   }
 

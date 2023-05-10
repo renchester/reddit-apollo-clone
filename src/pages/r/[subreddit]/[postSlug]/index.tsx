@@ -68,7 +68,7 @@ function PostPage(props: PostPageProps) {
   const router = useRouter();
   const pageTitle = `${post.title} - Reddit Clone`;
 
-  if (router.isFallback) {
+  if (router.isFallback || !subreddit || !post || !comments) {
     return <Loading message="Loading post data" />;
   }
 

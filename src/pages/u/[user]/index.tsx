@@ -62,7 +62,7 @@ function UserPage(props: UserPageProps) {
     }
   }, [user, currentUser, router]);
 
-  if (router.isFallback) {
+  if (router.isFallback || !user || !posts || !comments) {
     return <Loading message="Loading user data" />;
   }
 
