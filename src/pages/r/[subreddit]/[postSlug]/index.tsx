@@ -16,7 +16,6 @@ import fetchPostData from '@/firebase/firestore/posts/read/fetchPostData';
 import fetchPostComments from '@/firebase/firestore/comments/read/fetchPostComments';
 import { Comment, Post, Subreddit } from '@/types/types';
 import Loading from '@/components/Loading';
-import ScrollToTop from '@/components/utility/ScrollToTop';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
@@ -54,7 +53,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     });
   }
 
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
 type PostPageProps = {
@@ -96,7 +95,6 @@ function PostPage(props: PostPageProps) {
           <SubredditAside subreddit={subreddit} />
         </AsideContainer>
       </div>
-      <ScrollToTop />
     </>
   );
 }
