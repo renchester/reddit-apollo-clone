@@ -1,21 +1,21 @@
 import styles from './PostPage.module.scss';
+import { ReactElement, Suspense } from 'react';
 import Head from 'next/head';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { NewCommentProvider } from '@/hooks/useNewComment';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import AsideContainer from '@/components/asides/AsideContainer';
 import SubredditAside from '@/components/asides/SubredditAside';
-import { ReactElement, Suspense } from 'react';
 import PostMain from '@/components/posts/PostMain';
-import { NewCommentProvider } from '@/hooks/useNewComment';
 import CommentFeed from '@/components/comments/CommentFeed';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import Loading from '@/components/Loading';
 import fetchPostsBySubreddit from '@/firebase/firestore/posts/read/fetchPostsBySubreddit';
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
 import fetchPostData from '@/firebase/firestore/posts/read/fetchPostData';
 import fetchPostComments from '@/firebase/firestore/comments/read/fetchPostComments';
 import { Comment, Post, Subreddit } from '@/types/types';
-import Loading from '@/components/Loading';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);

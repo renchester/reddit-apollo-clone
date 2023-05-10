@@ -25,7 +25,7 @@ export const SnackbarProvider = (props: SnackbarProviderProps) => {
   const { children } = props;
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
-  const AUTO_DISMISS = 5000;
+  const AUTO_DISMISS = 3000;
   const activeAlertIds = alerts.join(',');
 
   useEffect(() => {

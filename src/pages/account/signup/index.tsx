@@ -1,26 +1,26 @@
 import styles from '../AuthPage.module.scss';
+import { ReactElement, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useState } from 'react';
+import { FirebaseError } from 'firebase/app';
+import { AnimatePresence } from 'framer-motion';
+import debounce from 'lodash.debounce';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
-import googleLogo from '@/assets/img/google-logo.png';
-import { AnimatePresence, motion } from 'framer-motion';
 import createAccountWithGoogle from '@/firebase/auth/signupWithGoogle';
 import createAccountWithEmail from '@/firebase/auth/signupWithEmail';
+import checkEmailAvailability from '@/firebase/auth/checkEmailAvailability';
+import signOutUser from '@/firebase/auth/signOutUser';
 import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import AuthInput from '@/components/auth/AuthInput';
 import validateEmail from '@/utils/validators/validateEmail';
-import debounce from 'lodash.debounce';
 import validateUsername from '@/utils/validators/validateUsername';
 import validatePassword from '@/utils/validators/validatePassword';
 import checkUsernameAvailability from '@/firebase/auth/checkUsernameAvailability';
-import checkEmailAvailability from '@/firebase/auth/checkEmailAvailability';
-import { FirebaseError } from 'firebase/app';
-import signOutUser from '@/firebase/auth/signOutUser';
+import googleLogo from '@/assets/img/google-logo.png';
 
 function SignupPage() {
   const { user } = useAuth();
@@ -190,7 +190,7 @@ function SignupPage() {
       <div className="page__container">
         {user ? (
           <div className={styles.signedIn}>
-            <p>Successfully signed in as {user.email}</p>
+            <p>Successfully signed in as {user.username}</p>
             <br />
             <p>Redirecting you to the home page...</p>
           </div>

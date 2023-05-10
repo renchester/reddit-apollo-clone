@@ -1,13 +1,13 @@
 import { ReactElement } from 'react';
+import Head from 'next/head';
+import { GetStaticProps } from 'next';
+import FeedPageLayout from '@/layouts/FeedPageLayout';
+import MasterLayout from '@/layouts/MasterLayout';
 import AsideContainer from '@/components/asides/AsideContainer';
 import AsideTemplate from '@/components/asides/AsideTemplate';
 import PostPreview from '@/components/posts/PostPreview';
 import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
-import FeedPageLayout from '@/layouts/FeedPageLayout';
-import MasterLayout from '@/layouts/MasterLayout';
 import { Post } from '@/types/types';
-import { GetStaticProps } from 'next';
-import Head from 'next/head';
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await fetchAllPosts(50);

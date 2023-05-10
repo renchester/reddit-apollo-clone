@@ -1,14 +1,14 @@
-import PostPreview from '@/components/posts/PostPreview';
 import styles from '../AccountPage.module.scss';
-import { useAuth } from '@/hooks/useAuth';
-import FeedPageLayout from '@/layouts/FeedPageLayout';
-import MasterLayout from '@/layouts/MasterLayout';
+import { ReactElement, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ReactElement, useEffect, useState } from 'react';
-import { Post } from '@/types/types';
-import fetchPostDataById from '@/firebase/firestore/posts/read/fetchPostDataById';
+import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
+import FeedPageLayout from '@/layouts/FeedPageLayout';
+import MasterLayout from '@/layouts/MasterLayout';
+import PostPreview from '@/components/posts/PostPreview';
+import fetchPostDataById from '@/firebase/firestore/posts/read/fetchPostDataById';
+import { Post } from '@/types/types';
 
 function SavedPostsPage() {
   const { user, bookmarkedPosts } = useAuth();

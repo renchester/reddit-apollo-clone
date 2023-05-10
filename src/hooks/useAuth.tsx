@@ -1,11 +1,7 @@
 import { auth, db } from '@/firebase/config';
 import getUserDetailsFromDb from '@/firebase/firestore/user/getUserDetailsFromDb';
 import { onAuthStateChanged } from 'firebase/auth';
-import {
-  CommentInteraction,
-  PostInteraction,
-  UserSubscription,
-} from '@/types/types';
+import { collection, onSnapshot } from 'firebase/firestore';
 import {
   type ReactNode,
   createContext,
@@ -14,8 +10,12 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { User } from '@/types/types';
-import { collection, onSnapshot } from 'firebase/firestore';
+import {
+  CommentInteraction,
+  PostInteraction,
+  UserSubscription,
+  User,
+} from '@/types/types';
 
 type AuthContextType = {
   user: User | null;
@@ -57,6 +57,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     CommentInteraction[] | null
   >(null);
 
+  // USER DETAILS LISTENER
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -77,6 +78,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribe();
   }, []);
 
+  // SUBSCRIPTIONS LISTENER
   useEffect(() => {
     if (!user) {
       setSubscriptions(null);
@@ -97,6 +99,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeSubscriptions();
   }, [user]);
 
+  // UPVOTED POSTS LISTENER
   useEffect(() => {
     if (!user) {
       setUpvotedPosts(null);
@@ -117,6 +120,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeUpvotedPosts();
   }, [user]);
 
+  // DOWNVOTED POSTS LISTENER
   useEffect(() => {
     if (!user) {
       setDownvotedPosts(null);
@@ -139,6 +143,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeDownvotedPosts();
   }, [user]);
 
+  // BOOKMARKED POSTS LISTENER
   useEffect(() => {
     if (!user) {
       setBookmarkedPosts(null);
@@ -161,6 +166,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeBookmarkedPosts();
   }, [user]);
 
+  // UPVOTED COMMENTS LISTENER
   useEffect(() => {
     if (!user) {
       setUpvotedComments(null);
@@ -183,6 +189,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     return () => unsubscribeUpvotedComments();
   }, [user]);
 
+  // DOWNVOTED COMMENTS LISTENER
   useEffect(() => {
     if (!user) {
       setDownvotedComments(null);

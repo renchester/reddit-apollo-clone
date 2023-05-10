@@ -1,8 +1,8 @@
 import { type ReactElement } from 'react';
 import Head from 'next/head';
-import AsideContainer from '@/components/asides/AsideContainer';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
+import AsideContainer from '@/components/asides/AsideContainer';
 import AllSubredditsPageAside from '@/components/asides/AllSubredditsPageAside';
 import SubredditPreview from '@/components/subreddits/SubredditPreview';
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';

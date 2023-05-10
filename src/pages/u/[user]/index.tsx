@@ -1,17 +1,17 @@
+import { ReactElement, useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { useAuth } from '@/hooks/useAuth';
+import MasterLayout from '@/layouts/MasterLayout';
+import FeedPageLayout from '@/layouts/FeedPageLayout';
 import fetchCommentsByUser from '@/firebase/firestore/comments/read/fetchCommentsByUser';
 import fetchPostsByUser from '@/firebase/firestore/posts/read/fetchPostsByUser';
 import fetchAllUsers from '@/firebase/firestore/user/fetchAllUsers';
 import fetchUserDetailsByUsername from '@/firebase/firestore/user/fetchUserDetailsByUsername';
-import FeedPageLayout from '@/layouts/FeedPageLayout';
-import MasterLayout from '@/layouts/MasterLayout';
-import { Post, User, Comment } from '@/types/types';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { ReactElement, useEffect } from 'react';
 import UserMain from '@/components/user/UserMain';
 import UserOverview from '@/components/user/UserOverview';
-import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/router';
+import { Post, User, Comment } from '@/types/types';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const user = await fetchUserDetailsByUsername(params?.user as string);

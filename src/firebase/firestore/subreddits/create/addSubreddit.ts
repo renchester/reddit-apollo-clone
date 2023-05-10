@@ -1,5 +1,5 @@
 import { User } from '@/types/types';
-import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { nanoid } from 'nanoid';
 import { db } from '../../../config';
 import joinSubreddit from '../update/joinSubreddit';

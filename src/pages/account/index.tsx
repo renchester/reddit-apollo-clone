@@ -1,16 +1,16 @@
 import styles from './AccountPage.module.scss';
+import { ReactElement, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ReactElement, useEffect, useState } from 'react';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useSnackbar } from '@/hooks/useSnackbar';
 import fetchPostsByUser from '@/firebase/firestore/posts/read/fetchPostsByUser';
 import fetchCommentsByUser from '@/firebase/firestore/comments/read/fetchCommentsByUser';
 import UserMain from '@/components/user/UserMain';
-import { Comment, Post } from '@/types/types';
-import { useSnackbar } from '@/hooks/useSnackbar';
 import UserOverview from '@/components/user/UserOverview';
+import { Comment, Post } from '@/types/types';
 
 function AccountPage() {
   const { user } = useAuth();

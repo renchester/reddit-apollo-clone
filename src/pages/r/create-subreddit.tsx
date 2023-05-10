@@ -1,11 +1,11 @@
 import styles from './CreateSubredditPage.module.scss';
 import { type ReactElement } from 'react';
 import Head from 'next/head';
-import AsideContainer from '@/components/asides/AsideContainer';
+import { useAuth } from '@/hooks/useAuth';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
+import AsideContainer from '@/components/asides/AsideContainer';
 import RuleAccordion from '@/components/shared/RuleAccordion';
-import { useAuth } from '@/hooks/useAuth';
 import CreateSubredditForm from '@/components/subreddits/CreateSubredditForm';
 import AsideTemplate from '@/components/asides/AsideTemplate';
 
@@ -58,7 +58,7 @@ function CreateSubredditPage() {
         <AsideContainer>
           <AsideTemplate
             title="Create Subreddit"
-            description="Looking to create a new community? You're in luck! This is tthe right place!"
+            description="Looking to create a new community? You're in luck! This is the right place!"
           />
         </AsideContainer>
       </div>

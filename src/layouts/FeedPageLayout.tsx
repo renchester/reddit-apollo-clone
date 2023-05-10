@@ -1,7 +1,7 @@
 import styles from './FeedPageLayout.module.scss';
 import { ReactNode, useEffect, useRef } from 'react';
-import Header from '@/components/headers/Header';
 import { useRouter } from 'next/router';
+import Header from '@/components/headers/Header';
 
 type FeedPageLayoutProps = {
   children: ReactNode;

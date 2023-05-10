@@ -1,18 +1,16 @@
 import styles from './SubmitPostPage.module.scss';
-import MasterLayout from '@/layouts/MasterLayout';
-import FeedPageLayout from '@/layouts/FeedPageLayout';
 import { type ReactElement } from 'react';
 import Head from 'next/head';
 import { GetStaticProps, GetStaticPaths } from 'next';
-
+import { useAuth } from '@/hooks/useAuth';
+import MasterLayout from '@/layouts/MasterLayout';
+import FeedPageLayout from '@/layouts/FeedPageLayout';
 import SubmitPanel from '@/components/posts/SubmitPanel';
 import AsideContainer from '@/components/asides/AsideContainer';
 import SubredditAside from '@/components/asides/SubredditAside';
-
 import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import { Subreddit } from '@/types/types';
-import { useAuth } from '@/hooks/useAuth';
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);

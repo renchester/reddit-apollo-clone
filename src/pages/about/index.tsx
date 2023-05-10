@@ -1,9 +1,9 @@
 import styles from './AboutPage.module.scss';
-import Footer from '@/components/Footer';
+import { ReactElement } from 'react';
+import Head from 'next/head';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import MasterLayout from '@/layouts/MasterLayout';
-import Head from 'next/head';
-import { ReactElement } from 'react';
+import Footer from '@/components/Footer';
 
 function AboutPage() {
   return (

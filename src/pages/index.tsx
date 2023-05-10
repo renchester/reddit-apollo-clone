@@ -1,16 +1,15 @@
+import { ReactElement, useEffect, useState } from 'react';
 import Head from 'next/head';
-
+import { GetStaticProps } from 'next';
+import { useAuth } from '@/hooks/useAuth';
+import { usePreferredSort } from '@/hooks/usePreferredSort';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
-import { ReactElement, useEffect, useState } from 'react';
 import AsideContainer from '@/components/asides/AsideContainer';
 import AsideTemplate from '@/components/asides/AsideTemplate';
-import { useAuth } from '@/hooks/useAuth';
-import { Post } from '@/types/types';
-import { GetStaticProps } from 'next';
-import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
 import PostPreview from '@/components/posts/PostPreview';
-import { usePreferredSort } from '@/hooks/usePreferredSort';
+import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
+import { Post } from '@/types/types';
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await fetchAllPosts(50);

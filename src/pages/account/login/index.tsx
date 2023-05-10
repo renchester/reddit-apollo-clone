@@ -1,22 +1,21 @@
 import styles from '../AuthPage.module.scss';
+import { ReactElement, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
-import googleLogo from '@/assets/img/google-logo.png';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
-import signOutUser from '@/firebase/auth/signOutUser';
 import AuthInput from '@/components/auth/AuthInput';
+import signOutUser from '@/firebase/auth/signOutUser';
 import loginWithGoogle from '@/firebase/auth/loginWithGoogle';
 import loginWithEmail from '@/firebase/auth/loginWithEmail';
 import validateEmail from '@/utils/validators/validateEmail';
 import validatePassword from '@/utils/validators/validatePassword';
+import googleLogo from '@/assets/img/google-logo.png';
 
 function LoginPage() {
   const { user } = useAuth();
@@ -144,7 +143,7 @@ function LoginPage() {
       <div className="page__container">
         {user ? (
           <div className={styles.signedIn}>
-            <p>Successfully logged in as {user.email}</p>
+            <p>Successfully logged in as {user.username}</p>
             <br />
             <p>Redirecting you to the home page...</p>
           </div>

@@ -1,12 +1,6 @@
 import { db } from '@/firebase/config';
 import { User, UserSubscription } from '@/types/types';
-import {
-  doc,
-  collection,
-  getDocs,
-  query,
-  onSnapshot,
-} from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
 
 const fetchUserSubscriptions = async (user: User) => {
   try {

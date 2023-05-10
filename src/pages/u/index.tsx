@@ -1,7 +1,7 @@
 import { ReactElement, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
-import { useRouter } from 'next/router';
 
 function UserPage() {
   const router = useRouter();
