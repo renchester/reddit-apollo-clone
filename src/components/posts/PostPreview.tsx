@@ -230,14 +230,14 @@ function PostPreview(props: PostPreviewProps) {
                   >
                     north
                   </i>
+                  <span
+                    aria-label="Post karma"
+                    className={styles.meta__data}
+                    data-upvoted={isUpvoted}
+                  >
+                    {Math.max(postKarma, 0)}
+                  </span>
                 </button>
-                <span
-                  aria-label="Post karma"
-                  className={styles.meta__data}
-                  data-upvoted={isUpvoted}
-                >
-                  {Math.max(postKarma, 0)}
-                </span>
               </div>
 
               {/* COMMENTS */}

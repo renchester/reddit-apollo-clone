@@ -179,6 +179,8 @@
 }
 
 .btnUpvote {
+  @extend %parent-with-centered-children;
+
   &[data-upvoted='true'] {
     @include th.themify() {
       color: th.themed('upvote');
