@@ -41,10 +41,12 @@ function LoginPage() {
       if (result) {
         addAlert({ message: 'Successfully signed in', status: 'success' });
         router.push('/');
+        router.reload();
       } else {
         await signOutUser();
         addAlert({ message: 'Cannot login at this moment', status: 'error' });
         router.push('/');
+        router.reload();
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -68,10 +70,12 @@ function LoginPage() {
       if (result) {
         addAlert({ message: 'Successfully signed in', status: 'success' });
         router.push('/');
+        router.reload();
       } else {
         await signOutUser();
         addAlert({ message: 'Cannot login at this moment', status: 'error' });
         router.push('/');
+        router.reload();
       }
     } catch (e) {
       if (e instanceof Error) {

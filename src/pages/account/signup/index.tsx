@@ -56,10 +56,12 @@ function SignupPage() {
           status: 'success',
         });
         router.push('/');
+        router.reload();
       } else {
         await signOutUser();
         addAlert({ message: 'Cannot sign up at this moment', status: 'error' });
         router.push('/');
+        router.reload();
       }
     } catch (e) {
       if (e instanceof Error || e instanceof FirebaseError) {
@@ -78,10 +80,12 @@ function SignupPage() {
           status: 'success',
         });
         router.push('/');
+        router.reload();
       } else {
         await signOutUser();
         addAlert({ message: 'Cannot sign up at this moment', status: 'error' });
         router.push('/');
+        router.reload();
       }
     } catch (e) {
       if (e instanceof Error || e instanceof FirebaseError) {
