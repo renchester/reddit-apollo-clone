@@ -1,8 +1,7 @@
 import styles from './SubredditPage.module.scss';
 import { useState, type ReactElement, useEffect } from 'react';
 import Head from 'next/head';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import { useAuth } from '@/hooks/useAuth';
 import { useSnackbar } from '@/hooks/useSnackbar';
 import { usePreferredSort } from '@/hooks/usePreferredSort';
@@ -12,15 +11,13 @@ import AsideContainer from '@/components/asides/AsideContainer';
 import PostPreview from '@/components/posts/PostPreview';
 import SubredditAside from '@/components/asides/SubredditAside';
 import SubredditMenu from '@/components/subreddits/SubredditMenu';
-import Loading from '@/components/Loading';
-import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
 import leaveSubreddit from '@/firebase/firestore/subreddits/update/leaveSubreddit';
 import joinSubreddit from '@/firebase/firestore/subreddits/update/joinSubreddit';
 import fetchPostsBySubreddit from '@/firebase/firestore/posts/read/fetchPostsBySubreddit';
 import { ImagePost, Post, Subreddit } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
   const posts = await fetchPostsBySubreddit(subreddit?.name as string);
 
@@ -29,20 +26,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       subreddit,
       posts,
     },
-    revalidate: 90,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const allSubreddits = (await fetchAllSubreddits()) as Subreddit[];
-
-  const paths = allSubreddits?.map((sub) => ({
-    params: { subreddit: sub.name },
-  }));
-
-  return {
-    paths,
-    fallback: true,
   };
 };
 
@@ -53,7 +36,6 @@ type SubredditPageProps = {
 
 function SubredditPage(props: SubredditPageProps) {
   const { subreddit, posts: _posts } = props;
-  const router = useRouter();
   const { user, subscriptions } = useAuth();
   const { addAlert } = useSnackbar();
   const { preferredSort } = usePreferredSort();
@@ -100,10 +82,6 @@ function SubredditPage(props: SubredditPageProps) {
     setFavoritedStatus(target?.isFavorite || false);
   }, [subscriptions, subreddit]);
 
-  if (router.isFallback || !subreddit || !_posts) {
-    return <Loading message="Loading subreddit" />;
-  }
-
   const pageTitle = `r/${subreddit.name} - Reddit Clone`;
 
   const hideMenu = () => setMenuVisibility(false);
@@ -138,68 +116,65 @@ function SubredditPage(props: SubredditPageProps) {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      {router.isFallback ? (
-        <Loading message="Loading user data" />
-      ) : (
-        <div className="page__container">
-          <main className="page__feed">
-            <div className={styles.sub__header}>
-              <h1 className="page__title">{subreddit.name}</h1>
-              <p className={styles.sub__description}>{subreddit.description}</p>
 
-              {user && (
-                <div className={styles.btn__container}>
-                  <button
-                    type="button"
-                    aria-label="Subscribe to this subreddit and join the community"
-                    className={styles.btn__join}
-                    onClick={handleSubscriptionChange}
+      <div className="page__container">
+        <main className="page__feed">
+          <div className={styles.sub__header}>
+            <h1 className="page__title">{subreddit.name}</h1>
+            <p className={styles.sub__description}>{subreddit.description}</p>
+
+            {user && (
+              <div className={styles.btn__container}>
+                <button
+                  type="button"
+                  aria-label="Subscribe to this subreddit and join the community"
+                  className={styles.btn__join}
+                  onClick={handleSubscriptionChange}
+                >
+                  {isUserSubscribed ? 'Leave' : 'Subscribe'}
+                </button>
+                <button
+                  type="button"
+                  aria-label="Show subreddit options"
+                  aria-haspopup
+                  aria-expanded={isMenuShown}
+                  className={styles.btn__options}
+                  onClick={toggleMenu}
+                >
+                  <i
+                    className={`material-symbols-outlined ${styles.btn__icon}`}
+                    aria-hidden
                   >
-                    {isUserSubscribed ? 'Leave' : 'Subscribe'}
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Show subreddit options"
-                    aria-haspopup
-                    aria-expanded={isMenuShown}
-                    className={styles.btn__options}
-                    onClick={toggleMenu}
-                  >
-                    <i
-                      className={`material-symbols-outlined ${styles.btn__icon}`}
-                      aria-hidden
-                    >
-                      more_horiz
-                    </i>
-                  </button>
+                    more_horiz
+                  </i>
+                </button>
 
-                  {isMenuShown && (
-                    <SubredditMenu
-                      hideMenu={hideMenu}
-                      subreddit={subreddit}
-                      isUserSubscribed={isUserSubscribed}
-                      handleSubscriptionChange={handleSubscriptionChange}
-                      isFavorited={isFavorited}
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-
-            {posts.length > 0 ? (
-              posts.map((post) => (
-                <PostPreview key={`sub-page--${post.post_id}`} post={post} />
-              ))
-            ) : (
-              <p>No posts yet</p>
+                {isMenuShown && (
+                  <SubredditMenu
+                    hideMenu={hideMenu}
+                    subreddit={subreddit}
+                    isUserSubscribed={isUserSubscribed}
+                    handleSubscriptionChange={handleSubscriptionChange}
+                    isFavorited={isFavorited}
+                  />
+                )}
+              </div>
             )}
-          </main>
+          </div>
 
-          <AsideContainer>
-            <SubredditAside subreddit={subreddit} />
-          </AsideContainer>
-        </div>
-      )}
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <PostPreview key={`sub-page--${post.post_id}`} post={post} />
+            ))
+          ) : (
+            <p>No posts yet</p>
+          )}
+        </main>
+
+        <AsideContainer>
+          <SubredditAside subreddit={subreddit} />
+        </AsideContainer>
+      </div>
     </>
   );
 }

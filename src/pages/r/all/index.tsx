@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import Head from 'next/head';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import MasterLayout from '@/layouts/MasterLayout';
 import AsideContainer from '@/components/asides/AsideContainer';
@@ -9,12 +9,11 @@ import PostPreview from '@/components/posts/PostPreview';
 import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
 import { Post } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await fetchAllPosts(50);
 
   return {
     props: { posts },
-    revalidate: 60,
   };
 };
 

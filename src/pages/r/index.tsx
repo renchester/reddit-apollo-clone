@@ -8,14 +8,13 @@ import SubredditPreview from '@/components/subreddits/SubredditPreview';
 import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
 import { Subreddit } from '@/types/types';
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   let subreddits = (await fetchAllSubreddits()) || [];
 
   return {
     props: {
       subreddits,
     },
-    revalidate: 300,
   };
 }
 

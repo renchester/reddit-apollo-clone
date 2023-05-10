@@ -1,4 +1,4 @@
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { ReactElement } from 'react';
 import MasterLayout from '@/layouts/MasterLayout';
@@ -9,12 +9,11 @@ import PostPreview from '@/components/posts/PostPreview';
 import fetchPopularPosts from '@/firebase/firestore/posts/read/fetchPopularPosts';
 import { Post } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await fetchPopularPosts(50);
 
   return {
     props: { posts },
-    revalidate: 600,
   };
 };
 

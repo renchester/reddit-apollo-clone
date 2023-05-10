@@ -1,7 +1,7 @@
 import styles from './SubmitPostPage.module.scss';
 import { type ReactElement } from 'react';
 import Head from 'next/head';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetServerSideProps } from 'next';
 import { useAuth } from '@/hooks/useAuth';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
@@ -9,29 +9,16 @@ import SubmitPanel from '@/components/posts/SubmitPanel';
 import AsideContainer from '@/components/asides/AsideContainer';
 import SubredditAside from '@/components/asides/SubredditAside';
 import fetchSubredditData from '@/firebase/firestore/subreddits/read/fetchSubredditData';
-import fetchAllSubreddits from '@/firebase/firestore/subreddits/read/fetchAllSubreddits';
+
 import { Subreddit } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
 
   return {
     props: {
       subreddit,
     },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const allSubreddits = (await fetchAllSubreddits()) as Subreddit[];
-
-  const paths = allSubreddits?.map((sub) => ({
-    params: { subreddit: sub.name },
-  }));
-
-  return {
-    paths,
-    fallback: false,
   };
 };
 

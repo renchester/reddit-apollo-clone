@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import Head from 'next/head';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useAuth } from '@/hooks/useAuth';
 import { usePreferredSort } from '@/hooks/usePreferredSort';
 import MasterLayout from '@/layouts/MasterLayout';
@@ -11,12 +11,11 @@ import PostPreview from '@/components/posts/PostPreview';
 import fetchAllPosts from '@/firebase/firestore/posts/read/fetchAllPosts';
 import { Post } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await fetchAllPosts(50);
 
   return {
     props: { posts },
-    revalidate: 60,
   };
 };
 

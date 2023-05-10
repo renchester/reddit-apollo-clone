@@ -1,20 +1,18 @@
 import { ReactElement, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { useAuth } from '@/hooks/useAuth';
 import MasterLayout from '@/layouts/MasterLayout';
 import FeedPageLayout from '@/layouts/FeedPageLayout';
 import fetchCommentsByUser from '@/firebase/firestore/comments/read/fetchCommentsByUser';
 import fetchPostsByUser from '@/firebase/firestore/posts/read/fetchPostsByUser';
-import fetchAllUsers from '@/firebase/firestore/user/fetchAllUsers';
 import fetchUserDetailsByUsername from '@/firebase/firestore/user/fetchUserDetailsByUsername';
 import UserMain from '@/components/user/UserMain';
 import UserOverview from '@/components/user/UserOverview';
-import Loading from '@/components/Loading';
 import { Post, User, Comment } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const user = await fetchUserDetailsByUsername(params?.user as string);
   const posts = (await fetchPostsByUser(user?.user_id as string)) || [];
   const comments = (await fetchCommentsByUser(user?.user_id as string)) || [];
@@ -25,19 +23,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       posts,
       comments,
     },
-    revalidate: 300,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const allUsers = (await fetchAllUsers()) as User[];
-  const paths = allUsers.map((user) => ({
-    params: { user: user.username },
-  }));
-
-  return {
-    paths,
-    fallback: true,
   };
 };
 
@@ -60,10 +45,6 @@ function UserPage(props: UserPageProps) {
       router.push(`/account`);
     }
   }, [user, currentUser, router]);
-
-  if (router.isFallback || !user || !posts || !comments) {
-    return <Loading message="Loading user data" />;
-  }
 
   const pageTitle = `u/${user.username} - Reddit Clone`;
 
