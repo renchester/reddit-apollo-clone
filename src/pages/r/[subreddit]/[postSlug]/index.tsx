@@ -1,5 +1,5 @@
 import styles from './PostPage.module.scss';
-import { ReactElement, Suspense } from 'react';
+import { ReactElement, Suspense, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -21,15 +21,13 @@ import { Comment, Post, Subreddit } from '@/types/types';
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subreddit = await fetchSubredditData(params?.subreddit as string);
   const post = await fetchPostData(params?.postSlug as string);
-  const comments = (await fetchPostComments(post?.post_id as string)) || [];
 
   return {
     props: {
       subreddit,
       post,
-      comments,
     },
-    revalidate: 30,
+    revalidate: 120,
   };
 };
 
@@ -60,14 +58,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
 type PostPageProps = {
   subreddit: Subreddit;
   post: Post;
-  comments: Comment[];
 };
 
 function PostPage(props: PostPageProps) {
-  const { subreddit, post, comments } = props;
+  const { subreddit, post } = props;
   const router = useRouter();
+  const [comments, setComments] = useState<Comment[]>([]);
 
-  if (router.isFallback || !subreddit || !post || !comments) {
+  useEffect(() => {
+    if (!post) return;
+
+    async function getComments() {
+      try {
+        const result = await fetchPostComments(post.post_id);
+
+        if (result) {
+          setComments(result);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
+        }
+      }
+    }
+
+    getComments();
+  }, [post]);
+
+  if (router.isFallback || !subreddit || !post) {
     return <Loading message="Loading post data" />;
   }
 

@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       subreddit,
       posts,
     },
-    revalidate: 120,
+    revalidate: 90,
   };
 };
 
