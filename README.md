@@ -1,38 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Project: Reddit Apollo Clone
 
-## Getting Started
+[**Live version** of the app can be found here](https://reddit-apollo-clone.vercel.app/)
 
-First, run the development server:
+This is a full-stack clone of Reddit, styled in the manner of the iOS Apollo App--replicating the popular social media platform's core functionalities. With its feature set, the clone encompasses both the front-end and back-end components, providing a seamless user experience akin to that of the Apollo App on iOS devices.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. **Reddit Features**: The app incorporates the basic features of Reddit such as creating subreddits, text posts, image posts, and comments; upvoting/downvoting posts and comments; subscribing to subreddits; and bookmarking posts.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+2. **Back-end Integration**: The app uses Firebase Firestore to store app data such as user, post, and subreddit details. Images are stored in Firebase Storage.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. **Authentication**: Users are authenticated through Firebase Authentication. An option to sign up using either Email or Google is provided.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+4. **Dark Mode**: Dark mode is integral to the Reddit experience and is also implemented site-wide in this clone through Sass mixins.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Technologies Used
 
-## Learn More
+- Typescript
+- React + NextJS
+- Firebase (Firestore, Authentication, & Storage)
+- Sass
 
-To learn more about Next.js, take a look at the following resources:
+### Credits/Acknowledgments
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is for personal use only. I do not own any of the rights for the assets used in this project. The design of this clone is based on the [Apollo App](https://apolloapp.io/) on iOS.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Display
 
-## Deploy on Vercel
+![Home Page](img/home-page.png)
+_Home Page_
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![Mobile View](img/mobile-view.png)
+_Mobile View_
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### To-do
+
+1. Add a search feature for posts.
+
+2. Add a feature to sort comments by new or popular.
+
+---
+
+Developed by **Renchester Ramos**
