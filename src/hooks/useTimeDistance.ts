@@ -41,8 +41,8 @@ const useTimeDistance = (props: TimeDistanceProps) => {
     xDays: '{{count}}d',
     aboutXWeeks: '{{count}}w',
     xWeeks: '{{count}}w',
-    aboutXMonths: '{{count}}m',
-    xMonths: '{{count}}m',
+    aboutXMonths: '{{count}}mo',
+    xMonths: '{{count}}mo',
     aboutXYears: '{{count}}y',
     xYears: '{{count}}y',
     overXYears: '{{count}}y',
@@ -75,7 +75,7 @@ const useTimeDistance = (props: TimeDistanceProps) => {
   }, [latestDate, endDate]);
 
   const defaultFormatDurationOptions = {
-    format: ['years', 'days', 'hours', 'minutes'],
+    format: ['years', 'months', 'weeks', 'days', 'hours', 'minutes'],
     locale: {
       formatDistance: formatDistanceShortenLocale,
     },
